@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\License;
+use App\Role;
 use Illuminate\Http\Request;
 
-class LicenseController extends Controller
+class RoleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class LicenseController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\License  $license
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function show(License $license)
+    public function show(Role $role)
     {
         //
     }
@@ -52,10 +52,10 @@ class LicenseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\License  $license
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function edit(License $license)
+    public function edit(Role $role)
     {
         //
     }
@@ -64,10 +64,10 @@ class LicenseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\License  $license
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, License $license)
+    public function update(Request $request, Role $role)
     {
         //
     }
@@ -75,10 +75,10 @@ class LicenseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\License  $license
+     * @param  \App\Role  $role
      * @return \Illuminate\Http\Response
      */
-    public function destroy(License $license)
+    public function destroy(Role $role)
     {
         //
     }

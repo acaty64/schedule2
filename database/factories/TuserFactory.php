@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use App\License;
+use App\Tuser;
 use Faker\Generator as Faker;
 
-$factory->define(License::class, function (Faker $faker) {
+$factory->define(Tuser::class, function (Faker $faker) {
     return [
         //
     ];
