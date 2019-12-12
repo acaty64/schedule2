@@ -76,24 +76,6 @@ class LoginTest extends TestCase
 
 
     /** @test */
-    // function new_users_authorized_by_google_are_registered_and_authenticated()
-    // {
-    //     // Given...
-    //     $this->mockGoogleUser();
-    //     // When
-    //     $response = $this->get('/login/callback');
-    //     // Then
-    //     $this->assertDatabaseHas('users', [
-    //         'email' => $this->email,
-    //         'name' => $this->name,
-    //     ]);
-    //     $this->assertAuthenticated();
-    //     $response->assertRedirect('/home');
-    // }
-
-
-
-    /** @test */
     function login_request_are_send_to_google( )
     {
         // Testing: return Socialite::driver('google')->redirect();

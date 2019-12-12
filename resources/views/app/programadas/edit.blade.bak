@@ -1,0 +1,116 @@
+@extends('layouts.app')
+
+@section('content')
+	<div class="container">
+		<div class="row">
+			Programacion de vacaciones: {{ $docente['name'] }}
+		</div>
+		<check-component docente_id="{{ $docente['docente_id'] }}"></check-component>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">Inicio</div>
+			<div class="col-md-2">Fin</div>
+			<div class="col-md-1">Dias</div>
+			<div class="col-md-1">Paso</div>
+			<div class="col-md-1">Máximo</div>
+			<div class="col-md-1">Tipo</div>
+		</div>
+		<form action="{{ route('app.programada.update') }}" method="POST">
+			{{ csrf_field() }}
+			<input type="hidden" name="id" value="{{ $data->id }}">
+			<span class="row">				
+				<span class="col-md-2">			
+					<div class="input-group">
+						<span class="input-group-addon" id="fecha_ini">Inicio</span>
+						<input type="date" class="form-control" name="fecha_ini" value="{{ $data->fecha_ini }}">
+					</div>
+				</span>
+			</span>
+			<span class="row">				
+				<span class="col-md-2">
+					<div class="input-group">
+						<span class="input-group-addon" id="fecha_fin">Fin</span>
+						<input type="date" class="form-control" name="fecha_fin" value="{{ $data->fecha_fin }}">
+					</div>
+				</span>
+			</span>
+			<span class="row">				
+				<span class="col-md-2">
+					<div class="input-group">
+						<span class="input-group-addon" id="paso">Paso</span>
+						<input type="string" class="form-control" name="paso" value="{{ $data->paso }}">
+					</div>
+				</span>
+			</span>
+			<span class="row">				
+				<span class="col-md-2">
+					<div class="input-group">
+						<span class="input-group-addon" id="maximo">Máximo</span>
+						<input type="string" class="form-control" name="maximo" value="{{ $data->maximo }}">
+					</div>
+				</span>
+			</span>
+			<span class="row">				
+				<div class="col-md-2">
+					<div class="input-group">
+						<span class="input-group-addon" id="maximo">Tipo</span>
+						<select name="select" value="{{ $data->type }}">
+							<option <?php if($data->type == 'fixed'){echo("selected ");}?> value="fixed">Fijo</option>
+							<option <?php if($data->type == 'closed'){echo("selected ");}?> value="closed">Cerrado</option>
+							<option <?php if($data->type == 'new'){echo("selected ");}?>value="new">Nuevo dato</option>
+						</select>
+					</div>
+				</div>
+			</span>
+
+
+
+<p>**************************************************************</p>
+			<div class="row">
+				<div class="col-md-2">					
+					<input type="date" name="fecha_ini" value="{{ $data->fecha_ini }}">
+				</div>
+				<div class="col-md-1">
+					<p>{{ $data->dias }}</p>
+				</div>
+				<div class="col-md-2">					
+					<input type="date" name="fecha_fin" value="{{ $data->fecha_fin }}">
+				</div>
+				<div class="col-md-1">					
+					<input type="string" name="paso" value="{{ $data->paso }}">
+				</div>
+				<div class="col-md-1">					
+					<input type="string" name="maximo" value="{{ $data->maximo }}">
+				</div>
+				<div class="col-md-2">
+					<select name="select" value="{{ $data->type }}">
+						<option <?php if($data->type == 'fixed'){echo("selected ");}?> value="fixed">Fijo</option>
+						<option <?php if($data->type == 'closed'){echo("selected ");}?> value="closed">Cerrado</option>
+						<option <?php if($data->type == 'new'){echo("selected ");}?>value="new">Nuevo dato</option>
+					</select>
+				</div>					
+			</div>
+			<div class="form-group">
+				<button type="submit" class="btn btn-sm btn-primary">Grabar modificaciones</button>
+			</div>
+		</form>
+	</div>
+@endsection
+
+
+{{-- 				<div class="col-md-1">
+					<p>{{ (new DateTime($data->fecha_fin))->diff(new DateTime($data->fecha_ini))->days + 1 }}</p>
+				</div> --}}
+
+
+{{-- 				<div class="col-md-2">
+					<div class="input-group">
+						<span class="input-group-addon" id="maximo">Tipo</span>
+						<select name="select" value="{{ $data->type }}">
+							<option <?php if($data->type == 'fixed'){echo("selected ");}?> value="fixed">Fijo</option>
+							<option <?php if($data->type == 'closed'){echo("selected ");}?> value="closed">Cerrado</option>
+							<option <?php if($data->type == 'new'){echo("selected ");}?>value="new">Nuevo dato</option>
+						</select>
+					</div>
+				</div> --}}

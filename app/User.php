@@ -11,20 +11,12 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
+    protected $append = ['cdocente', 'wdocente'];
+
     protected $fillable = [
         'name', 'email', 'password'
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'remember_token',
     ];
@@ -35,11 +27,20 @@ class User extends Authenticatable
         return $roles;
         // return $this->belongsToMany(Trole::class, 'user_id');
     }
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
+
+
+    public function getCdocenteAttribute()
+    {
+        $dataUser = DataUser::where('user_id', $this->id)->first();
+        return $dataUser->cdocente;
+    }
+
+    public function getWdocenteAttribute()
+    {
+        $dataUser = DataUser::where('user_id', $this->id)->first();
+        return $dataUser->wdoc3 . " " . $dataUser->wdoc2 . ", " . $dataUser->wdoc1;
+    }
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];

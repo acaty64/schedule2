@@ -1,0 +1,400 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Derecho;
+use App\Feriado;
+use App\Gozada;
+use App\Horario;
+use App\Http\Controllers\Controller;
+use App\Periodo;
+use App\Programada;
+use App\Semestre;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class ScheduleController extends Controller
+{
+  public function dataShow($docente_id)
+  {
+    $docente = User::findOrFail($docente_id);
+    $cdocente = $docente->cdocente;
+    $wdocente = $docente->wdocente;
+
+    // Define fini y ffin segun los periodos vigentes
+    $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
+    $fini = date("Y-m-d");
+    $ffin = date('Y-m-d', strtotime('1900-1-1'));
+    foreach ($periodos as $periodo) {
+      if( date('Y-m-d', strtotime($periodo->fecha_ini))<$fini){
+        $fini = $periodo->fecha_ini;
+      }
+      if( date('Y-m-d', strtotime($periodo->fecha_fin))>$ffin){
+        $ffin = $periodo->fecha_fin;
+      }
+    }
+    // Crea el calendario desde fini a ffin
+    $fecha = Carbon::parse($fini);
+    $ffin = Carbon::parse($ffin);
+    $rango = $fecha->diffInDays($ffin)+1;
+    $calendar = [];
+    for ($d=0; $d < $rango; $d++) {
+      if ( date('w', strtotime($fecha))==0 ){
+        $status = 'domingo';
+      }else{
+        $status = 'habil';
+      }
+      $item =  [
+        'id' => $d,
+        'semana' => 0,
+        'ndia' => date('w', strtotime($fecha)),
+        'fecha' => $fecha->format("Y-m-d"),
+        'status' => $status,
+        'color' => ''
+      ];
+      array_push($calendar, $item);
+      $fecha->addDay(1);
+    }
+    // Agrega los feriados
+    $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
+    foreach ($feriados as $feriado) {
+      $fecha = $feriado['fecha'];
+      foreach ($calendar as $dia) {
+        if($dia['fecha'] == $fecha){
+          $calendar[$dia['id']]['status'] = 'feriado';
+        }
+      }
+    }
+    
+    // Agrega las vacaciones gozadas
+    $gozadas = Gozada::where('cdocente',$cdocente)
+    ->where(function ($query) use ($fini, $ffin) {
+      $query->where('fecha_ini', '>=' ,$fini)
+      ->where('fecha_fin', '<=', $ffin);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_ini', '<' ,$fini)
+      ->where('fecha_fin', '>=', $fini);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_fin', '>=' ,$ffin)
+      ->where('fecha_ini', '>=', $ffin);
+    })
+    ->get();
+    foreach ($gozadas as $rango) {
+      $fecha = Carbon::parse($rango['fecha_ini']);
+      $fecha_fin = Carbon::parse($rango['fecha_fin']);
+      $rango = $fecha->diffInDays($fecha_fin)+1;
+      for ($d=0; $d < $rango; $d++) {
+        foreach ($calendar as $dia) {
+          if( Carbon::parse($dia['fecha']) == $fecha){
+            $calendar[$dia['id']]['status'] = 'gozadas';
+          }
+        }
+        $fecha->addDay(1);
+      }
+    }
+
+    // Agrega las vacaciones programadas
+    $programadas = Programada::where('cdocente',$cdocente)
+    ->where(function ($query) use ($fini, $ffin) {
+      $query->where('fecha_ini', '>=' ,$fini)
+      ->where('fecha_fin', '<=', $ffin);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_ini', '<' ,$fini)
+      ->where('fecha_fin', '>=', $fini);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_fin', '>=' ,$ffin)
+      ->where('fecha_ini', '>=', $ffin);
+    })
+    ->get();
+    foreach ($programadas as $rango) {
+      $fecha = Carbon::parse($rango['fecha_ini']);
+      $fecha_fin = Carbon::parse($rango['fecha_fin']);
+      $rango = $fecha->diffInDays($fecha_fin)+1;
+      for ($d=0; $d < $rango; $d++) {
+        foreach ($calendar as $dia) {
+          if( Carbon::parse($dia['fecha']) == $fecha){
+            $today = Carbon::today()->endOfDay();
+            if($fecha < $today){
+              $calendar[$dia['id']]['status'] = 'gozadas';
+            }else{
+              $calendar[$dia['id']]['status'] = 'vacaciones';
+            }
+          }
+        }
+        $fecha->addDay(1);
+      }
+    }
+
+    // Agrega los horarios (dia, noche, vacaciones)
+    $semestres = Semestre::where('status', true)->get();
+    $horarios = Horario::where('cdocente', $cdocente)->get();
+    foreach ($horarios as $horario) {
+      $semana = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
+      $weekDay = array_search($horario['dia'], $semana);
+        foreach ($semestres as $semestre) {
+          if( $semestre['semestre'] == $horario['semestre'] ){
+            $fecha = Carbon::parse($semestre['fecha_ini']);
+            $fecha_fin = Carbon::parse($semestre['fecha_fin']);
+            $rango = $fecha->diffInDays($fecha_fin)+1;
+            for ( $d=0; $d < $rango; $d++ ) {
+              if ( date('w', strtotime($fecha)) == $weekDay ){
+                foreach ($calendar as $dia) {
+                  if( Carbon::parse($dia['fecha']) == $fecha && $calendar[$dia['id']]['status'] == 'habil' ){
+                    // $calendar[$dia['id']]['status'] = 'vacaciones';
+                    $calendar[$dia['id']]['status'] = $horario['turno'];
+                  }
+                }
+              }
+              $fecha->addDay(1);
+            }
+          }
+        }
+    }
+    // // Filtra desde hoy()
+    // $calendar = array_filter($calendar, function($dia)
+    // {
+    //   return strtotime($dia['fecha']) >= strtotime('now');
+    // });
+    // Genera el calendario semana x semana
+    $key_first = array_keys($calendar)[0];
+    $fechas = [];
+    $dia = date('w', strtotime($calendar[$key_first]['fecha']));
+    for ($i=0; $i < $dia; $i++) { 
+      $item =  [
+        'id' => -1,
+        'semana' => 1,
+        'fecha' => '',
+        'ndia' => $i,
+        'status' => 'blanco',
+        'color' => ''
+      ];
+      array_push($fechas, $item);
+    }
+    foreach ($calendar as $fecha) {
+      array_push($fechas, $fecha);
+    }
+    $calendario = [];
+    $semana = [];
+    for ($i=0; $i < count($fechas); $i++) { 
+      $fechas[$i]['semana'] = intdiv($i, 7);
+    }
+    for ($n=0; $n < intdiv(count($fechas), 7); $n++) {
+      $semana = array_filter($fechas, function ($fecha) use($n)
+      {
+        return $fecha['semana'] == $n;
+      });
+      // Define mes
+      $meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
+      foreach ($semana as $dia) {
+        if ($dia['fecha'] != ''){
+          $mes = date('n', strtotime($dia['fecha']));
+          $anho = date('Y', strtotime($dia['fecha']));
+        }
+      }
+      array_push($calendario, ['mes'=> $meses[$mes-1].' '.$anho, 'semana'=>$semana]);
+    }
+return view('app.calendar.show')
+            ->with('docente', $docente)
+            ->with('data', $calendario);
+
+
+
+    return [
+      'docente' => [
+        'id'=>$docente->id, 
+        'cdocente'=> $cdocente,
+        'wdocente'=> $wdocente,
+      ],
+      'calendario' => $calendario,
+    ];
+  }    
+  public function save(Request $request)
+  {
+    $cdocente = $request->docente['cdocente'];
+      // Graba PROGRAMADAS
+      // Elimina los registros 'new' dentro del rango
+    $fini = date('Y-m-d', strtotime($request->fini));
+    $ffin = date('Y-m-d', strtotime($request->ffin));
+    $old = Programada::where('cdocente',$cdocente)
+    ->where(function ($query) use ($fini, $ffin) {
+      $query->where('fecha_ini', '>=' ,$fini)
+      ->where('fecha_fin', '<=', $ffin);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_ini', '<' ,$fini)
+      ->where('fecha_fin', '>=', $fini);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_fin', '>=' ,$ffin)
+      ->where('fecha_ini', '>=', $ffin);
+    })
+    ->get();
+    foreach ($old as $oldItem) {
+      if($oldItem['type'] == 'new'){
+        $record = Programada::findOrFail($oldItem['id']);
+        $record->delete();
+      }
+    }
+    $programadas = $request->programadas;
+    foreach($programadas as $item){
+      $fini = date('Y-m-d', strtotime($item['fecha_ini']));
+      $ffin = date('Y-m-d', strtotime($item['fecha_fin']));
+      if($item['type'] != 'closed'){
+        if($item['type'] == 'new'){
+          $new = new Programada;
+          $new->cdocente = $cdocente;
+          $new->fecha_ini = $fini;
+          $new->fecha_fin = $ffin;
+          $new->paso = $item['paso'];
+          $new->maximo = $item['maximo'];
+          $new->type = $item['type'];
+          $new->save();
+        }else{
+          $old = Programada::findOrFail($item['id']);
+          $old->fecha_ini = $fini;
+          $old->fecha_fin = $ffin;
+          $old->save();
+        }
+      }
+    }
+      // Graba HORARIOS
+    $horarios = $request->horarios;
+    foreach ($horarios as $item) {
+      $registro = Horario::where('cdocente', $cdocente)
+      ->where('semestre', $item['semestre'])
+      ->where('dia', $item['dia'])
+      ->first();
+//////////////////////////////////////////////////////////////////////////////
+      if($registro){
+            // modifica
+          $registro->turno = $item['turno'];
+          $registro->save();            
+
+        // if($item['turno'] == 'none'){
+        //     // elimina
+        //   $registro->delete();
+        // }else{
+        //     // modifica
+        //   $registro->turno = $item['turno'];
+        //   $registro->save();            
+        // }
+      }else{
+            // crea nuevo registro
+          $new = Horario::create([
+            'cdocente' => $cdocente,
+            'semestre' => $item['semestre'],
+            'dia' => $item['dia'],
+            'turno' => $item['turno']
+          ]);
+        // if($item['turno'] != 'none'){
+        //     // crea nuevo registro
+        //   $new = Horario::create([
+        //     'cdocente' => $cdocente,
+        //     'semestre' => $item['semestre'],
+        //     'dia' => $item['dia'],
+        //     'turno' => $item['turno']
+        //   ]);
+        // }
+      }
+    } 
+    return ['success' => true];
+  }
+  public function savePeriodos(Request $request)
+  {
+    $cdocente = $request->cdocente;
+    $periodos = $request->periodos;
+        // foreach ($periodos as $item) {
+        //     $periodo = Periodo::find($item->id);
+        //     $periodo->fecha_ini = date_format($item->fecha_ini, 'd/m/Y';
+        //     $periodo->fecha_fin = date_format($item->fecha_fin, 'd/m/Y';
+        // }
+    return ['success' => true, 'periodos' => $periodos];
+  }
+  public function create(Request $request)
+  {
+    Programada::create([
+      'cdocente' => $request->cdocente,
+      'periodo' => $request->periodo,
+      'fecha_ini' => $request->fecha_ini,
+      'fecha_fin' => $request->fecha_fin,
+    ]);
+    return ['success'=>true];
+  }
+  public function index()
+  {
+    $users = User::all()->sortBy('name');
+        // $users->map(function($user){
+        //     $user->fecha_fin = $user->periodo->fecha_fin;
+        // });
+    return response($users, 200);
+  }
+  public function data($docente_id)
+  {
+    $docente = User::findOrFail($docente_id);
+    $cdocente = $docente->cdocente;
+    $wdocente = $docente->wdocente;
+    $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
+    $fini = date("Y-m-d");
+    $ffin = date('Y-m-d', strtotime('1900-1-1'));
+    foreach ($periodos as $periodo) {
+      if( date('Y-m-d', strtotime($periodo->fecha_ini))<$fini){
+        $fini = $periodo->fecha_ini;
+      }
+      if( date('Y-m-d', strtotime($periodo->fecha_fin))>$ffin){
+        $ffin = $periodo->fecha_fin;
+      }
+    }
+    $derechos = Derecho::where('cdocente', $cdocente)->get();
+    $gozadas = Gozada::where('cdocente', $cdocente)->where('fecha_ini','>=',$fini)->where('fecha_fin','<=',$ffin)->get();
+    $programadas = Programada::where('cdocente',$cdocente)
+    ->where(function ($query) use ($fini, $ffin) {
+      $query->where('fecha_ini', '>=' ,$fini)
+      ->where('fecha_fin', '<=', $ffin);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_ini', '<' ,$fini)
+      ->where('fecha_fin', '>=', $fini);
+    })
+    ->orWhere(function ($query) use ($fini, $ffin){
+      $query->where('fecha_fin', '>=' ,$ffin)
+      ->where('fecha_ini', '>=', $ffin);
+    })
+    ->get();
+    $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
+    $horarios = Horario::where('cdocente', $cdocente)->get();
+    $semestres = Semestre::where('status', true)->get();
+    $parameters = [
+      'horario' => [
+        'qdias' => 5,
+        'noches' => 3
+      ],
+      'turnos_sab' => [
+        'noche', 
+        'vacaciones', 
+        'libre'
+      ]
+    ];
+    return [
+      'parameters' => $parameters,
+      'docente' => [
+        'id'=>$docente->id, 
+        'cdocente'=> $cdocente,
+        'wdocente'=> $wdocente,
+      ],
+      'periodos' => $periodos,
+      'gozadas' => $gozadas,  
+      'programadas' => $programadas,
+      'feriados' => $feriados,
+      'horarios' => $horarios, 
+      'semestres' => $semestres,
+      'derechos' => $derechos,
+      'semestre' => '2019-2' 
+    ];
+  }
+}
