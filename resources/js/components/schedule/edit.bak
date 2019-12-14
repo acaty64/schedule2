@@ -1,0 +1,89 @@
+<template>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <div class="row">
+              <div class="col-md-4"> 
+                Docente: <b>{{ user.name }}</b>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h5 align="center"><b>VACACIONES</b></h5>
+          </div>
+          <div class="panel-body">
+            <div class="container">
+                <periodos></periodos>
+            </div>            
+            <div class="container">
+                <div class="row"><div class="col-md-9"><hr></div></div>
+                <programadas></programadas>
+            </div> 
+          </div>
+        </div>
+      </div>
+    </div> 
+    <div class="row">
+      <div class="col-md-10 col-md-offset-1">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h5 align="center"><b>HORARIO</b></h5>
+          </div>
+          <div class="panel-body"> 
+            <div class="container">
+              <!-- <div class="row"><div class="col-md-9"><hr></div></div> -->
+                <horario></horario>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState, mapActions } from 'vuex';
+import periodos from './periodos';
+import programadas from './programadas';
+import horario from './horario';
+export default {
+  name: 'ScheduleEdit',
+  mounted(){
+    this.setCodDoc();
+    this.getData();
+    this.setSemestre();
+    this.setVacaciones();
+    this.getHoras();
+    this.changeSemestre();
+    // this.calculoVacaciones();
+  },
+	data() {
+		return {
+			user: this.$route.params.user,
+		};
+	},
+  components: { periodos, programadas, horario },
+  computed: {
+    ...mapState({
+      cod_doc: (state) => state.cod_doc,
+    }),
+  },
+  methods: {
+    ...mapActions(['setSemestre', 'changeSemestre', 'getHoras']),
+    setCodDoc(){ this.$store.dispatch('setCodDoc', this.user.cod_doc); },
+    // setSemestre(){ this.$store.dispatch('setSemestre'); },
+    getData(){ this.$store.dispatch('getData', this.cod_doc); },
+    setVacaciones(){ this.$store.dispatch('setVacaciones', this.cod_doc); },
+
+    // ...mapActions('getData', 'getHoras','setVacaciones', 'changeSemestre', 'calculoVacaciones')
+  //   getData(){
+  //   console.log('methods getData');
+  //     this.$store.dispatch('getData');
+  //   }
+  }
+};
+</script>
