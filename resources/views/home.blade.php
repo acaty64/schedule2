@@ -16,14 +16,15 @@
 
                     You are logged in!
                     <br>
+        <example-component></example-component>
                     {{-- {{ auth()->user()->roles() }} --}}
                     @foreach(auth()->user()->roles() as $rol)
 {{-- {{ $rol->trole->name }} --}}
                         @if($rol->trole->name == "Master" || $rol->trole->name == "Administrador")
-                            <a href="route('/schedule/index')">Ver Lista</a>
+                            <a href="{{ route('app.schedule.index') }}">Ver Lista</a>
                         @endif
                         @if($rol->trole->name == "Docente")
-                            <a href="route('/schedule/edit/'.{{ Auth()->user()->id }})">Editar</a>
+                            <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">Editar</a>
                         @endif
                     @endforeach
 {{--                     @if(!is_null({{ $roles }}))

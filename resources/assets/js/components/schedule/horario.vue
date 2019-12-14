@@ -73,7 +73,7 @@
 
 <script>
   import { mapState } from 'vuex';
-  import { mapGetters } from 'vuex'
+  import { mapGetters } from 'vuex';
   import Datepicker from 'vuejs-datepicker';
   import {es} from 'vuejs-datepicker/dist/locale';
 
