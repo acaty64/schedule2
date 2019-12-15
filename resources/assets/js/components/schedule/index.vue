@@ -24,11 +24,11 @@
 <script>
   import axios from 'axios';
   export default {
+    name: 'ScheduleIndex',
+
     mounted() {
       // console.log('schedule/index.vue mounted.');
     },
-
-    name: 'ScheduleIndex',
 
     data() {
       return {

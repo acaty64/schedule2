@@ -18,10 +18,10 @@ class ScheduleController extends Controller
 
     public function index()
     {
-        // $users = User::all()->sortBy('name');
+        $users = User::orderBy('name')->paginate(15);
         // return $users->toJson();
-        return view('app.schedule.index');
-        // ->with('data', $users);
+        return view('app.schedule.index')
+            ->with('data', $users);
     }
 
 }

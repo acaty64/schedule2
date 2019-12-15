@@ -289,8 +289,8 @@ export default {
         var filtro = rangoDias.filter(function (value) {
           return value.getDay() == xdia;
         });
-        for (var j = 0; j < filtro.length; j++) {
-          context.commit('addPorDiaWeek', filtro[j]);              
+        for (var i = 0; i < filtro.length; i++) {
+          context.commit('addPorDiaWeek', filtro[i]);              
         }
       }
     }

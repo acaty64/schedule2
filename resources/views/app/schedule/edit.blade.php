@@ -3,9 +3,9 @@
 @section('content')
 <div class="container">
 	<div class="row">
-		<schedule-edit-component 
+		<schedule-edit 
 			docente_id={{$docente_id}} >
-		</schedule-edit-component>
+		</schedule-edit>
 	</div>
 </div>
 @endsection
