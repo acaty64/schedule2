@@ -53469,8 +53469,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         var filtro = rangoDias.filter(function (value) {
           return value.getDay() == xdia;
         });
-        for (var i = 0; i < filtro.length; i++) {
-          context.commit('addPorDiaWeek', filtro[i]);
+        for (var j = 0; j < filtro.length; j++) {
+          context.commit('addPorDiaWeek', filtro[j]);
         }
       }
     }
