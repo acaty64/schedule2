@@ -53934,6 +53934,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -53991,7 +53992,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.commit('status', 'edit');
     },
     btnSave: function btnSave() {
-      this.$store.dispatch('saveData');
+      var _this2 = this;
+
+      return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return _this2.$store.dispatch('saveData');
+
+              case 3:
+                _this2.$store.commit('status', 'view');
+                _context2.next = 9;
+                break;
+
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2['catch'](0);
+
+                alert('Error de grabación.');
+
+              case 9:
+              case 'end':
+                return _context2.stop();
+            }
+          }
+        }, _callee2, _this2, [[0, 6]]);
+      }))();
     }
   }
 });
@@ -57089,6 +57118,20 @@ var render = function() {
                         }
                       },
                       [_vm._v("Rehacer")]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
+                _vm.status == "view"
+                  ? _c(
+                      "a",
+                      {
+                        staticClass: "btn btn-sm btn-primary",
+                        attrs: {
+                          role: "button",
+                          href: "/schedule/show/" + _vm.docente_id
+                        }
+                      },
+                      [_vm._v("Ver Calendario")]
                     )
                   : _vm._e()
               ]),

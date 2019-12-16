@@ -9,7 +9,11 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-
+    public function show($docente_id)
+    {
+        $data = Api\ScheduleController::dataShow($docente_id);
+        return view('app.schedule.show')->with('data', $data);
+    }
     public function edit($docente_id)
     {
     	return view('app.schedule.edit')

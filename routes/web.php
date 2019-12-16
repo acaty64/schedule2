@@ -43,10 +43,6 @@ Route::get('home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/calendar/show', function () {
-    return view('app.calendar.show');
-});
-
 /// DERECHOS
 Route::get('derecho/create', [
 	'as'	=> 'app.derecho.create',
@@ -241,6 +237,12 @@ Route::get('gozada/destroy/{docente_id}/{id}', [
 
 
 /////////////// SCHEDULE
+
+Route::get('schedule/show/{docente_id}', [
+	'as'	=> 'app.schedule.show',
+	'uses'	=> 'Api\ScheduleController@show'
+]);
+
 Route::get('schedule/edit/{docente_id}', [
 	'as'	=> 'app.schedule.edit',
 	'uses'	=> 'ScheduleController@edit'

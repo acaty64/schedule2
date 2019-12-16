@@ -12,6 +12,7 @@
                 <button v-if="status == 'view'" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
                 <button v-if="status == 'edit'" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
                 <button v-if="status == 'edit'" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
+                <a v-if="status == 'view'" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/show/'+ docente_id">Ver Calendario</a>
               </div>              
               <div class="col-md-6"> 
                 <span v-for="mess in check_main">
@@ -91,8 +92,13 @@ export default {
     btnEdit() {
       this.$store.commit('status', 'edit');
     },
-    btnSave() {
-      this.$store.dispatch('saveData');
+    async btnSave() {
+      try {
+        await this.$store.dispatch('saveData');
+        this.$store.commit('status', 'view');
+      } catch (e) {
+        alert('Error de grabación.');
+      }
     },
   }
 };

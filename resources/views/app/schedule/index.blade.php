@@ -19,7 +19,7 @@
 				<td>{{ $docente['cdocente'] }}</td>
 				<td>{{ $docente['name'] }}</td>
 				<td>
-					<a href="{{ route('app.schedule.edit', $docente['id'])}}">Editar</a>
+					<a class="btn btn-sm btn-primary" role="button" href="{{ route('app.schedule.edit', $docente['id'])}}">Editar</a>
 				</td>
 			</tr>
 			@endforeach

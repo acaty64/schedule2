@@ -16,22 +16,26 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
-  public function dataShow($docente_id)
+  public function show($docente_id)
   {
-    $docente = User::findOrFail($docente_id);
-    $cdocente = $docente->cdocente;
-    $wdocente = $docente->wdocente;
+    $data = $this->data($docente_id);
+
+    $docente = $data['docente'];
+    $cdocente = $docente['cdocente'];
+    $wdocente = $docente['wdocente'];
 
     // Define fini y ffin segun los periodos vigentes
-    $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
+    // $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
+    $periodos = $data['periodos'];
+    // $fini = date("Y-m-d");
     $fini = date("Y-m-d");
     $ffin = date('Y-m-d', strtotime('1900-1-1'));
     foreach ($periodos as $periodo) {
-      if( date('Y-m-d', strtotime($periodo->fecha_ini))<$fini){
-        $fini = $periodo->fecha_ini;
-      }
-      if( date('Y-m-d', strtotime($periodo->fecha_fin))>$ffin){
-        $ffin = $periodo->fecha_fin;
+      // if( date('Y-m-d', strtotime($periodo['fecha_ini']))<$fini){
+      //   $fini = $periodo['fecha_ini'];
+      // }
+      if( date('Y-m-d', strtotime($periodo['fecha_fin']))>$ffin){
+        $ffin = $periodo['fecha_fin'];
       }
     }
     // Crea el calendario desde fini a ffin
@@ -57,7 +61,8 @@ class ScheduleController extends Controller
       $fecha->addDay(1);
     }
     // Agrega los feriados
-    $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
+    // $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
+    $feriados = $data['feriados'];
     foreach ($feriados as $feriado) {
       $fecha = $feriado['fecha'];
       foreach ($calendar as $dia) {
@@ -66,22 +71,32 @@ class ScheduleController extends Controller
         }
       }
     }
-    
+////////////////    
     // Agrega las vacaciones gozadas
-    $gozadas = Gozada::where('cdocente',$cdocente)
-    ->where(function ($query) use ($fini, $ffin) {
-      $query->where('fecha_ini', '>=' ,$fini)
-      ->where('fecha_fin', '<=', $ffin);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_ini', '<' ,$fini)
-      ->where('fecha_fin', '>=', $fini);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_fin', '>=' ,$ffin)
-      ->where('fecha_ini', '>=', $ffin);
-    })
-    ->get();
+    $gozadas = $data['gozadas'];
+    // $all = Gozada::where('cdocente', $cdocente)->get();
+    // $gozadas = [];
+    // foreach ($all as $item) {
+    //   if(( $item['fecha_ini'] >= $fini && $item['fecha_fin'] <= $ffin) 
+    //     || ($item['fecha_ini'] < $fini && $item['fecha_fin'] >= $fini)
+    //     || ($item['fecha_fin'] >= $ffin && $item['fecha_ini'] >= $ffin)){
+    //     array_push($gozadas, $item);
+    //   }
+    // }
+    // $gozadas = Gozada::where('cdocente',$cdocente)
+    // ->where(function ($query) use ($fini, $ffin) {
+    //   $query->where('fecha_ini', '>=' ,$fini)
+    //   ->where('fecha_fin', '<=', $ffin);
+    // })
+    // ->orWhere(function ($query) use ($fini, $ffin){
+    //   $query->where('fecha_ini', '<' ,$fini)
+    //   ->where('fecha_fin', '>=', $fini);
+    // })
+    // ->orWhere(function ($query) use ($fini, $ffin){
+    //   $query->where('fecha_fin', '>=' ,$ffin)
+    //   ->where('fecha_ini', '>=', $ffin);
+    // })
+    // ->get();
     foreach ($gozadas as $rango) {
       $fecha = Carbon::parse($rango['fecha_ini']);
       $fecha_fin = Carbon::parse($rango['fecha_fin']);
@@ -95,22 +110,32 @@ class ScheduleController extends Controller
         $fecha->addDay(1);
       }
     }
-
+////////////////////////////
     // Agrega las vacaciones programadas
-    $programadas = Programada::where('cdocente',$cdocente)
-    ->where(function ($query) use ($fini, $ffin) {
-      $query->where('fecha_ini', '>=' ,$fini)
-      ->where('fecha_fin', '<=', $ffin);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_ini', '<' ,$fini)
-      ->where('fecha_fin', '>=', $fini);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_fin', '>=' ,$ffin)
-      ->where('fecha_ini', '>=', $ffin);
-    })
-    ->get();
+    $programadas = $data['programadas'];
+    // $all = Programada::where('cdocente', $cdocente)->get();
+    // $programadas = [];
+    // foreach ($all as $item) {
+    //   if(( $item['fecha_ini'] >= $fini && $item['fecha_fin'] <= $ffin) 
+    //     || ($item['fecha_ini'] < $fini && $item['fecha_fin'] >= $fini)
+    //     || ($item['fecha_fin'] >= $ffin && $item['fecha_ini'] >= $ffin)){
+    //     array_push($programadas, $item);
+    //   }
+    // }    
+    // $programadas = Programada::where('cdocente',$cdocente)
+    // ->where(function ($query) use ($fini, $ffin) {
+    //   $query->where('fecha_ini', '>=' ,$fini)
+    //   ->where('fecha_fin', '<=', $ffin);
+    // })
+    // ->orWhere(function ($query) use ($fini, $ffin){
+    //   $query->where('fecha_ini', '<' ,$fini)
+    //   ->where('fecha_fin', '>=', $fini);
+    // })
+    // ->orWhere(function ($query) use ($fini, $ffin){
+    //   $query->where('fecha_fin', '>=' ,$ffin)
+    //   ->where('fecha_ini', '>=', $ffin);
+    // })
+    // ->get();
     foreach ($programadas as $rango) {
       $fecha = Carbon::parse($rango['fecha_ini']);
       $fecha_fin = Carbon::parse($rango['fecha_fin']);
@@ -131,8 +156,10 @@ class ScheduleController extends Controller
     }
 
     // Agrega los horarios (dia, noche, vacaciones)
-    $semestres = Semestre::where('status', true)->get();
-    $horarios = Horario::where('cdocente', $cdocente)->get();
+    $semestres = $data['semestres'];
+    // $semestres = Semestre::where('status', true)->get();
+    $horarios = $data['horarios'];
+    // $horarios = Horario::where('cdocente', $cdocente)->get();
     foreach ($horarios as $horario) {
       $semana = ['DOM', 'LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'];
       $weekDay = array_search($horario['dia'], $semana);
@@ -199,20 +226,23 @@ class ScheduleController extends Controller
       }
       array_push($calendario, ['mes'=> $meses[$mes-1].' '.$anho, 'semana'=>$semana]);
     }
-return view('app.calendar.show')
-            ->with('docente', $docente)
-            ->with('data', $calendario);
-
-
-
-    return [
-      'docente' => [
-        'id'=>$docente->id, 
-        'cdocente'=> $cdocente,
-        'wdocente'=> $wdocente,
-      ],
-      'calendario' => $calendario,
+    $parameters = [
+      'width' => 50,
+      'height' =>25
     ];
+    return view('app.schedule.show')
+        ->with('docente', $docente)
+        ->with('data', $calendario)
+        ->with('param', $parameters);
+
+    // return [
+    //   'docente' => [
+    //     'id'=>$docente->id, 
+    //     'cdocente'=> $cdocente,
+    //     'wdocente'=> $wdocente,
+    //   ],
+    //   'calendario' => $calendario,
+    // ];
   }    
   public function save(Request $request)
   {
