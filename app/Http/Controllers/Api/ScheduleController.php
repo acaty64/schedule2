@@ -337,6 +337,7 @@ return view('app.calendar.show')
   public function data($docente_id)
   {
     $docente = User::findOrFail($docente_id);
+
     $cdocente = $docente->cdocente;
     $wdocente = $docente->wdocente;
     $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
@@ -351,24 +352,23 @@ return view('app.calendar.show')
       }
     }
     $derechos = Derecho::where('cdocente', $cdocente)->get();
-    $gozadas = Gozada::where('cdocente', $cdocente)->where('fecha_ini','>=',$fini)->where('fecha_fin','<=',$ffin)->get();
-    $programadas = Programada::where('cdocente',$cdocente)
-    ->where(function ($query) use ($fini, $ffin) {
-      $query->where('fecha_ini', '>=' ,$fini)
-      ->where('fecha_fin', '<=', $ffin);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_ini', '<' ,$fini)
-      ->where('fecha_fin', '>=', $fini);
-    })
-    ->orWhere(function ($query) use ($fini, $ffin){
-      $query->where('fecha_fin', '>=' ,$ffin)
-      ->where('fecha_ini', '>=', $ffin);
-    })
-    ->get();
+    $gozadas = Gozada::where('cdocente', $cdocente)
+          ->where('fecha_ini','>=',$fini)->where('fecha_fin','<=',$ffin)->get();
+
+    $all = Programada::where('cdocente', $cdocente)->get();
+    $programadas = [];
+    foreach ($all as $item) {
+      if(( $item['fecha_ini'] >= $fini && $item['fecha_fin'] <= $ffin) 
+        || ($item['fecha_ini'] < $fini && $item['fecha_fin'] >= $fini)
+        || ($item['fecha_fin'] >= $ffin && $item['fecha_ini'] >= $ffin)){
+        array_push($programadas, $item);
+      }
+    }
+
     $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
     $horarios = Horario::where('cdocente', $cdocente)->get();
-    $semestres = Semestre::where('status', true)->get();
+    $semestres = Semestre::where('status', true)->orderBy('semestre')->get();
+    $semestre1 = $semestres->first()->semestre;
     $parameters = [
       'horario' => [
         'qdias' => 5,
@@ -394,7 +394,7 @@ return view('app.calendar.show')
       'horarios' => $horarios, 
       'semestres' => $semestres,
       'derechos' => $derechos,
-      'semestre' => '2019-2' 
+      'semestre' => $semestre1
     ];
   }
 }

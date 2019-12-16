@@ -113,23 +113,27 @@ export default {
   }, // end of consistencia_horario()
   //* Funcion de verificacion de periodo
   check_periodos1: (context, item) => {
+    // TODO: Se ha modificado por AQUISSE (vacaciones adelantadas previamente)
     let periodo = item.periodo;
     let fecha_ini = item.fecha_ini;
     let periodo1 = periodo.substring(0,4);
     let periodo2 = periodo.substring(5,9);
     let limite = new Date(periodo2,0,1);
     if( fecha_ini < limite ){
-      return [false, 'La fecha de inicio debe ser mayor o igual a: ' + context.getters.cfecha(limite)];
+      return [true, ''];
+      // return [false, 'La fecha de inicio debe ser mayor o igual a: ' + context.getters.cfecha(limite)];
     }else{
       return [true, ''];
     }
   },
   check_periodos2: (context, item) => {
-    if( item.adelantadas > 7){
-      return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 7.'];
-    }else{
       return [true, ''];
-    }
+    // TODO: Se ha eliminado la consistencia de exceso de vacaciones adelantadas
+    // if( item.adelantadas > 7){
+    //   return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 7.'];
+    // }else{
+    //   return [true, ''];
+    // }
   },
   check_periodos3: (context, item) => {
     if(item.porprogramar < 0 || item.porprogramar > 7){
@@ -289,8 +293,8 @@ export default {
         var filtro = rangoDias.filter(function (value) {
           return value.getDay() == xdia;
         });
-        for (var i = 0; i < filtro.length; i++) {
-          context.commit('addPorDiaWeek', filtro[i]);              
+        for (var j = 0; j < filtro.length; j++) {
+          context.commit('addPorDiaWeek', filtro[j]);              
         }
       }
     }
@@ -363,8 +367,13 @@ export default {
       context.commit('periodo', [periodo, 'gozadas', gozadas]);
       context.commit('periodo', [periodo, 'programadas', programadas]);
       context.commit('periodo', [periodo, 'adelantadas', adelantadas]);
-      if ( derechos > gozadas + programadas + adelantadas ){
-        porprogramar = ganadas - gozadas - programadas - adelantadas ;
+      // Adelantadas del periodo anterior
+      let adelantadasOld = 0;
+      if( p > 0){
+        let adelantadasOld = context.state.periodos[p-1]['adelantadas'];
+      }
+      if ( derechos > gozadas + programadas + adelantadasOld ){
+        porprogramar = derechos - gozadas - programadas - adelantadas ;
       }
       context.commit('periodo', [periodo, 'porprogramar', porprogramar]);
 
@@ -373,19 +382,28 @@ export default {
   //* Proceso de calculo de vacaciones
   calculoVacaciones: (context) => { // Calcula vacaciones
     context.commit('clearPorDiaWeek');
-    context.dispatch('calcVacPorDiaWeek');
-    context.commit('clearVacPorPeriodo');
-    context.dispatch('derechos2periodos');
-    context.commit('clearHolidays');
-    context.dispatch('addGozadas2Holidays');
-    context.dispatch('addProgramadas2Holidays');
-    context.commit('sortHolidays');
-    context.dispatch('periodo2holidays');
-    context.dispatch('calcVacPorPeriodo');
+    var check1 = context.dispatch('calcVacPorDiaWeek');
+    check1.then(function (value) {
+      context.commit('clearVacPorPeriodo');
+      var check2 = context.dispatch('derechos2periodos');
+      check2.then(function (value) {
+        context.commit('clearHolidays');
+        var check3 = context.dispatch('addGozadas2Holidays');
+        check3.then(function (value) {
+          var check4 = context.dispatch('addProgramadas2Holidays');
+          check4.then(function (value) {
+            context.commit('sortHolidays');
+            var check5 = context.dispatch('periodo2holidays');
+            check5.then(function (value) {
+                context.dispatch('calcVacPorPeriodo');
+            });
+          });
+        });
+      });
+    });
   }, // end of calculoVacaciones()
   //* Determina 'periodo' en "holidays"
   periodo2holidays(context){
-console.log('periodo2holidays');
     for (var per in context.state.periodos) {
       let periodo = context.state.periodos[per]['periodo'];
       let fini = new Date(context.state.periodos[per]['fecha_ini']);
@@ -395,6 +413,12 @@ console.log('periodo2holidays');
         if( fini <= day && day <= ffin){
           context.commit('changePeriodoInHolidays', [index, periodo]);
         }
+        // else{
+        //   console.log('periodo2holidays false:', [
+        //               'index:', index, 
+        //               'periodo:' , periodo, 
+        //               'day:' , day]);
+        // }
       }
       // calcular dia en holidays
       var dia = 0;
@@ -405,12 +429,14 @@ console.log('periodo2holidays');
           context.commit('changeDiaInHolidays', [h, ++dia]);
           if ( dia > derechos ){
             context.commit('changeTipoInHolidays', [h, 'adelantada']);
-            var nextPeriodo = '';
-            if ( per < context.state.periodos.length - 1 ){
-              var newIndex = parseInt(per) + 1;              
-              nextPeriodo = context.state.periodos[newIndex]['periodo'];
-            }
-            context.commit('changePeriodoInHolidays', [h, nextPeriodo]);
+            context.commit('changePeriodoInHolidays', [h, periodo]);
+
+            // var nextPeriodo = '';
+            // if ( per < context.state.periodos.length - 1 ){
+            //   var newIndex = parseInt(per) + 1;              
+            //   nextPeriodo = context.state.periodos[newIndex]['periodo'];
+            // }
+            // context.commit('changePeriodoInHolidays', [h, nextPeriodo]);
           }else{
 // Cuando es programada y cuando gozada ???
 //            context.commit('changeTipoInHolidays', [h, 'programada']);

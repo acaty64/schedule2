@@ -78,6 +78,7 @@ class ScheduleApiTest extends TestCase
         	'fecha_ini'=>date_create_from_format('d/m/Y', '15/07/2019'),
         	'fecha_fin'=>date_create_from_format('d/m/Y', '13/08/2019'),
             'paso'=>15,
+            'minimo'=>1,
             'maximo'=>45,
             'type'=>'fixed',
         ]);
@@ -136,7 +137,7 @@ class ScheduleApiTest extends TestCase
                 'horarios' => $horarios, 
                 'semestres' => $semestres,
                 'derechos' => $derechos,
-                'semestre' => '2019-2'  
+                'semestre' => '2018-2'  
             ]);
 
     }

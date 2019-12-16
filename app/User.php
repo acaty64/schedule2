@@ -32,13 +32,17 @@ class User extends Authenticatable
     public function getCdocenteAttribute()
     {
         $dataUser = DataUser::where('user_id', $this->id)->first();
+        if(!$dataUser){
+            return '';
+        }
         return $dataUser->cdocente;
     }
 
     public function getWdocenteAttribute()
     {
-        $dataUser = DataUser::where('user_id', $this->id)->first();
-        return $dataUser->wdoc3 . " " . $dataUser->wdoc2 . ", " . $dataUser->wdoc1;
+        return $this->name;
+        // $dataUser = DataUser::where('user_id', $this->id)->first();
+        // return $dataUser->wdoc3 . " " . $dataUser->wdoc2 . ", " . $dataUser->wdoc1;
     }
     
     protected $casts = [

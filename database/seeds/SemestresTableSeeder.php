@@ -28,7 +28,7 @@ class SemestresTableSeeder extends Seeder
         	'semestre' => '2019-2',
         	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '21/08/2019'),
         	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '18/12/2019'),
-        	'status' => true 
+        	'status' => false 
         ]);
         Semestre::create([
         	'semestre' => '2020-01',
@@ -39,7 +39,7 @@ class SemestresTableSeeder extends Seeder
         Semestre::create([
         	'semestre' => '2020-02',
         	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '10/02/2020'),
-        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '12/03/2020'),
+        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '15/03/2020'),
         	'status' => true 
         ]);
         Semestre::create([
@@ -50,14 +50,14 @@ class SemestresTableSeeder extends Seeder
         ]);
         Semestre::create([
         	'semestre' => '2020-03',
-        	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '20/07/2020'),
-        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '19/08/2020'),
+        	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '16/07/2020'),
+        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '16/08/2020'),
         	'status' => true 
         ]);
         Semestre::create([
         	'semestre' => '2020-2',
-        	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '24/08/2020'),
-        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '18/12/2020'),
+        	'fecha_ini' => DateTime::createFromFormat('d/m/Y', '17/08/2020'),
+        	'fecha_fin' => DateTime::createFromFormat('d/m/Y', '20/12/2020'),
         	'status' => true 
         ]);
     }

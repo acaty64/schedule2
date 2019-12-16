@@ -28,10 +28,16 @@ class Programada extends Model
         $opcion = $this->minimo;
         while ($opcion <= $this->maximo) {
             array_push($opciones, $opcion);
-            $opcion += $this->paso;
+            if($this->paso == 0){
+                $opcion = $this->maximo + 1;
+            }else{
+                $opcion += $this->paso;
+            }
         }
-        if($opcion != $this->maximo){
-            array_push($opciones, $this->maximo);
+        if(sizeof($opciones)>0){
+            if($opciones[sizeof($opciones)-1] != $this->maximo){
+                array_push($opciones, $this->maximo);
+            }            
         }
         return $opciones;
     }
