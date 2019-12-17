@@ -12,7 +12,7 @@
                 <button v-if="status == 'view'" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
                 <button v-if="status == 'edit'" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
                 <button v-if="status == 'edit'" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
-                <a v-if="status == 'view'" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/show/'+ docente_id">Ver Calendario</a>
+                <a v-if="status == 'view'" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/crono/show/'+ docente_id">Ver Cronograma</a>
               </div>              
               <div class="col-md-6"> 
                 <span v-for="mess in check_main">

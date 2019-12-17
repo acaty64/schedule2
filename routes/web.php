@@ -238,9 +238,19 @@ Route::get('gozada/destroy/{docente_id}/{id}', [
 
 /////////////// SCHEDULE
 
-Route::get('schedule/show/{docente_id}', [
-	'as'	=> 'app.schedule.show',
-	'uses'	=> 'Api\ScheduleController@show'
+Route::get('schedule/crono/show/{docente_id}', [
+	'as'	=> 'api.schedule.crono.show',
+	'uses'	=> 'Api\ScheduleController@cronoShow'
+]);
+
+Route::get('schedule/crono/pdf/{docente_id}', [
+	'as'	=> 'api.schedule.crono.pdf',
+	'uses'	=> 'Api\ScheduleController@cronoPdf'
+]);
+
+Route::get('schedule/crono/download/{docente_id}', [
+	'as'	=> 'api.schedule.crono.download',
+	'uses'	=> 'Api\ScheduleController@cronoDownload'
 ]);
 
 Route::get('schedule/edit/{docente_id}', [

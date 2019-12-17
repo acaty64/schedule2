@@ -57128,10 +57128,10 @@ var render = function() {
                         staticClass: "btn btn-sm btn-primary",
                         attrs: {
                           role: "button",
-                          href: "/schedule/show/" + _vm.docente_id
+                          href: "/schedule/crono/show/" + _vm.docente_id
                         }
                       },
-                      [_vm._v("Ver Calendario")]
+                      [_vm._v("Ver Cronograma")]
                     )
                   : _vm._e()
               ]),

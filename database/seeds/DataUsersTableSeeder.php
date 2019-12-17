@@ -34,7 +34,7 @@ DataUser::create(['wdoc1' => 'BARNETT GUILLEN, LIDA ESTHER','email1' => 'lbarnet
 DataUser::create(['wdoc1' => 'COSTA RODRIGUEZ, JORGE EDUARDO','email1' => 'jcosta@ucss.edu.pe', 'cdocente' => '000728']);
 DataUser::create(['wdoc1' => 'FLORES BALLESTEROS, TEODORO EMILIO','email1' => 'eflores@ucss.edu.pe', 'cdocente' => '000590']);
 DataUser::create(['wdoc1' => 'GARCIA REGAL, RAUL FRANCISCO','email1' => 'rgarcia@ucss.edu.pe', 'cdocente' => '000474']);
-
+DataUser::create(['wdoc1' => 'LOPEZ BRAVO, RODOLFO ODLANIER','email1' => 'rlopez@ucss.edu.pe', 'cdocente' => '000510']);
 DataUser::create(['wdoc1' => 'MANRIQUE PINO, OSCAR','email1' => 'omanrique@ucss.edu.pe', 'cdocente' => '000253']);
 DataUser::create(['wdoc1' => 'MAZA CHUMPITAZ, ANGELA GIOVANA','email1' => 'amaza@ucss.edu.pe', 'cdocente' => '000620']);
 DataUser::create(['wdoc1' => 'MEDINA SIRLOPU, MARTHA','email1' => 'mmedina@ucss.edu.pe', 'cdocente' => '000113']);
@@ -47,6 +47,7 @@ DataUser::create(['wdoc1' => 'SEMINARIO OLORTIGUE, PABLO HUGO','email1' => 'psem
 DataUser::create(['wdoc1' => 'TENORIO MENDEZ, WALTER ORLANDO','email1' => 'otenorio@ucss.edu.pe', 'cdocente' => '000241']);
 DataUser::create(['wdoc1' => 'VELASQUEZ RODRIGUEZ, NORMA CONSTANZA','email1' => 'nvelasquez@ucss.edu.pe', 'cdocente' => '000441']);
 DataUser::create(['wdoc1' => 'ZARATE HERMOZA, JESUS ROBERTO','email1' => 'jzarate@ucss.edu.pe', 'cdocente' => '000645']);
+
 
         $datausers = DataUser::all();
         foreach($datausers as $item){

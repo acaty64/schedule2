@@ -24,6 +24,7 @@ class DerechosTableSeeder extends Seeder
         ]);
 
 
+
 Derecho::create(['cdocente' => '000566','periodo' => '2019-2020','dias' => 60]);
 Derecho::create(['cdocente' => '000152','periodo' => '2018-2019','dias' => 60]);
 Derecho::create(['cdocente' => '000152','periodo' => '2019-2020','dias' => 60]);

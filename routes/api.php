@@ -43,14 +43,14 @@ Route::post('schedule/save', [
 	'uses'	=> 'Api\ScheduleController@save'
 ]);
 
-Route::get('vacaciones/index', [
-	'as'	=> 'api.vacaciones.index',
-	'uses'	=> 'Api\VacacionesController@index'
-]);
-Route::post('schedule/create', [
-	'as'	=> 'schedule.create',
-	'uses'	=> 'Api\ScheduleController@create'
-]);
+// Route::get('vacaciones/index', [
+// 	'as'	=> 'api.vacaciones.index',
+// 	'uses'	=> 'Api\VacacionesController@index'
+// ]);
+// Route::post('schedule/create', [
+// 	'as'	=> 'schedule.create',
+// 	'uses'	=> 'Api\ScheduleController@create'
+// ]);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
