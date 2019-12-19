@@ -17,10 +17,70 @@ use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
+  public function dataReport($docente_id)
+  {
+    $user = User::findOrFail($docente_id);
+    $cdocente = $user->cdocente;
+    $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
+    $programadas = Programada::where('cdocente', $cdocente)->get();
+    $docente = $user;
+
+    $data = [
+      'periodos' => $periodos,
+      'programadas' => $programadas,
+      'docente' => $user
+    ];
+
+    return $data;
+  }
+  public function reportShow($docente_id)
+  {
+    $data = $this->dataReport($docente_id);
+    $data['type'] = 'Screen';
+
+    return view('app.schedule.report')
+        ->with('data',$data);  
+  }
+
+  public function reportPdf($docente_id)
+  {
+    $data = $this->dataReport($docente_id);
+    $data['type'] = 'PDF';
+
+    try{
+      $pdf = PDF::loadView('app.schedule.report', compact('data'))
+                ->setPaper('a4')
+                ->setOption('margin-top', 25)
+                ->setOrientation('Portrait');
+      return $pdf->stream('reporte.pdf');      
+    } catch (Exception $e) {
+      dd('Error reportPdf', $e);
+    }
+  }
+
+  public function reportDownload($docente_id)
+  {
+    $data = $this->dataReport($docente_id);
+    $data['type'] = 'PDF';
+
+    try{
+      $fileout = 'report_'.$data['docente']['name'];
+      $pdf = PDF::loadView('app.schedule.report', compact('data'))
+                ->setPaper('a4')
+                ->setOption('margin-top', 25)
+                ->setOrientation('Portrait');
+      return $pdf->download($fileout);      
+    } catch (Exception $e) {
+      dd('Error reportPdf', $e);
+    }
+    
+  }
+
   public function cronoDownload($docente_id)
   {
     # code...
   }
+  
   public function cronoPdf($docente_id)
   {
     $data = $this->dataCrono($docente_id);
@@ -363,7 +423,7 @@ class ScheduleController extends Controller
 
     $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
     $horarios = Horario::where('cdocente', $cdocente)->get();
-    $semestres = Semestre::where('status', true)->orderBy('semestre')->get();
+    $semestres = Semestre::where('status', true)->orderBy('fecha_ini')->get();
     $semestre1 = $semestres->first()->semestre;
     $parameters = [
       'horario' => [

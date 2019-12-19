@@ -2,6 +2,8 @@ export default {
   parameters: (state) => {
     return state.parameters;
   },
+  semestres: (state) => { return state.semestres },
+  horarios: (state) => { return state.horarios },
   cdocente: (state) => {
     return state.cdocente;
   },

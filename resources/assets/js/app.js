@@ -21,7 +21,7 @@ window.Vue = require('vue');
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 Vue.component('schedule-edit', 	require('./components/schedule/edit.vue'));
-// Vue.component('schedule-index', require('./components/schedule/index.vue'));
+Vue.component('schedule-report', require('./components/schedule/report.vue'));
 Vue.component('check-component', require('./components/schedule/check.vue'));
 
 /**
