@@ -24,8 +24,6 @@ Route::get('login',[
 	'uses' => 'Auth\LoginController@login'
 ]);
 
-
-
 // Route::get('/home', 'HomeController@index')->name('home');
 Route::get('loginGoogle',[
 	'as' => 'loginGoogle',

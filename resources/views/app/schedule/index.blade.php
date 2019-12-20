@@ -14,43 +14,45 @@
 		<tbody>
 
 			@foreach($data as $docente)
-			<tr>
-				<td>{{ $docente['id'] }}</td>
-				<td>{{ $docente['cdocente'] }}</td>
-				<td>{{ $docente['name'] }}</td>
-				<td>
-					<a role="button"
-						class="btn btn-sm btn-success glyphicon glyphicon-pencil" 
-						href="{{ route('app.schedule.edit', $docente['id'])}}" 
-						title="Editar Cronograma"></a>
-					
-					<a role="button" 
-						class="btn btn-sm btn-info glyphicon glyphicon-calendar" 
-						href="{{ route('api.schedule.crono.show', $docente['id'])}}" 
-						title="Ver Cronograma">Ver</a>
-					<a role="button" 
-						class="btn btn-sm btn-primary glyphicon glyphicon-show" 
-						href="{{ route('api.schedule.crono.pdf', $docente['id'])}}" 
-						title="Ver en PDF">Crono</a>
-					<a role="button" 
-						class="btn btn-sm btn-success glyphicon glyphicon-download" 
-						href="{{ route('api.schedule.crono.download', $docente['id'])}}" 
-						title="Descargar PDF">Crono</a>
+				@if($docente['cdocente'] != '')
+				<tr>
+					<td>{{ $docente['id'] }}</td>
+					<td>{{ $docente['cdocente'] }}</td>
+					<td>{{ $docente['name'] }}</td>
+					<td>
+						<a role="button"
+							class="btn btn-sm btn-success glyphicon glyphicon-pencil" 
+							href="{{ route('app.schedule.edit', $docente['id'])}}" 
+							title="Editar Cronograma"></a>
+						
+						<a role="button" 
+							class="btn btn-sm btn-info glyphicon glyphicon-calendar" 
+							href="{{ route('api.schedule.crono.show', $docente['id'])}}" 
+							title="Ver Cronograma">Ver</a>
+						<a role="button" 
+							class="btn btn-sm btn-primary glyphicon glyphicon-show" 
+							href="{{ route('api.schedule.crono.pdf', $docente['id'])}}" 
+							title="Ver en PDF">Crono</a>
+						<a role="button" 
+							class="btn btn-sm btn-success glyphicon glyphicon-download" 
+							href="{{ route('api.schedule.crono.download', $docente['id'])}}" 
+							title="Descargar PDF">Crono</a>
 
-					<a role="button" 
-						class="btn btn-sm btn-info glyphicon glyphicon-list" 
-						href="{{ route('api.schedule.report.show', $docente['id'])}}"
-						title="Ver reporte">Ver</a>
-					<a role="button" 
-						class="btn btn-sm btn-primary glyphicon glyphicon-show" 
-						href="{{ route('api.schedule.report.pdf', $docente['id'])}}"
-						title="Ver PDF">Reporte</a>
-					<a role="button" 
-						class="btn btn-sm btn-success glyphicon glyphicon-download" 
-						href="{{ route('api.schedule.report.download', $docente['id'])}}"
-						title="Descargar PDF">Reporte</a>
-				</td>
-			</tr>
+						<a role="button" 
+							class="btn btn-sm btn-info glyphicon glyphicon-list" 
+							href="{{ route('api.schedule.report.show', $docente['id'])}}"
+							title="Ver reporte">Ver</a>
+						<a role="button" 
+							class="btn btn-sm btn-primary glyphicon glyphicon-show" 
+							href="{{ route('api.schedule.report.pdf', $docente['id'])}}"
+							title="Ver PDF">Reporte</a>
+						<a role="button" 
+							class="btn btn-sm btn-success glyphicon glyphicon-download" 
+							href="{{ route('api.schedule.report.download', $docente['id'])}}"
+							title="Descargar PDF">Reporte</a>
+					</td>
+				</tr>
+				@endif
 			@endforeach
 		</tbody>
 	</table>

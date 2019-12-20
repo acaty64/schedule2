@@ -52,6 +52,39 @@
 		</tbody>
 	</table>
 
+	<table>
+		<thead>
+			<div class='title2'>HORARIOS PROGRAMADOS:</div>
+		</thead>
+	</table>
+	<table>
+		<thead>
+			<th class='header'>Semestre</th>
+			<th class='header'>De:</th>
+			<th class='header'>A:</th>
+			<th class='header'>LUN</th>
+			<th class='header'>MAR</th>
+			<th class='header'>MIE</th>
+			<th class='header'>JUE</th>
+			<th class='header'>VIE</th>
+			<th class='header'>SAB</th>
+		</thead>
+		<tbody>
+			@foreach($data['horarios'] as $item)
+				<tr>
+					<td>{{ $item['semestre'] }}</td>
+					<td>{{ $item['fecha_ini'] }}</td>
+					<td>{{ $item['fecha_fin'] }}</td>
+					<td>{{ $item['LUN'] }}</td>
+					<td>{{ $item['MAR'] }}</td>
+					<td>{{ $item['MIE'] }}</td>
+					<td>{{ $item['JUE'] }}</td>
+					<td>{{ $item['VIE'] }}</td>
+					<td>{{ $item['SAB'] }}</td>
+				</tr>
+			@endforeach
+		</tbody>
+	</table>
 </div>
 @endsection
 
@@ -72,7 +105,7 @@
 	}
 	table {
 		margin-bottom: 10px;
-		width: 50%;
+		width: 100%;
 		border-collapse: collapse;
 		background-color: blue;
 		color: white;

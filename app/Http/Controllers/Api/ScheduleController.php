@@ -23,16 +23,71 @@ class ScheduleController extends Controller
     $cdocente = $user->cdocente;
     $periodos = Periodo::where('cdocente', $cdocente)->where('status', true)->get();
     $programadas = Programada::where('cdocente', $cdocente)->get();
+
+    $pre = Horario::where('cdocente', $cdocente)->get();
+    $semestres = Semestre::where('status', true)->get();
+
+    $horarios = [];
+    foreach ($semestres as $semestre) {
+      $horario = [
+        'semestre' => $semestre->semestre,
+        'fecha_ini' => $semestre->fecha_ini,
+        'fecha_fin' => $semestre->fecha_fin,
+        'LUN' => '',
+        'MAR' => '',
+        'MIE' => '',
+        'JUE' => '',
+        'VIE' => '',
+        'SAB' => '',
+        'status' => true
+      ];
+      $dias = $pre->where('semestre', $semestre->semestre);
+      foreach ($dias as $dia) {
+        $horario[$dia->dia] = $dia->turno;
+      }
+      array_push($horarios, $horario);
+    }
+
+    foreach ($horarios as $key=>$h) {
+      foreach ($programadas as $p) {
+        if($h['fecha_ini'] >= $p['fecha_ini'] && $h['fecha_fin'] <= $p['fecha_fin']){
+          $horarios[$key]['status'] = false;
+        }
+      }
+    }
+
+    foreach ($horarios as $key => $h) {
+      if($h['status'] == false){
+        $horarios[$key]['LUN'] = 'vacaciones';
+        $horarios[$key]['MAR'] = 'vacaciones';
+        $horarios[$key]['MIE'] = 'vacaciones';
+        $horarios[$key]['JUE'] = 'vacaciones';
+        $horarios[$key]['VIE'] = 'vacaciones';
+        $horarios[$key]['SAB'] = 'vacaciones';
+      }
+    }
+
+    foreach ($horarios as $key => $h) {
+      foreach (['LUN', 'MAR', 'MIE', 'JUE', 'VIE', 'SAB'] as $key2 => $d) {
+        if($h[$d] == 'vacaciones'){
+          $horarios[$key][$d] = 'vacs';
+        }
+      }
+    }
+
+
     $docente = $user;
 
     $data = [
+      'docente' => $user,
       'periodos' => $periodos,
       'programadas' => $programadas,
-      'docente' => $user
+      'horarios' => $horarios
     ];
 
     return $data;
   }
+
   public function reportShow($docente_id)
   {
     $data = $this->dataReport($docente_id);
@@ -98,6 +153,7 @@ class ScheduleController extends Controller
   public function cronoShow($docente_id)
   {
     $showData = $this->dataCrono($docente_id);
+
     $showData['type'] = 'Screen';
 
     return view('app.schedule.crono')
@@ -115,11 +171,9 @@ class ScheduleController extends Controller
     // Define fini y ffin segun los periodos vigentes
     $periodos = $data['periodos'];
     $fini = date("Y-m-d");    // Desde hoy
-    $ffin = date('Y-m-d', strtotime('1900-1-1'));
+    // $ffin = date('Y-m-d', strtotime('1900-1-1'));
+    $ffin = $fini;
     foreach ($periodos as $periodo) {
-      // if( date('Y-m-d', strtotime($periodo['fecha_ini']))<$fini){
-      //   $fini = $periodo['fecha_ini'];
-      // }
       if( date('Y-m-d', strtotime($periodo['fecha_fin']))>$ffin){
         $ffin = $periodo['fecha_fin'];
       }
@@ -219,6 +273,7 @@ class ScheduleController extends Controller
           }
         }
     }
+// dd( 'dataCrono ', $docente);
     // // Filtra desde hoy()
     // Genera el calendario semana x semana
     $key_first = array_keys($calendar)[0];
