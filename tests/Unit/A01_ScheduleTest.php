@@ -35,7 +35,7 @@ class A01_ScheduleTest extends TestCase
     /**     * @test      */
     public function an_authorized_user_can_access_to_home()
     {
-        $user = $this->defaultUser();
+        $user = $this->defaultUser([], 'doc');
         $this->actingAs($user)
             ->get('/home')
             ->assertStatus(200)

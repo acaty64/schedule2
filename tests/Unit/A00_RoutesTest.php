@@ -21,15 +21,16 @@ class A00_RoutesTest extends TestCase
     /**     * @test      */
     public function an_authorized_user_can_access_to_home()
     {
-        $user = $this->defaultUser();
+        $user = $this->defaultUser([],'doc');
         $this->actingAs($user)
             ->get('/home')
             ->assertStatus(200)
-            ->assertViewIs('home');
+            ->assertViewIs('home')
+            ->assertSee('Bienvenido');
     }
 
     /**     * @test      */
-    public function an_unauthorized_user_can_not_access_to_home()
+    public function an_unauthorized_user_cannot_access_to_home()
     {
         $this->get('/home')
             ->assertStatus(302)

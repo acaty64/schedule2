@@ -11,7 +11,7 @@ use Laravel\Socialite\Two\User as SocialiteUser;
 use Mockery as m;
 use Tests\TestCase;
 
-class LoginTest extends TestCase
+class GoogleLoginTest extends TestCase
 {
     
     use RefreshDatabase;
@@ -29,7 +29,6 @@ class LoginTest extends TestCase
             ->shouldReceive('user')
             ->andReturn($googleUser);
     }
-
     protected function mockGoogleProvider()
     {
         $provider = m::mock(GoogleProvider::class);
@@ -47,12 +46,16 @@ class LoginTest extends TestCase
     /** @test */
     function an_authorized_user_by_google_are_authenticated()
     {
+
+
         // Given
-        // $this->withoutExceptionHandling();
-        $user = $this->defaultUser([
-                'email' => $this->email,
-                'name' => $this->name
-            ], 'doc');
+        $this->seed();
+        $this->withoutExceptionHandling();
+
+
+        // factory(User::class)->create([
+        //     'email' => $email,
+        // ]);
 
         $googleUser = m::mock(SocialiteUser::class, [
             'getEmail' => $this->email,
@@ -62,7 +65,6 @@ class LoginTest extends TestCase
         $this->mockGoogleProvider()
             ->shouldReceive('user')
             ->andReturn($googleUser);
-
         // When
         $response = $this->get('/login/callback');
 
@@ -85,29 +87,5 @@ class LoginTest extends TestCase
                 ->assertStatus(200)
                 ->assertSee($message);
            
-    }
-
-    /**     * @test      */
-    function an_unauthorized_google_user_redirect_to_loginGoogle()
-    {
-
-        // Given
-        $googleUser = m::mock(SocialiteUser::class, [
-            'getEmail' => $this->email,
-            'getName' => $this->name,
-        ]);
-
-        $this->mockGoogleProvider()
-            ->shouldReceive('user')
-            ->andReturn($googleUser);
-        // When
-        $response = $this->get('/login/callback');
-
-        // Then
-        $this->assertInvalidCredentials([
-            'email' => $this->email,
-        ]);
-
-        $response->assertRedirect('/loginGoogle');
     }
 }
