@@ -13,13 +13,26 @@ class A01_AuthorizationTest extends TestCase
     use DatabaseMigrations;
 
     /**     * @test      */
-    public function an_admin_can_access_to_create_derechos()
+    public function an_admin_user_can_access_to_create_derechos()
     {
         $user = $this->defaultUser([],'admin');
         $this->actingAs($user)
-            ->get('/derecho/create')
+            ->get('/')
+            ->assertStatus(200);
+        $this->get('/derecho/create')
             ->assertStatus(200)
             ->assertViewIs('app.derechos.create');
+    }
+
+    public function a_doc_user_cannot_access_to_create_derechos()
+    {
+        $user = $this->defaultUser([],'doc');
+        $this->actingAs($user)
+            ->get('/')
+            ->assertStatus(200);
+        $this->get('/derecho/create')
+            ->assertStatus(302)
+            ->assertRedirect('login');
     }
 
     /**     * @test      */
@@ -42,8 +55,67 @@ class A01_AuthorizationTest extends TestCase
             ->assertViewIs('app.derechos.edit');
     }
 
+    /**     * @test      */
+    public function a_doc_user_cannot_access_to_edit_derechos()
+    {
+        // Given
+        $user = $this->defaultUser([],'doc');
+        $doc = User::create([
+            'email' => 'jdoe@gmail.com',
+            'name' => 'John Doe'
+        ]);
+        $derechos = Derecho::create([
+                'cdocente'=>'900000',
+                'periodo'=>'2018-2019',
+                'dias'=>60
+        ]);
+        $this->actingAs($user)
+            ->get('/derecho/edit/'.$user->id.'/1')
+            ->assertStatus(302)
+            ->assertRedirect('login');
+    }
 
+    /**     * @test      */
+    public function an_admin_can_access_to_read_derechos()
+    {
+        // Given
+        $user = $this->defaultUser([],'admin');
+        $doc = User::create([
+            'email' => 'jdoe@gmail.com',
+            'name' => 'John Doe'
+        ]);
+        $derechos = Derecho::create([
+                'cdocente'=>'900000',
+                'periodo'=>'2018-2019',
+                'dias'=>60
+        ]);
+        $this->actingAs($user)
+            ->get('/derecho/read/'.$user->id)
+            ->assertStatus(200)
+            ->assertViewIs('app.derechos.index');
+    }
+
+    /**     * @test      */
+    public function a_doc_user_cannot_access_to_read_derechos()
+    {
+        // Given
+        $user = $this->defaultUser([],'doc');
+        $doc = User::create([
+            'email' => 'jdoe@gmail.com',
+            'name' => 'John Doe'
+        ]);
+        $derechos = Derecho::create([
+                'cdocente'=>'900000',
+                'periodo'=>'2018-2019',
+                'dias'=>60
+        ]);
+        $this->actingAs($user)
+            ->get('/derecho/read/'.$user->id)
+            ->assertStatus(302)
+            ->assertRedirect('login');
+    }
 
 
 
 }
+

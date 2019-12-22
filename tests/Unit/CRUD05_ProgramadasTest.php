@@ -18,13 +18,16 @@ class CRUD05_ProgramadasTest extends TestCase
      */
     public function createStoreProgramadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $response = $this->get('programada/create');
       $response->assertStatus(200);
 
       $data = [
-        'docente_id'=>$user->first()->id,
+        'docente_id'=>$user->id,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'paso'=>1,
@@ -35,7 +38,7 @@ class CRUD05_ProgramadasTest extends TestCase
       $response = $this->post('/programada/store', $data);
       $response->assertStatus(302);
       $this->assertDatabaseHas('programadas', [
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'paso'=>1,
@@ -49,10 +52,13 @@ class CRUD05_ProgramadasTest extends TestCase
      */
     public function readProgramadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);      
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $programada1 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'paso'=>1,
@@ -60,7 +66,7 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
       $programada2 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'paso'=>1,
@@ -68,7 +74,7 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
 
-      $response = $this->get('programada/read/'.$user->first()->id);
+      $response = $this->get('programada/read/'.$user->id);
       $response->assertStatus(200);
 
       $response->assertSeeText($programada1['fecha_ini']);
@@ -80,10 +86,13 @@ class CRUD05_ProgramadasTest extends TestCase
      */
     public function editUpdateProgramadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);  
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $programada1 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'paso'=>1,
@@ -91,7 +100,7 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
       $programada2 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'paso'=>1,
@@ -99,7 +108,7 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
 
-      $response = $this->get('programada/edit/1/2');
+      $response = $this->get('programada/edit/'.$user->id.'/2');
       $response->assertStatus(200);
 
       $value1 = $programada1->fecha_ini;
@@ -109,7 +118,7 @@ class CRUD05_ProgramadasTest extends TestCase
 
       $data = [
         'id' => 2,
-        'docente_id'=>1,
+        'docente_id'=> $user->id,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
         'paso'=>1,
@@ -122,7 +131,7 @@ class CRUD05_ProgramadasTest extends TestCase
 
       $this->assertDatabaseHas('programadas',[
         'id' => 2,
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
         'paso'=>1,
@@ -136,10 +145,13 @@ class CRUD05_ProgramadasTest extends TestCase
      */
     public function deleteProgramadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $programada1 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'paso'=>1,
@@ -147,7 +159,7 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
       $programada2 = Programada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'paso'=>1,
@@ -155,11 +167,12 @@ class CRUD05_ProgramadasTest extends TestCase
         'type' => 'fixed'
       ]);
 
-      $response = $this->get('programada/destroy/1/2');
+      $response = $this->get('programada/destroy/'.$user->id.'/2');
       $response->assertStatus(302);
 
       $this->assertDatabaseMissing('programadas',[
         'id' => $programada2->id,
+        'cdocente' => $user->id,
         'fecha_ini' => $programada2->fecha_ini,
         'fecha_fin' => $programada2->fecha_fin,
         'paso'=>1,

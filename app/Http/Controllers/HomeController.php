@@ -23,6 +23,11 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $roles = auth()->user()->roles();
+        if(!\Session::get('rol')){
+            $rol = $roles->first()->trole->acronym;
+            \Session::put('rol', $rol);            
+        }
+        return view('home')->with('roles', $roles);
     }
 }

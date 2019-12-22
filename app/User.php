@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Role;
+use App\Trole;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +12,7 @@ class User extends Authenticatable
 {
     use Notifiable;
 
-    protected $append = ['cdocente', 'wdocente'];
+    protected $append = ['cdocente', 'wdocente', 'isAdmin', 'isMaster', 'isDoc'];
 
     protected $fillable = [
         'name', 'email', 'password'
@@ -20,6 +21,36 @@ class User extends Authenticatable
     protected $hidden = [
         'remember_token',
     ];
+
+    public function getIsMasterAttribute()
+    {
+        $trole = Trole::where('acronym', 'master')->first();
+        $rol = Role::where('user_id', $this->id)->where('trole_id', $trole->id)->first();
+        if(!$rol){
+            return false;
+        }
+        return true;
+    }
+
+    public function getIsAdminAttribute()
+    {
+        $trole = Trole::where('acronym', 'admin')->first();
+        $rol = Role::where('user_id', $this->id)->where('trole_id', $trole->id)->first();
+        if(!$rol){
+            return false;
+        }
+        return true;
+    }
+
+    public function getIsDocAttribute()
+    {
+        $trole = Trole::where('acronym', 'doc')->first();
+        $rol = Role::where('user_id', $this->id)->where('trole_id', $trole->id)->first();
+        if(!$rol){
+            return false;
+        }
+        return true;
+    }
 
     public function roles()
     {

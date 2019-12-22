@@ -18,13 +18,16 @@ class CRUD06_GozadasTest extends TestCase
      */
     public function createStoreGozadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $response = $this->get('gozada/create');
       $response->assertStatus(200);
 
       $data = [
-        'docente_id'=>$user->first()->id,
+        'docente_id'=>$user->id,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'observaciones' => 'prueba'
@@ -33,7 +36,7 @@ class CRUD06_GozadasTest extends TestCase
       $response = $this->post('/gozada/store', $data);
       $response->assertStatus(302);
       $this->assertDatabaseHas('gozadas', [
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'observaciones' => 'prueba'
@@ -45,20 +48,23 @@ class CRUD06_GozadasTest extends TestCase
      */
     public function readGozadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);      
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $gozada1 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
       ]);
       $gozada2 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
       ]);
 
-      $response = $this->get('gozada/read/'.$user->first()->id);
+      $response = $this->get('gozada/read/'.$user->id);
       $response->assertStatus(200);
 
       $response->assertSeeText($gozada1['fecha_ini']);
@@ -70,20 +76,23 @@ class CRUD06_GozadasTest extends TestCase
      */
     public function editUpdateGozadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);  
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $gozada1 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
       ]);
       $gozada2 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
       ]);
 
-      $response = $this->get('gozada/edit/1/2');
+      $response = $this->get('gozada/edit/'.$user->id.'/2');
       $response->assertStatus(200);
 
       $value1 = $gozada1->fecha_ini;
@@ -93,7 +102,7 @@ class CRUD06_GozadasTest extends TestCase
 
       $data = [
         'id' => 2,
-        'docente_id'=>1,
+        'docente_id'=>$user->id,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
         'observaciones' => 'prueba'
@@ -104,7 +113,7 @@ class CRUD06_GozadasTest extends TestCase
 
       $this->assertDatabaseHas('gozadas',[
         'id' => 2,
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
         'observaciones' => 'prueba'
@@ -116,20 +125,23 @@ class CRUD06_GozadasTest extends TestCase
      */
     public function deleteGozadasTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $gozada1 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
       ]);
       $gozada2 = Gozada::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
       ]);
 
-      $response = $this->get('gozada/destroy/1/2');
+      $response = $this->get('gozada/destroy/'.$user->id.'/2');
       $response->assertStatus(302);
 
       $this->assertDatabaseMissing('gozadas',[

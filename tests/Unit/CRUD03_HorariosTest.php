@@ -7,6 +7,7 @@ use App\Horario;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Auth;
 use Tests\TestCase;
 
 class CRUD03_HorariosTest extends TestCase
@@ -18,13 +19,16 @@ class CRUD03_HorariosTest extends TestCase
      */
     public function createStoreHorariosTest()
     {
-        $user = factory(\App\User::class,1)->create();
-        factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
         $response = $this->get('horario/create');
         $response->assertStatus(200);
 
         $data = [
-            'docente' => 1,
+            'docente' => $user->id,
             'semestre' => '2019-2',
             'LUN' => 'dia',
             'MAR' => 'dia',
@@ -35,46 +39,45 @@ class CRUD03_HorariosTest extends TestCase
         ];
 		$response = $this->post('/horario/store', $data);
 		$response->assertStatus(302);
-        $cdocente = User::findOrFail(1)->cdocente;
 
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2',
                 'dia'=>'LUN', 
                 'turno'=>$data['LUN']
             ]);
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2', 
                 'dia'=>'MAR', 
                 'turno'=>$data['MAR']
             ]);
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2', 
                 'dia'=>'MIE', 
                 'turno'=>$data['MIE']
             ]);
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2', 
                 'dia'=>'JUE', 
                 'turno'=>$data['JUE']
             ]);
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2', 
                 'dia'=>'VIE', 
                 'turno'=>$data['VIE']
             ]);
         $this->assertDatabaseHas('horarios',
             [ 
-                'cdocente'=>$cdocente,
+                'cdocente'=>$user->cdocente,
                 'semestre'=>'2019-2', 
                 'dia'=>'SAB', 
                 'turno'=>$data['SAB']
@@ -86,30 +89,19 @@ class CRUD03_HorariosTest extends TestCase
      */
     public function readHorariosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
 
         $horario1 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'LUN',
             'turno'=>'dia'
         ]);
         $horario2 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'MAR',
             'turno'=>'noche'
@@ -132,36 +124,25 @@ class CRUD03_HorariosTest extends TestCase
      */
     public function editUpdateHorariosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
 
         $horario1 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'LUN',
             'turno'=>'dia'
         ]);
         $horario2 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'MAR',
             'turno'=>'noche'
         ]);
 
-        $response = $this->get('horario/edit/1/2019-2');
+        $response = $this->get('horario/edit/'.$user->id.'/2019-2');
         $response->assertStatus(200);
 
         $value = $user->wdocente;
@@ -173,8 +154,8 @@ class CRUD03_HorariosTest extends TestCase
         $response->assertSee($value2);
 
         $data = [
-            'docente_id' => 1,
-            'cdocente' => $datauser->cdocente,
+            'docente_id' => $user->id,
+            'cdocente' => $user->cdocente,
             'semestre'=>'2019-2',
             'LUN' => 'noche',
             'MAR' => 'dia',
@@ -231,48 +212,37 @@ class CRUD03_HorariosTest extends TestCase
      */
     public function deleteHorariosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
 
         $horario1 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'LUN',
             'turno'=>'dia'
         ]);
         $horario2 = Horario::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>'2019-2',
             'dia'=>'MAR',
             'turno'=>'noche'
         ]);
 
-        $response = $this->get('horario/destroy/1/2019-2');
+        $response = $this->get('horario/destroy/'.$user->id.'/2019-2');
         $response->assertStatus(302);
 
         $this->assertDatabaseMissing('horarios',[
             'id' => $horario1->id,
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>$horario1->semestre,
             'dia'=>$horario1->dia,
             'turno'=>$horario1->turno
         ]);
         $this->assertDatabaseMissing('horarios',[
             'id' => $horario2->id,
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$user->cdocente,
             'semestre'=>$horario2->semestre,
             'dia'=>$horario2->dia,
             'turno'=>$horario2->turno

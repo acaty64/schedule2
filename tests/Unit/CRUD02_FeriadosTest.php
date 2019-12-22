@@ -19,6 +19,9 @@ class CRUD02_FeriadosTest extends TestCase
      */
     public function createStoreFeriadosTest()
     {
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $response = $this->get('feriado/create');
         $response->assertStatus(200);
 
@@ -40,6 +43,9 @@ class CRUD02_FeriadosTest extends TestCase
      */
     public function readFeriadosTest()
     {
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $feriado1 = Feriado::create([
           'fecha' => date_create_from_format('d/m/Y', '30/08/2019'),
           'wferiado' => 'Santa Rosa de Lima',
@@ -61,6 +67,9 @@ class CRUD02_FeriadosTest extends TestCase
      */
     public function editUpdateFeriadosTest()
     {
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $feriado1 = Feriado::create([
           'fecha' => date_create_from_format('d/m/Y', '30/08/2019')->format('Y-m-d'),
           'wferiado' => 'Santa Rosa de Lima',
@@ -99,6 +108,9 @@ class CRUD02_FeriadosTest extends TestCase
      */
     public function deleteFeriadosTest()
     {
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $feriado1 = Feriado::create([
           'fecha' => date_create_from_format('d/m/Y', '30/08/2019')->format('Y-m-d'),
           'wferiado' => 'Santa Rosa de Lima',

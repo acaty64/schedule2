@@ -18,10 +18,8 @@ class CRUD01_DerechosTest extends TestCase
      */
     public function createStoreDerechosTest()
     {
-        $user = factory(\App\User::class,1)->create();
-        $datauser = factory(DataUser::class,1)->create(['user_id'=>$user->first()->id]);
-
-        $this->actingAs($user->first());
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
 
         $response = $this->get('derecho/create');
         $response->assertStatus(200);
@@ -40,9 +38,9 @@ class CRUD01_DerechosTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('traces',[
-            'cdocente' => $user->first()->cdocente,
+            'cdocente' => $auth->cdocente,
             'change' => 'Create Derechos',
-            'user_change' => $user->first()->id
+            'user_change' => $auth->id
         ]);
     }
 
@@ -51,37 +49,26 @@ class CRUD01_DerechosTest extends TestCase
      */
     public function readDerechosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $doc = $this->defaultUser([],'doc');
 
         $derecho1 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2017-2018',
             'dias'=>30
         ]);
         $derecho2 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2018-2019',
             'dias'=>60
         ]);
 
-        $response = $this->get('derecho/read/1');
+        $response = $this->get('derecho/read/'.$doc->id);
         $response->assertStatus(200);
 
-        $value = $user->wdocente;
+        $value = $doc->wdocente;
         $response->assertSeeText($value);
 
         $value1 = $derecho1->periodo;
@@ -95,37 +82,26 @@ class CRUD01_DerechosTest extends TestCase
      */
     public function editUpdateDerechosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $doc = $this->defaultUser([],'doc');
 
         $derecho1 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2017-2018',
             'dias'=>30
         ]);
         $derecho2 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2018-2019',
             'dias'=>60
         ]);
 
-        $response = $this->get('derecho/edit/1/2');
+        $response = $this->get('derecho/edit/'.$doc->id.'/'.$derecho2->id);
         $response->assertStatus(200);
 
-        $value = $user->wdocente;
+        $value = $doc->wdocente;
         $response->assertSeeText($value);
 
         $value1 = $derecho1->periodo;
@@ -135,12 +111,12 @@ class CRUD01_DerechosTest extends TestCase
 
         $data = [
             'id' => 2,
-            'cdocente' => $datauser->cdocente,
+            'cdocente' => $doc->cdocente,
             'periodo' => '2019-2020',
             'dias' => 10
         ];
 
-        $this->actingAs($user);
+        $this->actingAs($auth);
         $response = $this->post('derecho/update', $data);
         $response->assertStatus(302);
 
@@ -152,9 +128,9 @@ class CRUD01_DerechosTest extends TestCase
         ]);
 
         $this->assertDatabaseHas('traces',[
-            'cdocente' => $user->cdocente,
+            'cdocente' => $doc->cdocente,
             'change' => 'Update Derechos',
-            'user_change' => $user->id
+            'user_change' => $auth->id
         ]);
     }
 
@@ -163,35 +139,25 @@ class CRUD01_DerechosTest extends TestCase
      */
     public function deleteDerechosTest()
     {
-        factory(\App\User::class,1)->create();
-        
-        $user = User::findOrFail(1);
-        $datauser = DataUser::create([
-            'user_id' => 1,
-            'cdocente' => '000000',
-            'wdoc1' => 'Uno',
-            'wdoc2' => 'Usuario',
-            'wdoc3' => 'Master',    
-            'cdocente' => '000000',
-            'fono1' => '555-555-555',
-            'fono2' => '333-333-333',
-            'email1' => 'admin@gmail.com',
-            'email2' => 'master@gmail.com',
-        ]);
+
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $doc = $this->defaultUser([],'doc');
 
         $derecho1 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2017-2018',
             'dias'=>30
         ]);
         $derecho2 = Derecho::create([
-            'cdocente'=>$datauser->cdocente,
+            'cdocente'=>$doc->cdocente,
             'periodo'=>'2018-2019',
             'dias'=>60
         ]);
 
-        $this->actingAs($user);
-        $response = $this->get('derecho/destroy/1/2');
+        $this->actingAs($auth);
+        $response = $this->get('derecho/destroy/'.$doc->id.'/'.$derecho2->id);
         $response->assertStatus(302);
 
         $value1 = $derecho1->periodo;
@@ -207,7 +173,7 @@ class CRUD01_DerechosTest extends TestCase
         $this->assertDatabaseHas('traces',[
             'cdocente' => $derecho2->cdocente,
             'change' => 'Delete Derechos',
-            'user_change' => $user->id
+            'user_change' => $auth->id
         ]);
     }
 }

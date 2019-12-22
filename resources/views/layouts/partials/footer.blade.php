@@ -13,7 +13,7 @@
 	</span>	
     <div class="nav navbar-nav list-group-item list-inline" id="userType" style="color:red; font-size:75%">
     	<div>ID de usuario: {{ \Auth::user()->id }}</div>
-    	<div>Tipo de usuario: {{ \Session::get('ctype') }}</div>
+    	<div>Tipo de usuario: {{ \Session::get('rol') }}</div>
     	<div>Facultad: {{ \Session::get('wfacultad') }}</div>
     	<div>Filial: {{ \Session::get('wsede') }}</div>
 	</div>

@@ -19,13 +19,16 @@ class CRUD04_PeriodosTest extends TestCase
      */
     public function createStorePeriodosTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $response = $this->get('periodo/create');
       $response->assertStatus(200);
 
       $data = [
-        'docente_id'=>$user->first()->id,
+        'docente_id'=>$user->id,
         'periodo'=>'2017-2018',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
@@ -35,7 +38,7 @@ class CRUD04_PeriodosTest extends TestCase
       $response = $this->post('/periodo/store', $data);
       $response->assertStatus(302);
       $this->assertDatabaseHas('periodos', [
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2017-2018',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
@@ -48,24 +51,27 @@ class CRUD04_PeriodosTest extends TestCase
      */
     public function readPeriodosTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);      
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $periodo1 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2017-2018',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'status' => 1
       ]);
       $periodo2 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2018-2019',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'status' => 1
       ]);
 
-      $response = $this->get('periodo/read/'.$user->first()->id);
+      $response = $this->get('periodo/read/'.$user->id);
       $response->assertStatus(200);
 
       $response->assertSeeText($periodo1['periodo']);
@@ -77,24 +83,27 @@ class CRUD04_PeriodosTest extends TestCase
      */
     public function editUpdatePeriodosTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);  
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
+        $user = $this->defaultUser([],'doc');
+
       $periodo1 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2017-2018',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'status' => 1
       ]);
       $periodo2 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2018-2019',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'status' => 1
       ]);
 
-      $response = $this->get('periodo/edit/1/2');
+      $response = $this->get('periodo/edit/'.$user->id.'/2');
       $response->assertStatus(200);
 
       $value1 = $periodo1->periodo;
@@ -103,8 +112,8 @@ class CRUD04_PeriodosTest extends TestCase
       $response->assertSee($value2);
 
       $data = [
-        'id' => 2,
-        'docente_id'=>1,
+        'id' => $periodo2->id,
+        'docente_id'=>$user->id,
         'periodo'=>'2018-2019',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
@@ -116,7 +125,7 @@ class CRUD04_PeriodosTest extends TestCase
 
       $this->assertDatabaseHas('periodos',[
         'id' => 2,
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2018-2019',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '01/12/2019')->format('Y-m-d'),
@@ -129,24 +138,26 @@ class CRUD04_PeriodosTest extends TestCase
      */
     public function deletePeriodosTest()
     {
-      $user = factory(\App\User::class,1)->create();
-      factory(\App\DataUser::class,1)->create(['user_id'=>$user->first()->id]);
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+        $user = $this->defaultUser([],'doc');
+
       $periodo1 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2017-2018',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2018')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2018')->format('Y-m-d'),
         'status' => 1
       ]);
       $periodo2 = Periodo::create([
-        'cdocente'=>$user->first()->cdocente,
+        'cdocente'=>$user->cdocente,
         'periodo'=>'2018-2019',
         'fecha_ini'=>date_create_from_format('d/m/Y', '01/01/2019')->format('Y-m-d'),
         'fecha_fin'=>date_create_from_format('d/m/Y', '31/12/2019')->format('Y-m-d'),
         'status' => 1
       ]);
 
-      $response = $this->get('periodo/destroy/1/2');
+      $response = $this->get('periodo/destroy/'.$user->id.'/2');
       $response->assertStatus(302);
 
       $this->assertDatabaseMissing('periodos',[

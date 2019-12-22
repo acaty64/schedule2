@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Access\AuthorizationException;
 
 class AdminMiddleware
 {
@@ -20,11 +21,16 @@ class AdminMiddleware
             return redirect()->to('login');
             return redirect()->to('loginGoogle');
         };
-        if(\Session::get('rol') == 'admin'){
-            return $next($request);
-        }else{
+
+        if(!Auth::user()->isAdmin){
             return redirect()->to('login');
             return redirect()->to('loginGoogle');
+        }else{
+            return $next($request);
         }
+
+        // return $next($request);
     }
+
+
 }
