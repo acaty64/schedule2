@@ -13,14 +13,14 @@
             </div>
           @endif
           @foreach(auth()->user()->roles() as $rol)
-            @if($rol->trole->name == "Master" || $rol->trole->name == "Administrador")
+            @if($rol->trole->acronym == "master" || $rol->trole->acronym == "admin")
               Acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Acceso</button>
               </a>
               <a href="{{ route('app.schedule.index') }}"><button>Ver Lista</button></a>
             @endif
-            @if($rol->trole->name == "Docente")
+            @if($rol->trole->acronym == "doc")
               Bienvenido, acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Docente</button>

@@ -34,7 +34,9 @@ class LoginController extends Controller
         
         auth()->login($appUser);
 
-        $roles = $appUser->roles()->first();        
+        $roles = $appUser->roles();        
+
+        \Session::put('rol', $roles->first()->trole);
 
         return redirect('/home')->with('roles', $roles);
 

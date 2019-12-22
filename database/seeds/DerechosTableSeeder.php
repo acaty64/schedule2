@@ -23,37 +23,38 @@ class DerechosTableSeeder extends Seeder
             'dias'=>60
         ]);
 
+        if(env('APP_ENV') != 'testing'){
 
-
-Derecho::create(['cdocente' => '000566','periodo' => '2019-2020','dias' => 60]);
-Derecho::create(['cdocente' => '000152','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000152','periodo' => '2019-2020','dias' => 60]);
-Derecho::create(['cdocente' => '000508','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000508','periodo' => '2019-2020','dias' => 60]);
-Derecho::create(['cdocente' => '000728','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000590','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000474','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000510','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000253','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000620','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000113','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000113','periodo' => '2019-2020','dias' => 60]);
-Derecho::create(['cdocente' => '000285','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000007','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000191','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000201','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000242','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000241','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000441','periodo' => '2018-2019','dias' => 60]);
-Derecho::create(['cdocente' => '000645','periodo' => '2018-2019','dias' => 60]);
-
-
-
+            Derecho::create(['cdocente' => '000566','periodo' => '2019-2020','dias' => 60]);
+            Derecho::create(['cdocente' => '000152','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000152','periodo' => '2019-2020','dias' => 60]);
+            Derecho::create(['cdocente' => '000508','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000508','periodo' => '2019-2020','dias' => 60]);
+            Derecho::create(['cdocente' => '000728','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000590','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000474','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000510','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000253','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000620','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000113','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000113','periodo' => '2019-2020','dias' => 60]);
+            Derecho::create(['cdocente' => '000285','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000007','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000191','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000201','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000242','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000241','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000441','periodo' => '2018-2019','dias' => 60]);
+            Derecho::create(['cdocente' => '000645','periodo' => '2018-2019','dias' => 60]);
 
 
 
 
 
-        
+
+
+
+
+        }
     }
 }

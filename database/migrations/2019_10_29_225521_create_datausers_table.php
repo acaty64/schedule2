@@ -18,7 +18,7 @@ class CreateDatausersTable extends Migration
             $table->string('wdoc1', 255);
             $table->string('wdoc2', 30)->nullable();
             $table->string('wdoc3', 30)->nullable();
-            $table->string('cdocente',6);
+            $table->string('cdocente',6)->nullable();
             $table->string('fono1', 12)->nullable();
             $table->string('fono2', 12)->nullable();
             $table->string('email1', 80);

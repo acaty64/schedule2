@@ -23,11 +23,12 @@ class Role extends Model
 
     protected $append = ['trole'];
 
-    function trole()
+    function getTroleAttribute()
     {
-        // $trole = Trole::findOrFail($this->trole_id);
+        $trole = Trole::findOrFail($this->trole_id);
+        return $trole;
         // return $trole->name;
-        return $this->HasOne(Trole::class, 'id');
+        // return $this->HasOne(Trole::class, 'id');
         // return $this->belongsToManyToOne(Trole::class, 'trole_id')->name;
     }
 

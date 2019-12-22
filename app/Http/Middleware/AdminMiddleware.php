@@ -20,7 +20,7 @@ class AdminMiddleware
             return redirect()->to('login');
             return redirect()->to('loginGoogle');
         };
-        if(\Session::get('ctype') == 'admin'){
+        if(\Session::get('rol') == 'admin'){
             return $next($request);
         }else{
             return redirect()->to('login');
