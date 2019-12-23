@@ -9,6 +9,48 @@ Route::get('schedule/index', [
 	'uses'	=> 'ScheduleController@index'
 ]);
 
+/// EMAILS
+Route::post('email/store', [
+	'as'	=> 'app.email.store',
+	'uses'	=> 'EmailController@store'
+]);
+Route::get('email/index/{tmail_id}', [
+	'as'	=> 'app.email.index',
+	'uses'	=> 'EmailController@index'
+]);
+
+
+/// TMAILS
+Route::get('tmail/create', [
+	'as'	=> 'app.tmail.create',
+	'uses'	=> 'TmailController@create'
+]);
+
+Route::post('tmail/store', [
+	'as'	=> 'app.tmail.store',
+	'uses'	=> 'TmailController@store'
+]);
+
+Route::get('tmail/read', [
+	'as'	=> 'app.tmail.index',
+	'uses'	=> 'TmailController@index'
+]);
+
+Route::get('tmail/edit/{id}', [
+	'as'	=> 'app.tmail.edit',
+	'uses'	=> 'TmailController@edit'
+]);
+
+Route::post('tmail/update', [
+	'as'	=> 'app.tmail.update',
+	'uses'	=> 'TmailController@update'
+]);
+
+Route::get('tmail/destroy/{id}', [
+	'as'	=> 'app.tmail.destroy',
+	'uses'	=> 'TmailController@destroy'
+]);
+
 /// DERECHOS
 Route::get('derecho/create', [
 	'as'	=> 'app.derecho.create',

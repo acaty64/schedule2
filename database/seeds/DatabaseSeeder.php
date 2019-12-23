@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(ProgramadasTableSeeder::class);
         $this->call(SemestresTableSeeder::class);
         $this->call(HorariosTableSeeder::class);
+        $this->call(TmailsTableSeeder::class);
     }
 }
