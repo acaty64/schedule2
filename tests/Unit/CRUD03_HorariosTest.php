@@ -107,7 +107,7 @@ class CRUD03_HorariosTest extends TestCase
             'turno'=>'noche'
         ]);
 
-        $response = $this->get('horario/read/1');
+        $response = $this->get('horario/read/'.$user->id);
         $response->assertStatus(200);
 
         $value = $user->wdocente;

@@ -20,11 +20,11 @@ class MasterMiddleware
             return redirect()->to('login');
             return redirect()->to('loginGoogle');
         };
-        if(\Session::get('ctype') == 'master'){
+        if(Auth::user()->isMaster){
             return $next($request);
         }else{
-            return redirect()->to('login');
-            return redirect()->to('loginGoogle');
+            return redirect()->to('home');
+            // return redirect()->to('loginGoogle');
         }
     }
 }

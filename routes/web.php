@@ -78,9 +78,3 @@ Route::get('schedule/edit/{docente_id}', [
 	'as'	=> 'app.schedule.edit',
 	'uses'	=> 'ScheduleController@edit'
 ]);
-
-Route::get('schedule/index', [
-	'as'	=> 'app.schedule.index',
-	'uses'	=> 'ScheduleController@index'
-]);
-

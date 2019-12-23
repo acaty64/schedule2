@@ -14,10 +14,17 @@ class ScheduleController extends Controller
         $data = Api\ScheduleController::dataShow($docente_id);
         return view('app.schedule.show')->with('data', $data);
     }
+    
     public function edit($docente_id)
     {
-    	return view('app.schedule.edit')
-    		->with('docente_id', $docente_id);
+        if(\Auth::user()->isAdmin 
+            || \Auth::user()->isMaster 
+            || \Auth::user()->id == $docente_id){
+            	return view('app.schedule.edit')
+            		->with('docente_id', $docente_id);
+        }else{
+            return redirect('/home');
+        }
     }
 
     public function index()

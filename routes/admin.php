@@ -1,7 +1,13 @@
 <?php
 
-use Illuminate\Auth\Middleware\Authorize;
-use Illuminate\Http\Request;
+// use Illuminate\Auth\Middleware\Authorize;
+// use Illuminate\Http\Request;
+
+/// SCHEDULE
+Route::get('schedule/index', [
+	'as'	=> 'app.schedule.index',
+	'uses'	=> 'ScheduleController@index'
+]);
 
 /// DERECHOS
 Route::get('derecho/create', [

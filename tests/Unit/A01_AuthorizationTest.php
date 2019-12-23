@@ -13,6 +13,24 @@ class A01_AuthorizationTest extends TestCase
     use DatabaseMigrations;
 
     /**     * @test      */
+    public function an_authorized_user_can_access_to_home()
+    {
+        $user = $this->defaultUser([], 'doc');
+        $this->actingAs($user)
+            ->get('/home')
+            ->assertStatus(200)
+            ->assertViewIs('home');
+    }
+
+    /**     * @test      */
+    public function an_unauthorized_user_can_not_access_to_home()
+    {
+        $this->get('/home')
+            ->assertStatus(302)
+            ->assertRedirect('login');
+    }
+
+    /**     * @test      */
     public function an_admin_user_can_access_to_create_derechos()
     {
         $user = $this->defaultUser([],'admin');
@@ -32,7 +50,7 @@ class A01_AuthorizationTest extends TestCase
             ->assertStatus(200);
         $this->get('/derecho/create')
             ->assertStatus(302)
-            ->assertRedirect('login');
+            ->assertRedirect('home');
     }
 
     /**     * @test      */
@@ -72,7 +90,7 @@ class A01_AuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get('/derecho/edit/'.$user->id.'/1')
             ->assertStatus(302)
-            ->assertRedirect('login');
+            ->assertRedirect('home');
     }
 
     /**     * @test      */
@@ -112,7 +130,7 @@ class A01_AuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get('/derecho/read/'.$user->id)
             ->assertStatus(302)
-            ->assertRedirect('login');
+            ->assertRedirect('home');
     }
 
 

@@ -17,12 +17,15 @@ class DocenteMiddleware
     {
         if(!Auth::check()){
             Auth::logout();
+            return redirect()->to('login');
             return redirect()->to('loginGoogle');
         };
-        if(\Session::get('ctype') == 'doc'){
+        if(Auth::user()->isDoc || Auth::user()->isAdmin || Auth::user()->isMaster){
+// dd([$request, 'DocenteMiddleware']);
             return $next($request);
         }else{
-            return redirect()->to('loginGoogle');
+            return redirect()->to('home');
+            // return redirect()->to('loginGoogle');
         }
     }
 }

@@ -15,7 +15,8 @@ class PruebaTest extends TestCase
         $auth = $this->defaultUser([],'admin');
         $this->actingAs($auth);
 
-        $response = $this->get('derecho/create');
+        $response = $this->get('schedule/edit/1');
+        // $response = $this->get('derecho/create');
         $response->assertStatus(200);
 
     } 

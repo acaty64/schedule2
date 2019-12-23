@@ -44,8 +44,22 @@ class Kernel extends HttpKernel
 
         'admin' => [
             'web',
-            'is_admin'
+            'is_doc',
+            'is_admin',
         ],
+
+        'master' => [
+            'web',
+            'is_doc',
+            'is_admin',
+            'is_master',
+        ],
+
+        'doc' => [
+            'web',
+            'is_doc',
+        ],
+
     ];
 
     /**
@@ -66,7 +80,9 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'is_master' => \App\Http\Middleware\MasterMiddleware::class,
         'is_admin' => \App\Http\Middleware\AdminMiddleware::class,
+        'is_doc' => \App\Http\Middleware\DocenteMiddleware::class,
     ];
 
     /**

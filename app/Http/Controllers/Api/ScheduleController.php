@@ -90,11 +90,18 @@ class ScheduleController extends Controller
 
   public function reportShow($docente_id)
   {
-    $data = $this->dataReport($docente_id);
-    $data['type'] = 'Screen';
+    if(\Auth::user()->isAdmin 
+      || \Auth::user()->isMaster
+      || \Auth::user()->id == $docente_id){
 
-    return view('app.schedule.report')
-        ->with('data',$data);  
+      $data = $this->dataReport($docente_id);
+      $data['type'] = 'Screen';
+
+      return view('app.schedule.report')
+          ->with('data',$data);  
+    }else{
+      return redirect('/home');
+    }
   }
 
   public function reportPdf($docente_id)
@@ -152,12 +159,19 @@ class ScheduleController extends Controller
 
   public function cronoShow($docente_id)
   {
-    $showData = $this->dataCrono($docente_id);
+    if(\Auth::user()->isAdmin 
+      || \Auth::user()->isMaster
+      || \Auth::user()->id == $docente_id){
 
-    $showData['type'] = 'Screen';
+      $showData = $this->dataCrono($docente_id);
 
-    return view('app.schedule.crono')
-        ->with('data',$showData);  
+      $showData['type'] = 'Screen';
+
+      return view('app.schedule.crono')
+          ->with('data',$showData);  
+    }else{
+      return redirect('/home');
+    }
   }
 
   public function dataCrono($docente_id)

@@ -20,9 +20,9 @@ trait TestsHelper
 
     public function defaultUser(array $attributes = [], $type)
     {
-        if($this->defaultUser){
-            return $this->defaultUser;
-        }
+        // if($this->defaultUser){
+        //     return $this->defaultUser;
+        // }
         return $this->defaultUser = $this->user($attributes, $type);
         // factory(User::class)->create($attributes);
     }

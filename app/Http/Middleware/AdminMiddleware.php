@@ -3,9 +3,9 @@
 namespace App\Http\Middleware;
 
 use Closure;
+// use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Auth\Access\AuthorizationException;
 
 class AdminMiddleware
 {
@@ -21,12 +21,12 @@ class AdminMiddleware
             return redirect()->to('login');
             return redirect()->to('loginGoogle');
         };
-
-        if(!Auth::user()->isAdmin){
-            return redirect()->to('login');
-            return redirect()->to('loginGoogle');
-        }else{
+        if(Auth::user()->isAdmin || Auth::user()->isMaster){
+// dd([$request, 'AdminMiddleware']);
             return $next($request);
+        }else{
+            return redirect()->to('home');
+            // return redirect()->to('loginGoogle');
         }
 
         // return $next($request);
