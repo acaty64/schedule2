@@ -17,6 +17,7 @@ class CreateEmailsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('tmail_id');
             $table->string('from');
+            $table->integer('user_id_to');
             $table->string('to');
             $table->string('view');
             $table->dateTime('limit_date');

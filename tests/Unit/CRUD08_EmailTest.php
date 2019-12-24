@@ -63,7 +63,7 @@ class CRUD08_EmailTest extends TestCase
 
         $this->assertDatabaseHas('emails',[
             'tmail_id' => $tmail->id,
-            'from' => 'ucss.fcec.lim@gmail.com',
+            'from' => env('MAIL_USERNAME'),
             'to' => $email5->email,
             'view' => $tmail->view,
             'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),

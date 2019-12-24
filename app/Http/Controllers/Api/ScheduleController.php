@@ -131,12 +131,14 @@ class ScheduleController extends Controller
                 ->setPaper('a4')
                 ->setOption('margin-top', 25)
                 ->setOrientation('Portrait');
-      return $pdf->download($fileout);      
+      return $pdf->download($fileout);
     } catch (Exception $e) {
       dd('Error reportPdf', $e);
-    }
-    
+    }    
   }
+
+
+
 
   public function cronoDownload($docente_id)
   {

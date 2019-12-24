@@ -12,6 +12,7 @@ class Email extends Model
     	    'tmail_id',
             'from',
             'to',
+            'user_id_to',
             'cc1',
             'cc2',
             'view',

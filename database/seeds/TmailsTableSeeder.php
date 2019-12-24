@@ -14,9 +14,9 @@ class TmailsTableSeeder extends Seeder
     {
         Tmail::create([
             'name' => 'Requerimiento',
-            'subject' => 'Correo de prueba',
-            'view' => 'app.mail.required',
-            'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
+            'subject' => 'Acceso al módulo',
+            'view' => 'app.email.notification',
+            'limit_date' => date_create_from_format('d/m/Y', '07/01/2020'),
         ]);
     }
 }

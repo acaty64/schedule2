@@ -1,7 +1,9 @@
 <?php
 
-// use Illuminate\Auth\Middleware\Authorize;
-// use Illuminate\Http\Request;
+Route::get('email/send/notification/{email_id}', [
+	'as'	=> 'app.email.send.notification',
+	'uses'	=> 'EmailController@send_notification'
+]);
 
 /// SCHEDULE
 Route::get('schedule/index', [
