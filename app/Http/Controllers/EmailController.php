@@ -10,9 +10,16 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
-    public function send_notification($email_id)
+    public function send_notification($tmail_id)
     {
+        $emails = Email::where('tmail_id', $tmail_id)->get();
+        foreach ($emails as $item) {
+            $this->send_email_notification($item->id);
+        }
+    }
 
+    public function send_email_notification($email_id)
+    {
         $email = Email::findOrFail($email_id);
 
         $toUser = User::where('email', $email->to)->first();
@@ -63,19 +70,6 @@ try {
     dd('error', $e);
 }
 
-        // \Mail::send($email->view, $data, function ($message) use($data, $attach) {
-
-        //     $message->from($data['from'], $data['dfrom']);
-
-        //     $message->to($data['to']);
-
-        //     $message->subject($data['subject']);
-        //     if(!empty($data['attach'])){
-        //         $message->AddAttachment( $attach['file_to_attach'], $attach['name_file']);
-        //     }
-
-        // });
-
 
     }   // end of send_notification()
 
@@ -83,20 +77,49 @@ try {
     public function index($tmail_id)
     {
         $tmail = Tmail::findOrFail($tmail_id);
+        $emails = Email::where('tmail_id', $tmail_id)->get();
         $docs = [];
         $users = User::all();
         foreach ($users as $item) {
+            // array_push($item, ['chk' => 'off', 'sended' => 'off' ]);
             if($item->isDoc){
+                $item->setAttribute('chk', 'off');
+                $item->setAttribute('sended', 'off');
+                $item->setAttribute('reply', 'off');
                 array_push($docs, $item);
             }
         }
-
+        foreach ($emails as $chk) {
+            foreach ($docs as $key => $value) {
+                if($docs[$key]['id'] == $chk['user_id_to']){
+                    $docs[$key]['chk'] = 'on';
+                }
+            }
+        }
+        $sended = $emails->where('send_date','<>', '');
+        foreach ($sended as $chk) {
+            foreach ($docs as $key => $value) {
+                if($docs[$key]['id'] == $chk['user_id_to']){
+                    $docs[$key]['sended'] = 'on';
+                }
+            }
+        }
+        $reply = $emails->where('reply_date','<>', '');
+        foreach ($reply as $chk) {
+            foreach ($docs as $key => $value) {
+                if($docs[$key]['id'] == $chk['user_id_to']){
+                    $docs[$key]['replay'] = 'on';
+                }
+            }
+        }
+// dd($docs);
         return view('app.mail.email.index')
             ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
     }
 
     public function store(Request $request)
     {
+        $tmail = Tmail::findOrFail($request->tmail_id);
         $users = [];
         foreach ($request->chk as $key => $value) {
             $user = User::findOrFail($key);
@@ -104,27 +127,37 @@ try {
         }
         try {
             foreach ($users as $user) {
-                $email = new Email;
-                $email->tmail_id = $request->tmail->id ;
-                $email->from = env('MAIL_USERNAME');
-                $email->user_id_to = $user->id ;
-                $email->to = $user->email ;
-                $email->view = $request->tmail->view ;
-                $email->limit_date = $request->tmail->limit_date;
-                // $email->limit_date = $request->tmail->limit_date->format('Y-m-d H:i:s');
-// dd($email);
-                $email->save();
+                $old = Email::where('tmail_id', $tmail->id)
+                        ->where('to', $user->email)->get();
+                if($old->count() == 0){
+                    $email = new Email;
+                    $email->tmail_id = $tmail->id ;
+                    $email->from = env('MAIL_USERNAME');
+                    $email->user_id_to = $user->id ;
+                    $email->to = $user->email ;
+                    $email->view = $tmail->view ;
+                    $email->limit_date = $tmail->limit_date;
+                    $email->save();
+                }
             }
-            return redirect('app.mail.tmail.index');
+            return redirect(route('app.email.show', $tmail->id));
         } catch (Exception $e) {
             dd('error EmailController@store', e);
         }
     }
 
-    // public function show(Email $email)
-    // {
-    //     //
-    // }
+    public function show($tmail_id)
+    {
+        $tmail = Tmail::findOrFail($tmail_id);
+        $docs = [];
+        $emails = Email::where('tmail_id', $tmail->id)->get();
+        foreach ($emails as $item) {
+            $user = User::findOrFail($item->user_id_to);
+            array_push($docs, $user);
+        }
+        return view('app.mail.email.show')
+            ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
+    }
 
     public function edit($id)
     {

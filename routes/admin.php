@@ -1,6 +1,6 @@
 <?php
 
-Route::get('email/send/notification/{email_id}', [
+Route::get('email/send/notification/{tmail_id}', [
 	'as'	=> 'app.email.send.notification',
 	'uses'	=> 'EmailController@send_notification'
 ]);
@@ -19,6 +19,11 @@ Route::post('email/store', [
 Route::get('email/index/{tmail_id}', [
 	'as'	=> 'app.email.index',
 	'uses'	=> 'EmailController@index'
+]);
+
+Route::get('email/show/{tmail_id}', [
+	'as'	=> 'app.email.show',
+	'uses'	=> 'EmailController@show'
 ]);
 
 

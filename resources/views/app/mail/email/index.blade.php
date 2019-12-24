@@ -13,7 +13,7 @@
 		<div class="col-md-7">
 			<form action="{{ route('app.email.store') }}" method="POST">
 				{{ csrf_field() }}
-				<input type="hidden" value="{{ $data['tmail'] }}" name='tmail'>
+				<input type="hidden" value="{{ $data['tmail']['id'] }}" name='tmail_id'>
 				<span class="row">
 						<div class="form-group">
 							<button type="submit" class="btn btn-sm btn-primary">Grabar</button>
@@ -35,7 +35,44 @@
 							<td class="">{{ $item->cdocente }}</td>
 							<td class="">{{ $item->name }}</td>
 							<td>
-								<input type="checkbox" name="chk[{{ $item->id }}]" ><br>
+								@if($item->reply == 'on')
+									respondido
+								@else
+									@if($item->sended == 'on')
+										enviado
+									@else
+										@if($item->check == 'on')
+											por enviar
+										@else
+											por seleccionar
+										@endif
+									@endif
+								@endif
+							</td>
+							<td>
+								<input type="checkbox" 
+									name="chk[{{ $item->id }}]" 
+									value="{{ $item->chk }}" 
+									{{ ($item->chk == 'on') ? 'checked' : '' }} 
+									{{ ($item->sended == 'on') ? 'disabled' : '' }}>
+								<br>
+							</td>
+							<td>
+								<input type="checkbox" 
+									name="sended[{{ $item->id }}]" 
+									value="{{ $item->sended }}"
+									{{ ($item->sended == 'on') ? 'checked' : '' }} 
+									{{ ($item->chk == 'on') ? 'disabled' : '' }} 
+									{{ ($item->chk == 'off') ? 'disabled' : '' }} 
+									{{ ($item->sended == 'on') ? 'disabled' : '' }}>
+								<br>
+							</td>
+							<td>
+								<input type="checkbox" 
+									name="reply[{{ $item->id }}]" 
+									value="{{ $item->reply }}"
+									{{ ($item->reply == 'on') ? 'checked' : '' }}  disabled="disabled">
+								<br>
 							</td>
 						</tr>
 						@endforeach

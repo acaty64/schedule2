@@ -56,7 +56,7 @@ class CRUD08_EmailTest extends TestCase
             'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
         ]);
 
-        $data = ['tmail' => $tmail, 'chk' => $chk];
+        $data = ['tmail_id' => $tmail->id, 'chk' => $chk];
 
         $response = $this->post('/email/store', $data);
         $response->assertStatus(302);

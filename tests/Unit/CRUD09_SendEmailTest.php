@@ -47,8 +47,8 @@ class CRUD09_SendEmailTest extends TestCase
                 'view' => $tmail->view,
                 'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
             ]);
-            $response = $this->get(route('app.email.send.notification', $email->id));
         }
+        $response = $this->get(route('app.email.send.notification', $tmail->id));
 
         $this->assertDatabaseHas('emails',[
             'tmail_id' => $tmail->id,

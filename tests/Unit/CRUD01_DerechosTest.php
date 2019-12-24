@@ -102,7 +102,7 @@ class CRUD01_DerechosTest extends TestCase
         $response->assertStatus(200);
 
         $value = $doc->wdocente;
-        $response->assertSeeText($value);
+        $response->assertSeeText(e($value));
 
         $value1 = $derecho1->periodo;
         $value2 = $derecho2->periodo;

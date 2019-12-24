@@ -124,21 +124,27 @@ class ScheduleController extends Controller
   {
     $data = $this->dataReport($docente_id);
     $data['type'] = 'PDF';
-
+    $cdocente = User::findOrFail($docente_id)->cdocente;
+    $file_to_attach = public_path() . '/reports/report_' . $cdocente . '.pdf';
+    
     try{
-      $fileout = 'report_'.$data['docente']['name'];
-      $pdf = PDF::loadView('app.schedule.report', compact('data'))
+      // Borrar archivo anterior
+      if(file_exists($file_to_attach)){
+        unlink($file_to_attach);
+      }
+
+      PDF::loadView('app.schedule.report', compact('data'))
                 ->setPaper('a4')
                 ->setOption('margin-top', 25)
-                ->setOrientation('Portrait');
-      return $pdf->download($fileout);
+                ->setOrientation('Portrait')
+                ->save($file_to_attach);
     } catch (Exception $e) {
-      dd('Error reportPdf', $e);
+      return ['success'=>'false', 'error' => $e];
     }    
+    if(file_exists($file_to_attach)){
+      return redirect(route('app.schedule.index'));
+    }
   }
-
-
-
 
   public function cronoDownload($docente_id)
   {
@@ -341,6 +347,7 @@ class ScheduleController extends Controller
       'param' => $parameters,
     ];
   }    
+
   public function save(Request $request)
   {
     $cdocente = $request->docente['cdocente'];
@@ -443,6 +450,7 @@ class ScheduleController extends Controller
         // }
     return ['success' => true, 'periodos' => $periodos];
   }
+
   public function create(Request $request)
   {
     Programada::create([
@@ -453,14 +461,16 @@ class ScheduleController extends Controller
     ]);
     return ['success'=>true];
   }
-  public function index()
-  {
-    $users = User::all()->sortBy('name');
-        // $users->map(function($user){
-        //     $user->fecha_fin = $user->periodo->fecha_fin;
-        // });
-    return response($users, 200);
-  }
+
+  // public function index()
+  // {
+  //   $users = User::all()->sortBy('name');
+  //       // $users->map(function($user){
+  //       //     $user->fecha_fin = $user->periodo->fecha_fin;
+  //       // });
+  //   return response($users, 200);
+  // }
+
   public function data($docente_id)
   {
     $docente = User::findOrFail($docente_id);
