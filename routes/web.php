@@ -69,9 +69,14 @@ Route::get('schedule/report/pdf/{docente_id}', [
 	'uses'	=> 'Api\ScheduleController@reportPdf'
 ]);
 
-Route::get('schedule/report/download/{docente_id}', [
-	'as'	=> 'api.schedule.report.download',
-	'uses'	=> 'Api\ScheduleController@reportDownload'
+Route::get('schedule/report/download/pc/{docente_id}', [
+	'as'	=> 'api.schedule.report.download.pc',
+	'uses'	=> 'Api\ScheduleController@reportDownload_pc'
+]);
+
+Route::get('schedule/report/download/public/{docente_id}', [
+	'as'	=> 'api.schedule.report.download.public',
+	'uses'	=> 'Api\ScheduleController@reportDownload_public'
 ]);
 
 Route::get('schedule/edit/{docente_id}', [

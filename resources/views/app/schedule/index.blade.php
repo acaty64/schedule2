@@ -48,8 +48,12 @@
 							title="Ver PDF">Reporte</a>
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 
-							href="{{ route('api.schedule.report.download', $docente['id'])}}"
+							href="{{ route('api.schedule.report.download.pc', $docente['id'])}}"
 							title="Descargar PDF">Reporte</a>
+						<a role="button" 
+							class="btn btn-sm btn-success glyphicon glyphicon-download" 
+							href="{{ route('api.schedule.report.download.public', $docente['id'])}}"
+							title="Genera PDF">Reporte</a>
 					</td>
 				</tr>
 				@endif

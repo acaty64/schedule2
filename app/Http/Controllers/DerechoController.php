@@ -19,8 +19,8 @@ class DerechoController extends Controller
       $docente = User::findOrFail($docente_id);
       $derechos = Derecho::where('cdocente', $docente->cdocente)->get();
       return view('app.derechos.index')
-      ->with('derechos', $derechos)
-      ->with('docente', $docente);
+        ->with('derechos', $derechos)
+        ->with('docente', $docente);
     }
 
     /**
@@ -66,6 +66,7 @@ class DerechoController extends Controller
         'change' => 'Create Derechos',
         'user_change' => \Auth::user()->id,
       ]);
+      flash('Derechos del docente: ' . $docente->wdocente . 'grabado.')->success();
       return redirect()->route('app.derecho.index', $data['docente']);
     }
 
@@ -94,7 +95,6 @@ class DerechoController extends Controller
       return view('app.derechos.edit')
       ->with('docente', $user)
       ->with('data', $derecho);
-
     }
 
     /**
@@ -108,7 +108,7 @@ class DerechoController extends Controller
     {
       $data = $request->all();
       $derecho = Derecho::findOrFail($data['id']);
-      if($derecho){        
+      if($derecho){
         if($derecho->cdocente == $data['cdocente']){        
           $derecho->periodo = $data['periodo'];
           $derecho->dias = $data['dias'];
@@ -119,11 +119,14 @@ class DerechoController extends Controller
             'change' => 'Update Derechos',
             'user_change' => \Auth::user()->id,
           ]);
+          flash('Derechos del docente modificado.')->success();
           return redirect()->route('app.derecho.index', $data['id']);
         }else{
+          flash('Derechos no modificados.')->error();
           return ['success'=>false];
         }
       }else{
+        flash('Derechos no modificados.')->error();
         return ['success'=>false];
       }
     }
@@ -146,12 +149,15 @@ class DerechoController extends Controller
             'docente_id' => $user->id,
             'change' => 'Delete Derechos',
             'user_change' => \Auth::user()->id,
-          ]);          
+          ]);
+          flash('Derechos eliminados.')->success();          
           return redirect()->route('app.derecho.index', $user_id);
         }else{
+          flash('Derechos NO eliminados.')->error();          
           return ['success'=>false];
         }
       }else{
+        flash('Derechos NO eliminados.')->error();          
         return ['success'=>false];
       }
     }

@@ -10,7 +10,7 @@
 </div>
 <div class="container">
 	<div class="row">
-		<div class="col-md-7">
+		<div class="col-md-9">
 			<form action="{{ route('app.email.send.notification', $data['tmail']['id']) }}" method="GET">
 				{{ csrf_field() }}
 				<span class="row">
@@ -24,6 +24,7 @@
 							<th scope="col" class="text-center">Id</th>
 							<th scope="col" class="text-center">Codigo</th>
 							<th scope="col" class="text-center">Nombre</th>
+							<th scope="col" class="text-center">Información</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -32,6 +33,10 @@
 							<td class="">{{ $item->id }}</td>
 							<td class="">{{ $item->cdocente }}</td>
 							<td class="">{{ $item->name }}</td>
+							<td class="">{{ (is_null($item->send_date)) ? 'por enviar' : 'enviado'}}</td>
+							<td class="">{{ substr($item->send_date,0,10) }}</td>
+							<td class="">{{ (is_null($item->reply_date)) ? '' : 'respondido'}}</td>
+							<td class="">{{ substr($item->reply_date,0,10) }}</td>
 						</tr>
 						@endforeach
 					</tbody>

@@ -70,7 +70,10 @@
                 </div>
             </div>
         </nav>
+        <div class="container">
+            @include('flash::message')
             @yield('content')
+        </div>
     </div>
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

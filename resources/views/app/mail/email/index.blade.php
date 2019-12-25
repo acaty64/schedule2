@@ -41,8 +41,8 @@
 									@if($item->sended == 'on')
 										enviado
 									@else
-										@if($item->check == 'on')
-											por enviar
+										@if($item->chk == 'on')
+											seleccionado
 										@else
 											por seleccionar
 										@endif

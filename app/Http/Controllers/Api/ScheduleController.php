@@ -120,29 +120,54 @@ class ScheduleController extends Controller
     }
   }
 
-  public function reportDownload($docente_id)
+  public function reportDownload_pc($docente_id){
+    return $this->reportDownload($docente_id, 'pc');
+  }
+
+  public function reportDownload_public($docente_id){
+    return $this->reportDownload($docente_id, 'public');
+  }
+
+  private function reportDownload($docente_id, $output)
   {
     $data = $this->dataReport($docente_id);
     $data['type'] = 'PDF';
-    $cdocente = User::findOrFail($docente_id)->cdocente;
-    $file_to_attach = public_path() . '/reports/report_' . $cdocente . '.pdf';
-    
+    $user = User::findOrFail($docente_id);
+    $file_to_attach = public_path() . '/reports/report_' . $user->cdocente . '.pdf';
+    $file_name = 'report_' . $user->wdocente . '.pdf';    
     try{
-      // Borrar archivo anterior
-      if(file_exists($file_to_attach)){
-        unlink($file_to_attach);
-      }
+      if($output == 'pc'){
+        PDF::loadView('app.schedule.report', compact('data'))
+                  ->setPaper('a4')
+                  ->setOption('margin-top', 25)
+                  ->setOrientation('Portrait')
+                  ->download($file_name);
+      }else{
+        // Borrar archivo anterior
+        if(file_exists($file_to_attach)){
+          unlink($file_to_attach);
+        }
 
-      PDF::loadView('app.schedule.report', compact('data'))
-                ->setPaper('a4')
-                ->setOption('margin-top', 25)
-                ->setOrientation('Portrait')
-                ->save($file_to_attach);
+        PDF::loadView('app.schedule.report', compact('data'))
+                  ->setPaper('a4')
+                  ->setOption('margin-top', 25)
+                  ->setOrientation('Portrait')
+                  ->save($file_to_attach);
+      }
     } catch (Exception $e) {
       return ['success'=>'false', 'error' => $e];
     }    
+
     if(file_exists($file_to_attach)){
-      return redirect(route('app.schedule.index'));
+      if($output == 'pc'){      
+        flash('Archivo: report_' . $cdocente . '.pdf generado.')->success();
+        return redirect(route('app.schedule.index'));
+      }else{
+        // Crear archivo reporte (TODO: ejecutar una funcion de otro controlador)
+        flash('Archivo: report_' . $file_to_attach . '.pdf generado.')->success();
+        return redirect(route('app.schedule.index'));
+        // return ['success' => true, 'file_to_attach' => $file_to_attach, 'file_name' => $file_name];
+      }
     }
   }
 
@@ -462,14 +487,12 @@ class ScheduleController extends Controller
     return ['success'=>true];
   }
 
-  // public function index()
-  // {
-  //   $users = User::all()->sortBy('name');
-  //       // $users->map(function($user){
-  //       //     $user->fecha_fin = $user->periodo->fecha_fin;
-  //       // });
-  //   return response($users, 200);
-  // }
+  // TODO: Verificar si se usa o no
+  public function index()
+  {
+    $users = User::all()->sortBy('name');
+    return response($users, 200);
+  }
 
   public function data($docente_id)
   {

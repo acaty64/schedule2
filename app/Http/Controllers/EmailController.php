@@ -12,10 +12,21 @@ class EmailController extends Controller
 {
     public function send_notification($tmail_id)
     {
-        $emails = Email::where('tmail_id', $tmail_id)->get();
+        $emails = Email::where('tmail_id', $tmail_id)
+                ->whereNull('send_date')
+                ->get();
+        $count = 0;
         foreach ($emails as $item) {
-            $this->send_email_notification($item->id);
+            $chk_send = $this->send_email_notification($item->id);
+            if(!$chk_send['success']){
+                flash($chk_send['message'])->error();
+                return redirect(route('app.email.show',$tmail_id));
+            }
+            $count++;
         }
+        flash($count . ' correos enviados')->success();
+        return redirect(route('app.email.show',$tmail_id));
+        // return ['success'=>true];
     }
 
     public function send_email_notification($email_id)
@@ -26,50 +37,60 @@ class EmailController extends Controller
         $wdocente = $toUser->wdocente;
         $cdocente = $toUser->cdocente;
 
-        // Crear archivo reporte
+        // Crear archivo reporte (TODO: ejecutar una funcion de otro controlador)
+        // $file_report = Api\ScheduleController::reportDownload_public($user->id);
+        // if(!$file_report){
+        //     return ['success'=>false, 'message' => 'Error de generación de archivo PDF de: '.$wdocente];
+        // }
+        // $file_to_attach = $file_report['file_to_attach'];
+        // $file_name = $file_report['file_name'];
 
-        $file_to_attach = public_path() . '/reports/report_' . $cdocente . '.pdf';
+        $file_to_attach = public_path() . '/reports/report_' . $toUser->cdocente . '.pdf';
+        $file_name = 'report_' . $toUser->wdocente . '.pdf';    
 
-        $file_name = $wdocente . '.pdf';
+        if(file_exists($file_to_attach)){
+            $data = [
+                'from' => $email->from,
+                'dfrom' => 'Departamento Académico FCEC',
+                'to' => $email->to,
+                'user_id_to' => $email->to,
+                'subject' => $email->subject,
+                'wdocente' => $wdocente,
+                'limite' => $email->limit_date,
+                'view' => $email->view,
+            ];
 
-            // PDF::loadHTML($html)->save(public_path().'/vacaciones/'.$file_out); 
+            $attach = [
+                'file_to_attach' => $file_to_attach,
+                'file_name' => $file_name,            
+            ];
 
+            try {
+                    Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {        
+                        $message->to($data['to'], '');
+                        $message->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC');
+                        $message->subject($data['subject']);
+                        $message->attach( $attach['file_to_attach'], 
+                            [ 'as'=>$attach['file_name'], 'mime' => 'application/pdf']);
+                    });         
 
+                    $email->send_date = now();
+                    $email->save();
 
-        $data = [
-            'from' => $email->from,
-            'dfrom' => 'Departamento Académico FCEC',
-            'to' => $email->to,
-            'user_id_to' => $email->to,
-            'subject' => $email->subject,
-            'wdocente' => $wdocente,
-            'limite' => $email->limit_date,
-            'view' => $email->view,
-            // 'limite' => $email->limit_date->format('Y-m-d H:i:s'),
-        ];
-
-        $attach = [
-            'file_to_attach' => $file_to_attach,            
-            'file_name' => $file_name,            
-        ];
-
-$attach = [];
-// Api\EmailController::send($data, $attach);
-try {
-    Mail::send($data['view'], ['data'=>$data], function ($message) use ($data) {        
-        $message -> to($data['to'], '')
-            ->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC')
-            ->subject($data['subject']);
-    });         
-
-    $email->send_date = now();
-    $email->save();
-
-    return response()->json(['success' => true ]);
-} catch (Exception $e) {
-    dd('error', $e);
-}
-
+                    // flash('Email enviado a: ' . $data['to'])->success();
+                    // return response()->json(['success' => true ]);
+            } catch (Exception $e) {
+                dd('Error de proceso send_email_notification.');
+                // flash('Error de proceso send_email_notification.')->error();
+                // return back();
+            }
+            return true;
+        }else{
+            // flash('Genere el archivo PDF de: '.$wdocente)->error();
+            // return back();
+            // return redirect(route('app.schedule.index'));
+            return ['success'=>false, 'message' => 'Genere el archivo PDF de: '.$wdocente];
+        }
 
     }   // end of send_notification()
 
@@ -112,7 +133,8 @@ try {
                 }
             }
         }
-// dd($docs);
+        //// Sort by name
+
         return view('app.mail.email.index')
             ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
     }
@@ -126,6 +148,13 @@ try {
             array_push($users, $user);
         }
         try {
+            $olds = Email::where('tmail_id', $tmail->id)
+                        ->whereNull('send_date')->get();
+            foreach ($olds as $old) {
+                if(!array_key_exists($old->user_id_to, $request->chk)){
+                    $old->delete();
+                }
+            }
             foreach ($users as $user) {
                 $old = Email::where('tmail_id', $tmail->id)
                         ->where('to', $user->email)->get();
@@ -153,8 +182,15 @@ try {
         $emails = Email::where('tmail_id', $tmail->id)->get();
         foreach ($emails as $item) {
             $user = User::findOrFail($item->user_id_to);
+            $user->setAttribute('send_date', $item->send_date);
+            $user->setAttribute('reply_date', $item->reply_date);
             array_push($docs, $user);
         }
+
+        usort($docs, function ($item1, $item2) {
+            return $item1['name'] <=> $item2['name'];
+        });
+
         return view('app.mail.email.show')
             ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
     }
