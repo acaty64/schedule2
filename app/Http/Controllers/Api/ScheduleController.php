@@ -124,8 +124,8 @@ class ScheduleController extends Controller
     return $this->reportDownload($docente_id, 'pc');
   }
 
-  public function reportDownload_public($docente_id){
-    return $this->reportDownload($docente_id, 'public');
+  public function reportDownload_storage($docente_id){
+    return $this->reportDownload($docente_id, 'storage');
   }
 
   private function reportDownload($docente_id, $output)
@@ -133,7 +133,7 @@ class ScheduleController extends Controller
     $data = $this->dataReport($docente_id);
     $data['type'] = 'PDF';
     $user = User::findOrFail($docente_id);
-    $file_to_attach = public_path() . '/reports/report_' . $user->cdocente . '.pdf';
+    $file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
     $file_name = 'report_' . $user->wdocente . '.pdf';    
     try{
       if($output == 'pc'){

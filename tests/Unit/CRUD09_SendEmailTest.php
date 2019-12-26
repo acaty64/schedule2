@@ -40,7 +40,7 @@ class CRUD09_SendEmailTest extends TestCase
 
         foreach ($users as $user) {
             // Crea archivos pdf ficticios
-            $file_to_attach = public_path() . '/reports/report_' . $user->cdocente . '.pdf';
+            $file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
             $archivo = fopen($file_to_attach, "a") ;
             fclose($archivo);   
 

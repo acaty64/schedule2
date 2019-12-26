@@ -45,7 +45,7 @@ class EmailController extends Controller
         // $file_to_attach = $file_report['file_to_attach'];
         // $file_name = $file_report['file_name'];
 
-        $file_to_attach = public_path() . '/reports/report_' . $toUser->cdocente . '.pdf';
+        $file_to_attach = storage_path() . '/reports/report_' . $toUser->cdocente . '.pdf';
         $file_name = 'report_' . $toUser->wdocente . '.pdf';    
 
         if(file_exists($file_to_attach)){
