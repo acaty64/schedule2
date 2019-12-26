@@ -49,11 +49,13 @@ class CRUD08_EmailTest extends TestCase
 
         $chk = [$email3->id=>'on', $email4->id=>'on', $email5->id=>'on'];
 
+        $chk_date = date_create_from_format('d/m/Y H:i:s', '31/12/2019 23:59:59');
+
         $tmail = Tmail::create([
             'name' => 'Requerimiento',
             'subject' => 'Correo de prueba',
             'view' => 'app.mail.required',
-            'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
+            'limit_date' => $chk_date,
         ]);
 
         $data = ['tmail_id' => $tmail->id, 'chk' => $chk];

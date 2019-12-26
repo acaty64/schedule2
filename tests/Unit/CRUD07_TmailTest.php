@@ -18,13 +18,14 @@ class CRUD07_TmailTest extends TestCase
         $this->actingAs($auth);
 
         $response = $this->get('tmail/create');
+        $chk_date = date_create_from_format('d/m/Y H:i:s', '31/12/2019 23:59:59');
         $response->assertStatus(200);
 
         $data = [
             'name' => 'Requerimiento',
             'subject' => 'Correo de prueba',
             'view' => 'app.mail.required',
-            'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
+            'limit_date' => $chk_date,
         ];
 		$response = $this->post('/tmail/store', $data);
 		$response->assertStatus(302);
@@ -33,7 +34,7 @@ class CRUD07_TmailTest extends TestCase
             'name' => 'Requerimiento',
             'subject' => 'Correo de prueba',
             'view' => 'app.mail.required',
-            'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
+            'limit_date' => $chk_date,
         ]);
 
         // $this->assertDatabaseHas('traces',[

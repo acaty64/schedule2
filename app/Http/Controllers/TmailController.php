@@ -21,17 +21,19 @@ class TmailController extends Controller
 
     public function store(Request $request)
     {
-        try {
+        // try {
             $tmail = new Tmail;
             $tmail->name = $request->name;
             $tmail->subject = $request->subject;
             $tmail->view = $request->view;
-            $tmail->limit_date = $request->limit_date->format('Y-m-d H:i:s');
+            $date = $request->limit_date->setTime(23,59,59);
+            $tmail->limit_date = $date->format('Y-m-d H:i:s');
             $tmail->save();
             return redirect('app.mail.tmail.index');
-        } catch (Exception $e) {
-            dd('error TmailController@store', e);
-        }
+// dd($tmail);
+        // } catch (Exception $e) {
+        //     dd('error TmailController@store', e);
+        // }
     }
 
     public function show(Tmail $tmail)
