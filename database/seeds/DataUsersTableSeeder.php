@@ -25,14 +25,17 @@ class DataUsersTableSeeder extends Seeder
             'email2' => 'master@gmail.com',
         ]);
 
-        // $users = User::all();
-        // foreach ($users as $user) {
-        //     DataUser::create([
-        //         'user_id' => $user->id,
-        //         'wdoc1' => $user->name,
-        //         'email1' => $user->email
-        //     ]);
-        // }
+        if(env('APP_ENV') == 'testing'){
+            $users = User::where('id','>',1 )->get();
+            foreach ($users as $user) {
+                DataUser::create([
+                    'user_id' => $user->id,
+                    'cdocente' => '00000'.$user->id,
+                    'wdoc1' => $user->name,
+                    'email1' => $user->email
+                ]);
+            }
+        }
 
         if(env('APP_ENV') != 'testing'){
 

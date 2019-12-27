@@ -171,9 +171,56 @@ class ScheduleController extends Controller
     }
   }
 
-  public function cronoDownload($docente_id)
+
+  public function cronoDownload_pc($docente_id){
+    return $this->cronoDownload($docente_id, 'pc');
+  }
+
+  public function cronoDownload_storage($docente_id){
+    return $this->cronoDownload($docente_id, 'storage');
+  }
+
+  private function cronoDownload($docente_id, $output)
   {
-    # code...
+    $data = $this->dataCrono($docente_id);
+    $data['type'] = 'PDF';
+    $user = User::findOrFail($docente_id);
+    $file_to_attach = storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
+    $file_name = 'crono_' . $user->wdocente . '.pdf';    
+    try{
+      if($output == 'pc'){
+        PDF::loadView('app.schedule.crono', compact('data'))
+                  ->setPaper('a4')
+                  ->setOption('margin-top', 25)
+                  ->setOrientation('Portrait')
+                  ->download($file_name);
+      }else{
+        // Borrar archivo anterior
+        if(file_exists($file_to_attach)){
+          unlink($file_to_attach);
+        }
+
+        PDF::loadView('app.schedule.crono', compact('data'))
+                  ->setPaper('a4')
+                  ->setOption('margin-top', 25)
+                  ->setOrientation('Portrait')
+                  ->save($file_to_attach);
+      }
+    } catch (Exception $e) {
+      return ['success'=>'false', 'error' => $e];
+    }    
+
+    if(file_exists($file_to_attach)){
+      if($output == 'pc'){      
+        flash('Archivo: crono_' . $cdocente . '.pdf generado.')->success();
+        return redirect(route('app.schedule.index'));
+      }else{
+        // Crear archivo reporte (TODO: ejecutar una funcion de otro controlador)
+        flash('Archivo: crono_' . $file_to_attach . '.pdf generado.')->success();
+        return redirect(route('app.schedule.index'));
+        // return ['success' => true, 'file_to_attach' => $file_to_attach, 'file_name' => $file_name];
+      }
+    }
   }
   
   public function cronoPdf($docente_id)

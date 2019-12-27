@@ -35,8 +35,12 @@
 							title="Ver en PDF">Crono</a>
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 
-							href="{{ route('api.schedule.crono.download', $docente['id'])}}" 
-							title="Descargar PDF">Crono</a>
+							href="{{ route('api.schedule.crono.download.pc', $docente['id'])}}" 
+							title="Descargar Crono PDF">to PC</a>
+						<a role="button" 
+							class="btn btn-sm btn-success glyphicon glyphicon-download" 
+							href="{{ route('api.schedule.crono.download.storage', $docente['id'])}}" 
+							title="Genera Crono PDF">to Serve</a>
 
 						<a role="button" 
 							class="btn btn-sm btn-info glyphicon glyphicon-list" 
@@ -49,11 +53,11 @@
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 
 							href="{{ route('api.schedule.report.download.pc', $docente['id'])}}"
-							title="Descargar PDF">Reporte</a>
+							title="Descargar Reporte PDF">to PC</a>
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 
-							href="{{ route('api.schedule.report.download.public', $docente['id'])}}"
-							title="Genera PDF">Reporte</a>
+							href="{{ route('api.schedule.report.download.storage', $docente['id'])}}"
+							title="Genera Reporte PDF">to Serve</a>
 					</td>
 				</tr>
 				@endif
