@@ -91,7 +91,7 @@
 @push('js')
 <script>
 	btnSave.onclick = function () {
-		console.log('Click btnSave');
+console.log('Click btnSave');
 		$("#contenedor_carga").css("visibility", "visible");
 		$("#contenedor-carga").css("opacity", 0.9);
 	}

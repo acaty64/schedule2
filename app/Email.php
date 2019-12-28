@@ -19,6 +19,10 @@ class Email extends Model
             'send_date',
             'limit_date',
             'reply_date',
+            'file_to_attach1',
+            'file_name1',
+            'file_to_attach2',
+            'file_name2'
     ];
 
 }

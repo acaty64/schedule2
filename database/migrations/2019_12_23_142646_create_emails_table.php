@@ -25,6 +25,10 @@ class CreateEmailsTable extends Migration
             $table->string('cc2')->nullable();
             $table->dateTime('send_date')->nullable();
             $table->dateTime('reply_date')->nullable();
+            $table->string('file_to_attach1')->nullable();
+            $table->string('file_name1')->nullable();
+            $table->string('file_to_attach2')->nullable();
+            $table->string('file_name2')->nullable();
             $table->timestamps();
         });
     }

@@ -40,8 +40,13 @@ class CRUD09_SendEmailTest extends TestCase
 
         foreach ($users as $user) {
             // Crea archivos pdf ficticios
-            $file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
-            $archivo = fopen($file_to_attach, "a") ;
+            $file_to_attach1 = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
+            $file_name1 = 'report_' . $user->name;
+            $file_to_attach2 = storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
+            $file_name2 = 'crono_' . $user->name;
+            $archivo = fopen($file_to_attach1, "a") ;
+            fclose($archivo);   
+            $archivo = fopen($file_to_attach2, "a") ;
             fclose($archivo);   
 
             $email = Email::create([
@@ -50,6 +55,10 @@ class CRUD09_SendEmailTest extends TestCase
                 'user_id_to' => $user->id,
                 'to' => $user->email,
                 'view' => $tmail->view,
+                'file_to_attach1' => $file_to_attach1,
+                'file_name1' => $file_name1,
+                'file_to_attach2' => $file_to_attach2,
+                'file_name2' => $file_name2,
                 'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
             ]);
         }

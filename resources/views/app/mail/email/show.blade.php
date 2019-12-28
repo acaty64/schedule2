@@ -14,9 +14,11 @@
 			<form action="{{ route('app.email.send.notification', $data['tmail']['id']) }}" method="GET">
 				{{ csrf_field() }}
 				<span class="row">
+					@if($data['chk_send']>0)
 					<div class="form-group">
 						<button type="submit" class="btn btn-sm btn-primary">Enviar</button>
 					</div>
+					@endif
 				</span>
 				<table class="table">
 					<thead>
