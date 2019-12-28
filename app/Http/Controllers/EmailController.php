@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Email;
+use App\Http\Classes\Report;
+use App\Http\Classes\Download;
 use App\Tmail;
 use App\User;
 use Illuminate\Http\Request;
@@ -37,15 +39,7 @@ class EmailController extends Controller
         $wdocente = $toUser->wdocente;
         $cdocente = $toUser->cdocente;
 
-        // Crear archivo reporte (TODO: ejecutar una funcion de otro controlador)
-        // $file_report = Api\ScheduleController::reportDownload_public($user->id);
-        // if(!$file_report){
-        //     return ['success'=>false, 'message' => 'Error de generación de archivo PDF de: '.$wdocente];
-        // }
-        // $file_to_attach = $file_report['file_to_attach'];
-        // $file_name = $file_report['file_name'];
-
-        $file_to_attach = storage_path() . '/reports/report_' . $toUser->cdocente . '.pdf';
+        $file_to_attach = storage_path() . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR .'report_' . $toUser->cdocente . '.pdf';
         $file_name = 'report_' . $toUser->wdocente . '.pdf';    
 
         if(file_exists($file_to_attach)){
@@ -159,14 +153,22 @@ class EmailController extends Controller
                 $old = Email::where('tmail_id', $tmail->id)
                         ->where('to', $user->email)->get();
                 if($old->count() == 0){
-                    $email = new Email;
-                    $email->tmail_id = $tmail->id ;
-                    $email->from = env('MAIL_USERNAME');
-                    $email->user_id_to = $user->id ;
-                    $email->to = $user->email ;
-                    $email->view = $tmail->view ;
-                    $email->limit_date = $tmail->limit_date;
-                    $email->save();
+                    $responseR = Report::reportDownload_storage($user->id);
+                    $responseC = Report::cronoDownload_storage($user->id);
+                    if($responseR['success'] && $responseC['success']){
+                        $email = new Email;
+                        $email->tmail_id = $tmail->id ;
+                        $email->from = env('MAIL_USERNAME');
+                        $email->user_id_to = $user->id ;
+                        $email->to = $user->email ;
+                        $email->view = $tmail->view ;
+                        $email->limit_date = $tmail->limit_date;
+                        $email->save();
+                    } else {
+                        flash('Error al generar PDF: '.$user->name)->error();
+                        return redirect(route('app.email.index', $tmail->id));
+                        break;
+                    }
                 }
             }
             return redirect(route('app.email.show', $tmail->id));

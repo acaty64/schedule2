@@ -21,7 +21,7 @@ class DownloadStorageTest extends TestCase
 
         $user = User::findOrFail($user_id);
 
-		$response = $this->get(route('api.schedule.report.download.storage', $user_id));
+		$response = $this->get(route('report.download.storage', $user_id));
 
 		$file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
 
@@ -48,7 +48,7 @@ class DownloadStorageTest extends TestCase
 
         $user = User::findOrFail($user_id);
 
-		$response = $this->get(route('api.schedule.crono.download.storage', $user_id));
+		$response = $this->get(route('crono.download.storage', $user_id));
 
 		$file_to_attach = storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
 

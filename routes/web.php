@@ -45,43 +45,43 @@ Auth::routes();
 /////////////// SCHEDULE
 
 Route::get('schedule/crono/show/{docente_id}', [
-	'as'	=> 'api.schedule.crono.show',
-	'uses'	=> 'Api\ScheduleController@cronoShow'
+	'as'	=> 'schedule.crono.show',
+	'uses'	=> 'ScheduleController@cronoShow'
 ]);
 
 Route::get('schedule/crono/pdf/{docente_id}', [
-	'as'	=> 'api.schedule.crono.pdf',
-	'uses'	=> 'Api\ScheduleController@cronoPdf'
+	'as'	=> 'schedule.crono.pdf',
+	'uses'	=> 'ScheduleController@cronoPdf'
 ]);
 
 Route::get('schedule/crono/download/pc/{docente_id}', [
-	'as'	=> 'api.schedule.crono.download.pc',
-	'uses'	=> 'Api\ScheduleController@cronoDownload_pc'
+	'as'	=> 'crono.download.pc',
+	'uses'	=> '\App\Http\Classes\Report@cronoDownload_pc'
 ]);
 
 Route::get('schedule/crono/download/storage/{docente_id}', [
-	'as'	=> 'api.schedule.crono.download.storage',
-	'uses'	=> 'Api\ScheduleController@cronoDownload_storage'
+	'as'	=> 'crono.download.storage',
+	'uses'	=> '\App\Http\Classes\Report@cronoDownload_storage'
 ]);
 
 Route::get('schedule/report/show/{docente_id}', [
-	'as'	=> 'api.schedule.report.show',
-	'uses'	=> 'Api\ScheduleController@reportShow'
+	'as'	=> 'schedule.report.show',
+	'uses'	=> 'ScheduleController@reportShow'
 ]);
 
 Route::get('schedule/report/pdf/{docente_id}', [
-	'as'	=> 'api.schedule.report.pdf',
-	'uses'	=> 'Api\ScheduleController@reportPdf'
+	'as'	=> 'schedule.report.pdf',
+	'uses'	=> 'ScheduleController@reportPdf'
 ]);
 
 Route::get('schedule/report/download/pc/{docente_id}', [
-	'as'	=> 'api.schedule.report.download.pc',
-	'uses'	=> 'Api\ScheduleController@reportDownload_pc'
+	'as'	=> 'report.download.pc',
+	'uses'	=> '\App\Http\Classes\Report@reportDownload_pc'
 ]);
 
 Route::get('schedule/report/download/storage/{docente_id}', [
-	'as'	=> 'api.schedule.report.download.storage',
-	'uses'	=> 'Api\ScheduleController@reportDownload_storage'
+	'as'	=> 'report.download.storage',
+	'uses'	=> '\App\Http\Classes\Report@reportDownload_storage'
 ]);
 
 Route::get('schedule/edit/{docente_id}', [

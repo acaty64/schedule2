@@ -76,6 +76,7 @@
         </div>
     </div>
     <!-- Scripts -->
+    @stack('js')
     <script src="{{ asset('js/app.js') }}"></script>
     @yield('style')
     @if(\Auth::user())

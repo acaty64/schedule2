@@ -3,8 +3,13 @@
 namespace Tests\Unit;
 
 use App\Email;
+use App\Horario;
+use App\Semestre;
 use App\Tmail;
+use App\User;
+use FeriadosTableSeeder;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use SemestresTableSeeder;
 use Tests\TestCase;
 
 class CRUD08_EmailTest extends TestCase
@@ -59,6 +64,53 @@ class CRUD08_EmailTest extends TestCase
         ]);
 
         $data = ['tmail_id' => $tmail->id, 'chk' => $chk];
+
+        $this->seed(SemestresTableSeeder::class);
+        $this->seed(FeriadosTableSeeder::class);
+
+        foreach ($chk as $key => $value) {
+            $user = User::findOrFail($key);
+            $semestres = Semestre::all();
+            foreach ($semestres as $semestre) {
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'LUN',
+                    'turno' => 'noche',
+                ]);
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'MAR',
+                    'turno' => 'dia',
+                ]);
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'MIE',
+                    'turno' => 'noche',
+                ]);
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'JUE',
+                    'turno' => 'dia',
+                ]);
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'VIE',
+                    'turno' => 'noche',
+                ]);
+                Horario::create([
+                    'cdocente' => $user->cdocente,
+                    'semestre' => $semestre,
+                    'dia' => 'SAB',
+                    'turno' => 'libre',
+                ]);
+
+            }
+        }
 
         $response = $this->post('/email/store', $data);
         $response->assertStatus(302);
