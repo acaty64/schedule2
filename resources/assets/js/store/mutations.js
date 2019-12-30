@@ -2,6 +2,12 @@ export default {
   parameters(state, value){
     state.parameters = value;
   },
+  editable(state, value){
+    state.editable = value;
+  },
+  tmail_id(state, value){
+    state.tmail_id = value;
+  },
   check_main(state, value){
     state.check_main = value;
   },

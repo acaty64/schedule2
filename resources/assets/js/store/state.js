@@ -3,6 +3,8 @@ import {es} from 'vuejs-datepicker/dist/locale';
 
 export default {
 	docente_id: 0,
+	editable: false,
+	tmail_id: false,
 	check_main: [],
 	holidays: [],
 	component_key: 0,

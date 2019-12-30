@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Derecho;
+use App\Email;
 use App\Feriado;
 use App\Gozada;
 use App\Horario;
@@ -587,7 +588,27 @@ class ScheduleController extends Controller
         'libre'
       ]
     ];
-    // dd('api/ScheduleController', $horarios);
+
+    $email = Email::where('user_id_to', $docente_id)
+              ->orderByDesc('send_date')
+              ->first();
+    if(is_null($email)){
+      $editable = false;
+      $tmail_id = false;
+    }else{
+      if(!$email->reply_date){
+        $tmail_id = $email->tmail_id;
+        if($email->limit > now()){
+          $editable = false;
+        }else{
+          $editable = true;
+        }
+      }else{
+        $editable = false;
+        $tmail_id = false;
+      }
+    }
+
     return [
       'parameters' => $parameters,
       'docente' => [
@@ -602,7 +623,9 @@ class ScheduleController extends Controller
       'horarios' => $horarios, 
       'semestres' => $semestres,
       'derechos' => $derechos,
-      'semestre' => $semestre1
+      'semestre' => $semestre1,
+      'editable' => $editable,
+      'tmail_id' => $tmail_id
     ];
   }
 }

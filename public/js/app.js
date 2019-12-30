@@ -54070,6 +54070,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     check_main: function check_main(state) {
       return state.check_main;
+    },
+    editable: function editable(state) {
+      return state.editable;
+    },
+    tmail_id: function tmail_id(state) {
+      return state.tmail_id;
     }
   })),
   methods: {
@@ -57076,7 +57082,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
-                _vm.status == "view"
+                _vm.status == "view" && _vm.editable
                   ? _c(
                       "button",
                       {
@@ -57091,7 +57097,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "edit"
+                _vm.status == "edit" && _vm.editable
                   ? _c(
                       "button",
                       {
@@ -57106,7 +57112,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "edit"
+                _vm.status == "edit" && _vm.editable
                   ? _c(
                       "button",
                       {
@@ -57121,17 +57127,21 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "view"
+                _vm.status == "view" && _vm.editable
                   ? _c(
                       "a",
                       {
                         staticClass: "btn btn-sm btn-primary",
                         attrs: {
                           role: "button",
-                          href: "/schedule/crono/show/" + _vm.docente_id
+                          href:
+                            "/schedule/confirm/view/" +
+                            _vm.tmail_id +
+                            "/" +
+                            _vm.docente_id
                         }
                       },
-                      [_vm._v("Ver Cronograma")]
+                      [_vm._v("Confirmar")]
                     )
                   : _vm._e()
               ]),
@@ -57682,6 +57692,8 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	docente_id: 0,
+	editable: false,
+	tmail_id: false,
 	check_main: [],
 	holidays: [],
 	component_key: 0,
@@ -57780,7 +57792,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       'ffin': context.state.ffin
     };
     axios.post(url, request).then(function (response) {
-      // console.log('saveData: ', response.data);
       return { 'success': response.data };
     }).catch(function (error) {
       console.log(error);
@@ -58651,53 +58662,61 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
             case 2:
               _context6.next = 4;
-              return context.commit('docente', data.docente);
+              return context.commit('editable', data.editable);
 
             case 4:
               _context6.next = 6;
-              return context.commit('semestre', data.semestre);
+              return context.commit('tmail_id', data.tmail_id);
 
             case 6:
               _context6.next = 8;
-              return context.commit('feriados', data.feriados);
+              return context.commit('docente', data.docente);
 
             case 8:
               _context6.next = 10;
-              return context.commit('periodos', data.periodos);
+              return context.commit('semestre', data.semestre);
 
             case 10:
               _context6.next = 12;
-              return context.commit('gozadas', data.gozadas);
+              return context.commit('feriados', data.feriados);
 
             case 12:
               _context6.next = 14;
-              return context.commit('programadas', data.programadas);
+              return context.commit('periodos', data.periodos);
 
             case 14:
               _context6.next = 16;
-              return context.commit('horarios', data.horarios);
+              return context.commit('gozadas', data.gozadas);
 
             case 16:
               _context6.next = 18;
-              return context.commit('semestres', data.semestres);
+              return context.commit('programadas', data.programadas);
 
             case 18:
               _context6.next = 20;
-              return context.commit('derechos', data.derechos);
+              return context.commit('horarios', data.horarios);
 
             case 20:
               _context6.next = 22;
-              return context.dispatch('getHoras');
+              return context.commit('semestres', data.semestres);
 
             case 22:
               _context6.next = 24;
-              return context.dispatch('setDateLimit');
+              return context.commit('derechos', data.derechos);
 
             case 24:
               _context6.next = 26;
-              return context.dispatch('setCheckSemestres');
+              return context.dispatch('getHoras');
 
             case 26:
+              _context6.next = 28;
+              return context.dispatch('setDateLimit');
+
+            case 28:
+              _context6.next = 30;
+              return context.dispatch('setCheckSemestres');
+
+            case 30:
             case 'end':
               return _context6.stop();
           }
@@ -58742,6 +58761,12 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 /* harmony default export */ __webpack_exports__["a"] = ({
   parameters: function parameters(state, value) {
     state.parameters = value;
+  },
+  editable: function editable(state, value) {
+    state.editable = value;
+  },
+  tmail_id: function tmail_id(state, value) {
+    state.tmail_id = value;
   },
   check_main: function check_main(state, value) {
     state.check_main = value;

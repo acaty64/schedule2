@@ -7,6 +7,8 @@ describe('store state', () => {
 	test('default state is correct', () => {
 		expect(state).toEqual({
 			docente_id: 0,
+			editable: false,
+			tmail_id: false,
 			check_main: [],
 			component_key: 0,
 			mess_horario: ['','',''],

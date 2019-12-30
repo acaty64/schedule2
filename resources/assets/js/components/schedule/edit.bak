@@ -6,7 +6,20 @@
           <div class="panel-heading">
             <div class="row">
               <div class="col-md-4"> 
-                Docente: <b>{{ user.name }}</b>
+                Docente: <b>{{ docente.wdocente }}</b>
+              </div>
+              <div class="col-md-2"> 
+                <button v-if="status == 'view'" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
+                <button v-if="status == 'edit'" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
+                <button v-if="status == 'edit'" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
+                <a v-if="status == 'view'" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/crono/show/'+ docente_id">Ver Cronograma</a>
+              </div>              
+              <div class="col-md-6"> 
+                <span v-for="mess in check_main">
+                  <font color="red">
+                    <b>{{ mess }}</b><br>                
+                  </font>
+                </span>
               </div>
             </div>
           </div>
@@ -17,11 +30,13 @@
           </div>
           <div class="panel-body">
             <div class="container">
-                <periodos></periodos>
+                <periodos :key="component_key"></periodos>
             </div>            
+            <div class="row">
+              <div class="col-md-12"><hr></div>
+            </div>
             <div class="container">
-                <div class="row"><div class="col-md-9"><hr></div></div>
-                <programadas></programadas>
+                <programadas :key="component_key"></programadas>
             </div> 
           </div>
         </div>
@@ -31,12 +46,11 @@
       <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h5 align="center"><b>HORARIO</b></h5>
+            <h5 align="center"><b>HORARIOS</b></h5>
           </div>
           <div class="panel-body"> 
             <div class="container">
-              <!-- <div class="row"><div class="col-md-9"><hr></div></div> -->
-                <horario></horario>
+                <horario :key="component_key"></horario>
             </div>
           </div>
         </div>
@@ -52,38 +66,40 @@ import programadas from './programadas';
 import horario from './horario';
 export default {
   name: 'ScheduleEdit',
-  mounted(){
-    this.setCodDoc();
-    this.getData();
-    this.setSemestre();
-    this.setVacaciones();
-    this.getHoras();
-    this.changeSemestre();
-    // this.calculoVacaciones();
+  async mounted(){
+    await this.getData(this.docente_id);
   },
-	data() {
-		return {
-			user: this.$route.params.user,
-		};
-	},
   components: { periodos, programadas, horario },
+  props: ['docente_id'],
   computed: {
     ...mapState({
-      cod_doc: (state) => state.cod_doc,
+      status: (state) => state.status,
+      component_key: (state) => state.component_key,
+      docente: (state) => state.docente,
+      check_main: (state) => state.check_main,
     }),
   },
   methods: {
-    ...mapActions(['setSemestre', 'changeSemestre', 'getHoras']),
-    setCodDoc(){ this.$store.dispatch('setCodDoc', this.user.cod_doc); },
-    // setSemestre(){ this.$store.dispatch('setSemestre'); },
-    getData(){ this.$store.dispatch('getData', this.cod_doc); },
-    setVacaciones(){ this.$store.dispatch('setVacaciones', this.cod_doc); },
-
-    // ...mapActions('getData', 'getHoras','setVacaciones', 'changeSemestre', 'calculoVacaciones')
-  //   getData(){
-  //   console.log('methods getData');
-  //     this.$store.dispatch('getData');
-  //   }
+    getData(docente_id){
+      this.$store.dispatch('getData', docente_id);
+    },
+    semestre(semestre){
+      this.$store.commit('semestre', semestre);
+    },
+    btnRestore(docente_id) {
+      this.$store.dispatch('restoreData', docente_id);
+    },
+    btnEdit() {
+      this.$store.commit('status', 'edit');
+    },
+    async btnSave() {
+      try {
+        await this.$store.dispatch('saveData');
+        this.$store.commit('status', 'view');
+      } catch (e) {
+        alert('Error de grabación.');
+      }
+    },
   }
 };
 </script>

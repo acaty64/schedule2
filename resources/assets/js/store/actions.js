@@ -10,7 +10,6 @@ export default {
       'ffin': context.state.ffin
     };
     axios.post(url, request).then(response=>{
-// console.log('saveData: ', response.data);
       return {'success': response.data};
     }).catch(function (error) {
         console.log(error);
@@ -19,21 +18,21 @@ export default {
   //* Consistencia global
   setCheckMain (context) {
     var check_main = [];
-    // Horarios
+      // Horarios
     for( var s in context.state.semestres ){
       if(context.state.semestres[s]['color'] == 'red'){
         check_main.push("Verifique los mensajes en el panel HORARIOS.");
         break;
       }
     }
-    // Programadas
+      // Programadas
     for( var q in context.state.programadas ){
       if(context.state.programadas[q]['message'] != ""){
         check_main.push("Verifique los mensajes en el panel VACACIONES PROGRAMADAS.");
         break;
       }
     }
-    // Periodos
+      // Periodos
     for( var p in context.state.periodos ){
       if(context.state.periodos[p]['message'] != ""){
         check_main.push("Verifique los mensajes en el panel PERIODOS");
@@ -42,7 +41,7 @@ export default {
     }
     context.commit('check_main', check_main);
   },
-  //* Consistencia de horarios todos los semestres
+    //* Consistencia de horarios todos los semestres
   async setCheckSemestres (context) {
     for ( var i in context.state.semestres ){
       var semestre = context.state.semestres[i]['semestre'];
@@ -50,11 +49,11 @@ export default {
     }
     return true;
   },
-  //* Transfiere "horario" a "horarios" //
+    //* Transfiere "horario" a "horarios" //
   horario2horarios: (context) => {
     context.commit('horario2horarios');
   },
-  //* Consistencia_programadas
+    //* Consistencia_programadas
   async consistencia_programadas (context) {
     for (var i = 0; i < context.state.programadas.length; i++) {
       var item = context.state.programadas[i];
@@ -62,7 +61,7 @@ export default {
       context.commit('messageCheck', ['programadas', item,  mess_prog[1]]);
     }
   },
-  //* Consistencia (periodo, programada u horario)
+    //* Consistencia (periodo, programada u horario)
   async consistencia_periodos (context) {
     for(var i in context.state.periodos){
       var check = [];
@@ -82,7 +81,7 @@ export default {
       context.commit('messageCheck', ['periodos', item,  check]);
     }
   }, // end of consistencia_periodos()
-  //* Consistencia_horario
+    //* Consistencia_horario
   async consistencia_horario (context, semestre) {
     let check1 = false, check2 = false, check3 = false;
     let mess_hora1 = await context.dispatch('check_horario1', semestre);
@@ -111,7 +110,7 @@ export default {
     await context.commit('component_key');              
     return [check_semestre, color];
   }, // end of consistencia_horario()
-  //* Funcion de verificacion de periodo
+    //* Funcion de verificacion de periodo
   check_periodos1: (context, item) => {
     // TODO: Se ha modificado por AQUISSE (vacaciones adelantadas previamente)
     let periodo = item.periodo;
@@ -438,8 +437,8 @@ export default {
             // }
             // context.commit('changePeriodoInHolidays', [h, nextPeriodo]);
           }else{
-// Cuando es programada y cuando gozada ???
-//            context.commit('changeTipoInHolidays', [h, 'programada']);
+    // Cuando es programada y cuando gozada ???
+    //            context.commit('changeTipoInHolidays', [h, 'programada']);
             var today = new Date();
             today.setHours(0,0,0);
             if(context.state.holidays[h]['fecha'] <= today){
@@ -684,6 +683,8 @@ export default {
   }, // end of getHoras()
   async initialData(context, data){
       await context.commit('parameters', data.parameters);
+      await context.commit('editable', data.editable);
+      await context.commit('tmail_id', data.tmail_id);
       await context.commit('docente', data.docente);
       await context.commit('semestre', data.semestre);
       await context.commit('feriados', data.feriados);        
@@ -701,7 +702,7 @@ export default {
   getData: (context, docente_id) => {   // Obtiene la Data del backend
     var url = context.state.protocol+'//'+context.state.URLdomain+'/api/schedule/data/'+docente_id;
     axios.get(url).then(response=>{
-// console.log('getData: ', response.data);
+    // console.log('getData: ', response.data);
         let check = context.dispatch('initialData', response.data);
         check.then(function (value){
           context.dispatch('changeSemestre', response.data.semestre);

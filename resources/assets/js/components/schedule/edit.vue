@@ -9,10 +9,10 @@
                 Docente: <b>{{ docente.wdocente }}</b>
               </div>
               <div class="col-md-2"> 
-                <button v-if="status == 'view'" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
-                <button v-if="status == 'edit'" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
-                <button v-if="status == 'edit'" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
-                <a v-if="status == 'view'" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/crono/show/'+ docente_id">Ver Cronograma</a>
+                <button v-if="status == 'view' && editable" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
+                <button v-if="status == 'edit' && editable" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
+                <button v-if="status == 'edit' && editable" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
+                <a v-if="status == 'view' && editable" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/confirm/view/'+tmail_id+'/'+ docente_id">Confirmar</a>
               </div>              
               <div class="col-md-6"> 
                 <span v-for="mess in check_main">
@@ -77,6 +77,8 @@ export default {
       component_key: (state) => state.component_key,
       docente: (state) => state.docente,
       check_main: (state) => state.check_main,
+      editable: (state) => state.editable,
+      tmail_id: (state) => state.tmail_id,
     }),
   },
   methods: {
