@@ -67,15 +67,5 @@ class CRUD09_SendEmailTest extends TestCase
         $sended = Email::whereNotNull('send_date')->get();
         $this->assertTrue($sended->count() == 1);        
 
-        // $this->assertDatabaseHas('emails',[
-        //     'tmail_id' => $tmail->id,
-        //     'from' => 'ucss.fcec.lim@gmail.com',
-        //     'to' => $user5->email,
-        //     'user_id_to' => $user5->id,
-        //     'view' => $tmail->view,
-        //     'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
-        //     'send_date' => now()->format('Y-m-d H:i:s')
-        // ]);
-
     }
 }

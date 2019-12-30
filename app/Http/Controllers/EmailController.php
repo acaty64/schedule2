@@ -12,11 +12,59 @@ use Illuminate\Support\Facades\Mail;
 
 class EmailController extends Controller
 {
+    public function send_reply($tmail_id, $docente_id)
+    {
+        $email = Email::where('tmail_id', $tmail_id)
+        ->where('user_id_to', $docente_id)
+        ->first();
+        $user = User::findOrFail($docente_id);
+        if(!is_null($email)){
+
+            $data = [
+                'from' => $email->from,
+                'dfrom' => 'Departamento Académico FCEC',
+                'to' => $email->to,
+                'user_id_to' => $email->to,
+                'subject' => 'Confirmación de cronograma.',
+                'wdocente' => $user->wdocente,
+                'view' => 'app.mail.email.reply',
+            ];
+
+            $attach = [
+                ['file_to_attach' => $email->file_to_attach1, 'file_name' => $email->file_name1 ],
+                ['file_to_attach' => $email->file_to_attach2, 'file_name' => $email->file_name2 ]
+            ];
+
+            try {
+                Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {
+                    $message->to($data['to'], '');
+                    $message->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC');
+                    $message->subject($data['subject']);
+                    foreach ($attach as $item) {
+                        $message->attach( $item['file_to_attach'], 
+                            [ 'as'=>$item['file_name'], 'mime' => 'application/pdf']);
+                    }
+                });         
+
+                $email->reply_date = now();
+                $email->save();
+
+                flash('Correo electrónico de confirmación enviado.')->success();
+                return redirect(route('app.schedule.edit', $user->id));
+
+            } catch (Exception $e) {
+                flash('Error al enviar el correo electrónico.')->error();
+                return redirect(route('schedule.confirm.view', ['tmail_id'=>$tmail->id, 'docente_id'=>$user->id]));
+            }
+        }
+
+    }
+
     public function send_notification($tmail_id)
     {
         $emails = Email::where('tmail_id', $tmail_id)
-                ->whereNull('send_date')
-                ->get();
+        ->whereNull('send_date')
+        ->get();
         $count = 0;
         foreach ($emails as $item) {
             $chk_send = $this->send_email_notification($item->id);
@@ -40,54 +88,40 @@ class EmailController extends Controller
         $wdocente = $toUser->wdocente;
         $cdocente = $toUser->cdocente;
 
-        // $file_to_attach = storage_path() . DIRECTORY_SEPARATOR . 'reports'. DIRECTORY_SEPARATOR .'report_' . $toUser->cdocente . '.pdf';
-        // $file_name = 'report_' . $toUser->wdocente . '.pdf';    
+        $data = [
+            'from' => $email->from,
+            'dfrom' => 'Departamento Académico FCEC',
+            'to' => $email->to,
+            'user_id_to' => $email->to,
+            'subject' => $email->subject,
+            'wdocente' => $wdocente,
+            'limite' => $email->limit_date,
+            'view' => $email->view,
+        ];
 
-        // if(file_exists($file_to_attach)){
-            $data = [
-                'from' => $email->from,
-                'dfrom' => 'Departamento Académico FCEC',
-                'to' => $email->to,
-                'user_id_to' => $email->to,
-                'subject' => $email->subject,
-                'wdocente' => $wdocente,
-                'limite' => $email->limit_date,
-                'view' => $email->view,
-            ];
+        $attach = [
+            ['file_to_attach' => $email->file_to_attach1, 'file_name' => $email->file_name1 ],
+            ['file_to_attach' => $email->file_to_attach2, 'file_name' => $email->file_name2 ]
+        ];
 
-            $attach = [
-                ['file_to_attach' => $email->file_to_attach1, 'file_name' => $email->file_name1 ],
-                ['file_to_attach' => $email->file_to_attach2, 'file_name' => $email->file_name2 ]
-            ];
+        try {
+            Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {        
+                $message->to($data['to'], '');
+                $message->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC');
+                $message->subject($data['subject']);
+                foreach ($attach as $item) {
+                    $message->attach( $item['file_to_attach'], 
+                        [ 'as'=>$item['file_name'], 'mime' => 'application/pdf']);
+                }
+            });         
 
-            try {
-                    Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {        
-                        $message->to($data['to'], '');
-                        $message->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC');
-                        $message->subject($data['subject']);
-                        foreach ($attach as $item) {
-                            $message->attach( $item['file_to_attach'], 
-                                [ 'as'=>$item['file_name'], 'mime' => 'application/pdf']);
-                        }
-                    });         
+            $email->send_date = now();
+            $email->save();
 
-                    $email->send_date = now();
-                    $email->save();
-
-            } catch (Exception $e) {
-                return ['success'=>false, 'message' => 'Error al enviar el correo electrónico.'];
-
-                dd('Error de proceso send_email_notification.');
-                // flash('Error de proceso send_email_notification.')->error();
-                // return back();
-            }
-            return ['success'=>true];
-        // }else{
-        //     // flash('Genere el archivo PDF de: '.$wdocente)->error();
-        //     // return back();
-        //     // return redirect(route('app.schedule.index'));
-        //     return ['success'=>false, 'message' => 'Genere el archivo PDF de: '.$wdocente];
-        // }
+        } catch (Exception $e) {
+            return ['success'=>false, 'message' => 'Error al enviar el correo electrónico.'];
+        }
+        return ['success'=>true];
 
     }   // end of send_notification()
 
@@ -133,7 +167,7 @@ class EmailController extends Controller
         //// Sort by name
 
         return view('app.mail.email.index')
-            ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
+        ->with('data', ['users'=>$docs, 'tmail'=> $tmail]);
     }
 
     public function store(Request $request)
@@ -151,7 +185,7 @@ class EmailController extends Controller
             }
             try {
                 $olds = Email::where('tmail_id', $tmail->id)
-                            ->whereNull('send_date')->get();
+                ->whereNull('send_date')->get();
                 foreach ($olds as $old) {
                     if(!array_key_exists($old->user_id_to, $request->chk)){
                         $old->delete();
@@ -159,7 +193,7 @@ class EmailController extends Controller
                 }
                 foreach ($users as $user) {
                     $old = Email::where('tmail_id', $tmail->id)
-                            ->where('to', $user->email)->get();
+                    ->where('to', $user->email)->get();
                     if($old->count() == 0){
                         $responseR = Report::reportDownload_storage($user->id);
                         $responseC = Report::cronoDownload_storage($user->id);
@@ -213,7 +247,7 @@ class EmailController extends Controller
         });
 
         return view('app.mail.email.show')
-            ->with('data', ['users'=>$docs, 'tmail'=> $tmail, 'chk_send' => count($chk_send)]);
+        ->with('data', ['users'=>$docs, 'tmail'=> $tmail, 'chk_send' => count($chk_send)]);
     }
 
     public function edit($id)

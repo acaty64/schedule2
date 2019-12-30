@@ -17,11 +17,16 @@ class DownloadStorageTest extends TestCase
 
         $this->seed();
 
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $user_id = Role::where('trole_id', 3)->first()->user_id;
 
         $user = User::findOrFail($user_id);
 
 		$response = $this->get(route('report.download.storage', $user_id));
+
+        $this->assertTrue($response['success']);
 
 		$file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
 
@@ -31,10 +36,9 @@ class DownloadStorageTest extends TestCase
     		if(file_exists($file_to_attach)){
     			break;
     		}
-    	}while(!file_exists($file_to_attach));
+    	}while(!file_exists($file_to_attach) && $time < 3000);
 
 		$this->assertFileExists($file_to_attach);
-    
     }
 
 
@@ -44,11 +48,16 @@ class DownloadStorageTest extends TestCase
 
         $this->seed();
 
+        $auth = $this->defaultUser([],'admin');
+        $this->actingAs($auth);
+
         $user_id = Role::where('trole_id', 3)->first()->user_id;
 
         $user = User::findOrFail($user_id);
 
 		$response = $this->get(route('crono.download.storage', $user_id));
+
+        $this->assertTrue($response['success']);
 
 		$file_to_attach = storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
 
@@ -58,10 +67,10 @@ class DownloadStorageTest extends TestCase
     		if(file_exists($file_to_attach)){
     			break;
     		}
-    	}while(!file_exists($file_to_attach));
+    	}while(!file_exists($file_to_attach) && $time < 3000);
 
 		$this->assertFileExists($file_to_attach);
-    
+
     }
 
 }

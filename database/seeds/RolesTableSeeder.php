@@ -29,13 +29,13 @@ class RolesTableSeeder extends Seeder
         	'user_id' => 4, 
         	'trole_id' => 4, 
         ]);
-        	$users = User::where('id','>', 4)->get();
-        	foreach ($users as $user) {
-		        Role::create([
-		        	'user_id' => $user->id, 
-		        	'trole_id' => 3, 
-		        ]);
-        	}
+    	$users = User::where('id','>', 4)->get();
+    	foreach ($users as $user) {
+	        Role::create([
+	        	'user_id' => $user->id, 
+	        	'trole_id' => 3, 
+	        ]);
+    	}
         // if(env('APP_ENV') == 'testing'){
         // }else{
         // 	$users = User::where('id','>', 4)->get();

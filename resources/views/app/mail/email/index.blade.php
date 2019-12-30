@@ -19,7 +19,7 @@
 				<input type="hidden" value="{{ $data['tmail']['id'] }}" name='tmail_id'>
 				<span class="row">
 						<div class="form-group">
-							<button id="btnSave" type="submit" class="btn btn-sm btn-primary" onclick="btnSave">Grabar</button>
+							<button id="btnSave" type="submit" class="btn btn-sm btn-primary">Grabar</button>
 						</div>
 				</span>
 				<table class="table">
@@ -89,12 +89,13 @@
 @endsection
 
 @push('js')
-<script>
-	btnSave.onclick = function () {
+{{-- 	document.getElementById("btnSave").addEventListener("click", btnSave);
+	function btnSave() {
 console.log('Click btnSave');
 		$("#contenedor_carga").css("visibility", "visible");
 		$("#contenedor-carga").css("opacity", 0.9);
-	}
+	 }  --}}
+<script>
 	// https://www.youtube.com/watch?v=nq0vAO6SDlI
 	window.onload = function () {
 		var contenedor = document.getElementById('contenedor_carga');
