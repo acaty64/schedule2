@@ -3,8 +3,9 @@ import {es} from 'vuejs-datepicker/dist/locale';
 
 export default {
 	docente_id: 0,
-	editable: false,
+	// editable: false,
 	tmail_id: false,
+	confirm: false,
 	check_main: [],
 	holidays: [],
 	component_key: 0,
@@ -14,7 +15,7 @@ export default {
 	// 	turnos_sab: ['noche', 'vacaciones', 'none'] 
 	// },
 	parameters: '',
-	status: 'view',
+	status: '',
 	cdocente: '',
 	docente: {},
 	periodos: [],
@@ -37,10 +38,11 @@ export default {
 	// semestre: '2019-2',
 	panel: {
 		btn: {
-		  periodos: 'view',
-		  programadas: 'view',
-		  rango: 'view',
-		  horario: 'view'
+			// agregar_p: false,
+		  confirmar: false,
+		  editar: false,
+		  grabar: false,
+		  rehacer: false
 		},
 		data: {
 		  periodos: 'view',
@@ -48,6 +50,9 @@ export default {
 		  rango: 'view',
 		  horario: 'view'
 		},
+	},
+	btn_prog: {
+		agregar: false,
 	},
 	vacaciones_in: {
 	  periodos: [

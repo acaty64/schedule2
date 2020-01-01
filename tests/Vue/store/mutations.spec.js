@@ -202,16 +202,16 @@ describe('store mutations', () => {
 		expect(state.horas).toEqual(['08:00-08:30']);		
 	});
 
-
 	test('change value in panel array', () => {
 		const state = {
 			status: 'view',
 			panel: {
 				btn: {
-				  rango: 'none',
-				  periodos: 'none',
-				  programadas: 'none',
-				  horario: 'none'
+				  // agregar_p: 'none',
+				  editar: 'none',
+				  grabar: 'none',
+				  rehacer: 'none',
+				  confirmar: 'none',
 				},
 				data: {
 				  rango: 'none',
@@ -221,57 +221,115 @@ describe('store mutations', () => {
 				},
 			},
 		};
-		mutations.btnEdit(state, 'horario');
+
+		mutations.confirm(state, false);
+		mutations.status(state, 'view');
 		expect(state.panel).toEqual({
 			btn: {
-				  rango: 'none',
-				  periodos: 'none',
-				  programadas: 'none',
-				  horario: 'edit'
+				  editar: false,
+				  grabar: false,
+				  rehacer: false,
+				  confirmar: false,
+				  // agregar_p: false,
 			},
 			data: {
-			  rango: 'view',
+			  horario: 'view',
 			  periodos: 'view',
 			  programadas: 'view',
-			  horario: 'edit'
+			  rango: 'view',
 			}
-		});		
-	});
+		});
 
-	test('change values to view in panel array', () => {
-		const state = {
-			status: 'view',
-			panel: {
-				btn: {
-				  rango: 'none',
-				  periodos: 'none',
-				  programadas: 'none',
-				  horario: 'none'
-				},
-				data: {
-				  rango: 'none',
-				  periodos: 'none',
-				  programadas: 'none',
-				  horario: 'none'
-				},
-			}
-		};
-		mutations.btnEdit(state, 'periodos');
+		mutations.confirm(state, true);
+		mutations.status(state, 'editable');
 		expect(state.panel).toEqual({
 			btn: {
-				  rango: 'none',
-				  periodos: 'edit',
-				  programadas: 'none',
-				  horario: 'none'
+				  // agregar_p: false,
+				  confirmar: true,
+				  editar: true,
+				  grabar: false,
+				  rehacer: false,
 			},
 			data: {
-			  rango: 'view',
-			  periodos: 'edit',
+			  horario: 'view',
+			  periodos: 'view',
 			  programadas: 'view',
-			  horario: 'view'
+			  rango: 'view',
 			}
-		});		
+		});
+
+		mutations.confirm(state, true);
+		mutations.status(state, 'edit');
+		expect(state.panel).toEqual({
+			btn: {
+				  // agregar_p: true,
+				  editar: false,
+				  grabar: false,
+				  rehacer: true,
+				  confirmar: false,
+			},
+			data: {
+			  horario: 'edit',
+			  periodos: 'view',
+			  programadas: 'edit',
+			  rango: 'edit',
+			}
+		});
+
+		mutations.confirm(state, true);
+		mutations.status(state, 'upgradeable');
+		expect(state.panel).toEqual({
+			btn: {
+				  editar: false,
+				  grabar: true,
+				  rehacer: true,
+				  confirmar: false,
+				  // agregar_p: true,
+			},
+			data: {
+			  horario: 'edit',
+			  periodos: 'view',
+			  programadas: 'edit',
+			  rango: 'edit',
+			}
+		});
+
 	});
+
+	// test('change values to view in panel array', () => {
+	// 	const state = {
+	// 		status: 'view',
+	// 		panel: {
+	// 			btn: {
+	// 			  rango: 'none',
+	// 			  periodos: 'none',
+	// 			  programadas: 'none',
+	// 			  horario: 'none'
+	// 			},
+	// 			data: {
+	// 			  rango: 'none',
+	// 			  periodos: 'none',
+	// 			  programadas: 'none',
+	// 			  horario: 'none'
+	// 			},
+	// 		}
+	// 	};
+	// 	mutations.btnEdit(state, 'periodos');
+	// 	expect(state.panel).toEqual({
+	// 		btn: {
+	// 			  rango: 'none',
+	// 			  periodos: 'edit',
+	// 			  programadas: 'none',
+	// 			  horario: 'none'
+	// 		},
+	// 		data: {
+	// 		  rango: 'view',
+	// 		  periodos: 'edit',
+	// 		  programadas: 'view',
+	// 		  horario: 'view'
+	// 		}
+	// 	});		
+	// });
 
 	test('change values with messageCheck mutation', ()=>{
 		const state = {

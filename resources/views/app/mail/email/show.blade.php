@@ -17,9 +17,6 @@
 		</h3>
 	</div>
 </div>
-<div id="contenedor_carga">
-	<div id="carga"></div>
-</div>
 <div class="container">
 	<div class="row">
 		<div class="col-md-9">
@@ -60,63 +57,4 @@
 		</div>
 	</div>
 </div>
-@endsection
-
-@push('js')
-<script>
-	// https://www.youtube.com/watch?v=nq0vAO6SDlI
-	window.onload = function () {
-		var contenedor = document.getElementById('contenedor_carga');
-		contenedor.style.visibility = 'hidden';
-		contenedor.style.opacity = '0';
-	}	
-</script>
-@endpush
-
-@section('style')
- <style>
-	*, *: after, *:before{
-		margin:0;
-		padding: 0;
-		-webkit-box-sizing: border-box;
-		-moz-box-sizing: border-box;
-		box-sizing: border-box;
-	}
-
-	#contenedor_carga{
-		background-color: rgba(250, 240, 245, 0.9);
-		height: 100%;
-		width: 100%;
-		position: fixed;
-		-webkit-transition: all 1s ease;
-		-o-transition: all 1s ease;
-		transition: all 1s ease;
-		z-index: 10000;
-	}
-
-	#carga{
-		border: 15px solid #ccc;
-		border-top-color: #F4266A;
-		border-top-style: groove;
-		height: 100px;
-		width: 100px;
-		border-radius: 100%;
-
-		position: absolute;
-		top: 0;
-		left: 0;
-		right: 0;
-		bottom: 0;
-		margin: auto;
-		-webkit-transition: girar 1.5s linear infinite ;
-		-o-transition: girar 1.5s linear infinite ;
-		animation: girar 1.5s linear infinite ;
-	}
-
-	@keyframes girar {
-		from { transform: rotate(0deg); }
-		to { transform: rotate(360deg); }
-	}
-
-</style>
 @endsection

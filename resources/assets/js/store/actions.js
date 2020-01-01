@@ -41,7 +41,12 @@ export default {
     }
     context.commit('check_main', check_main);
   },
-    //* Consistencia de horarios todos los semestres
+
+  editToUpgradeable(context){
+    if(context.state.check_main.length == 0 && context.state.status == 'edit'){
+      context.commit('status', 'upgradeable');
+    }
+  },
   async setCheckSemestres (context) {
     for ( var i in context.state.semestres ){
       var semestre = context.state.semestres[i]['semestre'];
@@ -621,6 +626,7 @@ export default {
       context.dispatch('fillSchedule');
       var check1 = context.dispatch('calculoVacaciones');
       check1.then(function(value){
+        context.commit('messageCheck', []);
         var check2 = context.dispatch('consistencia_horario', semestre);
         check2.then(function(value){
           var check3 = context.dispatch('consistencia_periodos');
@@ -629,7 +635,10 @@ export default {
             check4.then(function(value){
               var check5 = context.dispatch('setCheckMain');
               check5.then(function(value){
-                context.commit('component_key');
+                var check6 = context.dispatch('editToUpgradeable');
+                  check6.then(function(value){
+                  context.commit('component_key');
+                });
               });
             });
           });
@@ -683,7 +692,8 @@ export default {
   }, // end of getHoras()
   async initialData(context, data){
       await context.commit('parameters', data.parameters);
-      await context.commit('editable', data.editable);
+      await context.commit('confirm', data.confirm);
+      await context.commit('status', data.status);
       await context.commit('tmail_id', data.tmail_id);
       await context.commit('docente', data.docente);
       await context.commit('semestre', data.semestre);

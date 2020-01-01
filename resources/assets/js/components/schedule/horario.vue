@@ -36,15 +36,12 @@
     <div class="row"><div class="col-md-9"><hr></div></div> 
     <div class="row">
       <div class="col-md-3">HORARIO SELECCIONADO</div><b>{{ semestre }}</b>
-<!--       <div class="col-md-1">
-        <button v-if='panelHorario_btn == "view"' v-on:click='btnEdit("horario")' class="btn btn-sm btn-success">Editar</button>
-      </div> -->
     </div>
     <div class="panel-body">
       <div class="container">
         <div class="row">
           <div class="col-md-2" style="text-align: center">__TURNO__</div>
-          <span v-if="status == 'edit'">
+          <span v-if="status == 'edit' || status == 'upgradeable'">
             <div class="col-md-1" style="text-align: center" v-for="dia in semana">
               <select :value=turnos[dia] @change="changeTurno(dia, $event.target.value)">
                 <option value="libre">Libre</option>
@@ -54,7 +51,7 @@
               </select>
             </div>
           </span>
-          <span v-if="status == 'view'">
+          <span v-else>
             <div v-for="turno in turnos" class="col-md-1" style="text-align: 'center'"><b>{{ wturno(turno) }}</b></div>
           </span>
         </div>              
@@ -96,10 +93,10 @@
         semestres: (state) => state.semestres,
         schedule: (state) => state.schedule,
         status: (state) => state.status,
-        panelRango_btn: (state) => state.panel.btn.rango,
-        panelRango_data: (state) => state.panel.data.rango,
-        panelHorario_btn: (state) => state.panel.btn.horario,
-        panelHorario_data: (state) => state.panel.data.horario,
+        // panelRango_btn: (state) => state.panel.btn.rango,
+        // panelRango_data: (state) => state.panel.data.rango,
+        // panelHorario_btn: (state) => state.panel.btn.horario,
+        // panelHorario_data: (state) => state.panel.data.horario,
         turnos: (state) => state.turnos,
         mess_horario: (state) => state.mess_horario,
         component_key: (state) => state.component_key,
@@ -125,9 +122,9 @@
         await this.$store.dispatch('changeSemestre', this.semestre);
         this.$store.commit('component_key');
       },
-      btnEdit (type){
-        this.$store.commit('btnEdit',type);
-      },
+      // btnEdit (type){
+      //   this.$store.commit('btnEdit',type);
+      // },
     }, // End of Methods
   };  
 </script>

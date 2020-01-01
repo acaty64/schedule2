@@ -435,6 +435,14 @@ $exports.store = store;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports) {
+
+var core = module.exports = { version: '2.6.11' };
+if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1495,21 +1503,13 @@ var index_esm = {
 /* harmony default export */ __webpack_exports__["a"] = (index_esm);
 
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.6.11' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(8)))
 
 /***/ }),
 /* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(15);
+var isObject = __webpack_require__(16);
 module.exports = function (it) {
   if (!isObject(it)) throw TypeError(it + ' is not an object!');
   return it;
@@ -1627,6 +1627,16 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Thank's IE8 for his funny defineProperty
+module.exports = !__webpack_require__(23)(function () {
+  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
+});
+
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports) {
 
 var g;
@@ -1653,7 +1663,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1682,95 +1692,13 @@ exports.default = _assign2.default || function (target) {
 };
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(20);
-var createDesc = __webpack_require__(47);
-module.exports = __webpack_require__(10) ? function (object, key, value) {
-  return dP.f(object, key, createDesc(1, value));
-} : function (object, key, value) {
-  object[key] = value;
-  return object;
-};
-
-
-/***/ }),
 /* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(23)(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(107);
-
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _promise = __webpack_require__(109);
-
-var _promise2 = _interopRequireDefault(_promise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new _promise2.default(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
-          resolve(value);
-        } else {
-          return _promise2.default.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
-
-/***/ }),
-/* 13 */
-/***/ (function(module, exports) {
-
-module.exports = {};
-
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports, __webpack_require__) {
-
 var global = __webpack_require__(1);
-var core = __webpack_require__(4);
-var ctx = __webpack_require__(18);
-var hide = __webpack_require__(9);
+var core = __webpack_require__(3);
+var ctx = __webpack_require__(19);
+var hide = __webpack_require__(11);
 var has = __webpack_require__(21);
 var PROTOTYPE = 'prototype';
 
@@ -1832,7 +1760,101 @@ module.exports = $export;
 
 
 /***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var dP = __webpack_require__(15);
+var createDesc = __webpack_require__(47);
+module.exports = __webpack_require__(7) ? function (object, key, value) {
+  return dP.f(object, key, createDesc(1, value));
+} : function (object, key, value) {
+  object[key] = value;
+  return object;
+};
+
+
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(107);
+
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _promise = __webpack_require__(109);
+
+var _promise2 = _interopRequireDefault(_promise);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (fn) {
+  return function () {
+    var gen = fn.apply(this, arguments);
+    return new _promise2.default(function (resolve, reject) {
+      function step(key, arg) {
+        try {
+          var info = gen[key](arg);
+          var value = info.value;
+        } catch (error) {
+          reject(error);
+          return;
+        }
+
+        if (info.done) {
+          resolve(value);
+        } else {
+          return _promise2.default.resolve(value).then(function (value) {
+            step("next", value);
+          }, function (err) {
+            step("throw", err);
+          });
+        }
+      }
+
+      return step("next");
+    });
+  };
+};
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
+
+module.exports = {};
+
+
+/***/ }),
 /* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var anObject = __webpack_require__(5);
+var IE8_DOM_DEFINE = __webpack_require__(99);
+var toPrimitive = __webpack_require__(100);
+var dP = Object.defineProperty;
+
+exports.f = __webpack_require__(7) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
+  anObject(O);
+  P = toPrimitive(P, true);
+  anObject(Attributes);
+  if (IE8_DOM_DEFINE) try {
+    return dP(O, P, Attributes);
+  } catch (e) { /* empty */ }
+  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
+  if ('value' in Attributes) O[P] = Attributes.value;
+  return O;
+};
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
@@ -1841,7 +1863,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4285,18 +4307,18 @@ __vue_render__$4._withStripped = true;
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,r){ true?r(exports):"function"==typeof define&&define.amd?define(["exports"],r):r((e=e||self).vdp_translation_index={})}(this,function(e){"use strict";function r(e,r){for(var a=0;a<r.length;a++){var n=r[a];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,n.key,n)}}var a=function(){function e(r,a,n,u){!function(e,r){if(!(e instanceof r))throw new TypeError("Cannot call a class as a function")}(this,e),this.language=r,this.months=a,this.monthsAbbr=n,this.days=u,this.rtl=!1,this.ymd=!1,this.yearSuffix=""}var a,n,u;return a=e,(n=[{key:"language",get:function(){return this._language},set:function(e){if("string"!=typeof e)throw new TypeError("Language must be a string");this._language=e}},{key:"months",get:function(){return this._months},set:function(e){if(12!==e.length)throw new RangeError("There must be 12 months for ".concat(this.language," language"));this._months=e}},{key:"monthsAbbr",get:function(){return this._monthsAbbr},set:function(e){if(12!==e.length)throw new RangeError("There must be 12 abbreviated months for ".concat(this.language," language"));this._monthsAbbr=e}},{key:"days",get:function(){return this._days},set:function(e){if(7!==e.length)throw new RangeError("There must be 7 days for ".concat(this.language," language"));this._days=e}}])&&r(a.prototype,n),u&&r(a,u),e}(),n=new a("Afrikaans",["Januarie","Februarie","Maart","April","Mei","Junie","Julie","Augustus","September","Oktober","November","Desember"],["Jan","Feb","Mrt","Apr","Mei","Jun","Jul","Aug","Sep","Okt","Nov","Des"],["So.","Ma.","Di.","Wo.","Do.","Vr.","Sa."]),u=new a("Arabic",["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوڤمبر","ديسمبر"],["يناير","فبراير","مارس","أبريل","مايو","يونيو","يوليو","أغسطس","سبتمبر","أكتوبر","نوڤمبر","ديسمبر"],["أحد","إثنين","ثلاثاء","أربعاء","خميس","جمعة","سبت"]);u.rtl=!0;var i=new a("Bulgarian",["Януари","Февруари","Март","Април","Май","Юни","Юли","Август","Септември","Октомври","Ноември","Декември"],["Ян","Фев","Мар","Апр","Май","Юни","Юли","Авг","Сеп","Окт","Ное","Дек"],["Нд","Пн","Вт","Ср","Чт","Пт","Сб"]),t=new a("Bosnian",["Januar","Februar","Mart","April","Maj","Juni","Juli","Avgust","Septembar","Oktobar","Novembar","Decembar"],["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],["Ned","Pon","Uto","Sri","Čet","Pet","Sub"]),o=new a("Catalan",["Gener","Febrer","Març","Abril","Maig","Juny","Juliol","Agost","Setembre","Octubre","Novembre","Desembre"],["Gen","Feb","Mar","Abr","Mai","Jun","Jul","Ago","Set","Oct","Nov","Des"],["Diu","Dil","Dmr","Dmc","Dij","Div","Dis"]),s=new a("Czech",["leden","únor","březen","duben","květen","červen","červenec","srpen","září","říjen","listopad","prosinec"],["led","úno","bře","dub","kvě","čer","čec","srp","zář","říj","lis","pro"],["ne","po","út","st","čt","pá","so"]),b=new a("Danish",["Januar","Februar","Marts","April","Maj","Juni","Juli","August","September","Oktober","November","December"],["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],["Sø","Ma","Ti","On","To","Fr","Lø"]),l=new a("German",["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"],["Jan","Feb","Mär","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],["So.","Mo.","Di.","Mi.","Do.","Fr.","Sa."]),m=new a("Estonian",["Jaanuar","Veebruar","Märts","Aprill","Mai","Juuni","Juuli","August","September","Oktoober","November","Detsember"],["Jaan","Veebr","Märts","Apr","Mai","Juuni","Juuli","Aug","Sept","Okt","Nov","Dets"],["P","E","T","K","N","R","L"]),M=new a("Greek",["Ιανουάριος","Φεβρουάριος","Μάρτιος","Απρίλιος","Μάϊος","Ιούνιος","Ιούλιος","Αύγουστος","Σεπτέμβριος","Οκτώβριος","Νοέμβριος","Δεκέμβριος"],["Ιαν","Φεβ","Μαρ","Απρ","Μαι","Ιουν","Ιουλ","Αυγ","Σεπ","Οκτ","Νοε","Δεκ"],["Κυρ","Δευ","Τρι","Τετ","Πεμ","Παρ","Σαβ"]),p=new a("English",["January","February","March","April","May","June","July","August","September","October","November","December"],["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],["Sun","Mon","Tue","Wed","Thu","Fri","Sat"]),J=new a("Spanish",["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"],["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"],["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"]),g=new a("Persian",["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"],["فرو","ارد","خرد","تیر","مرد","شهر","مهر","آبا","آذر","دی","بهم","اسف"],["یکشنبه","دوشنبه","سه‌شنبه","چهارشنبه","پنجشنبه","جمعه","شنبه"]),S=new a("Finnish",["tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kesäkuu","heinäkuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"],["tammi","helmi","maalis","huhti","touko","kesä","heinä","elo","syys","loka","marras","joulu"],["su","ma","ti","ke","to","pe","la"]),c=new a("Faroese",["Januar","Februar","Mars","Apríl","Mai","Juni","Juli","August","Septembur","Oktobur","Novembur","Desembur"],["Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Des"],["Sun","Mán","Týs","Mik","Hós","Frí","Ley"]),A=new a("French",["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"],["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"],["Dim","Lun","Mar","Mer","Jeu","Ven","Sam"]),v=new a("Georgia",["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"],["იან","თებ","მარ","აპრ","მაი","ივნ","ივლ","აგვ","სექ","ოქტ","ნოე","დეკ"],["კვი","ორშ","სამ","ოთხ","ხუთ","პარ","შაბ"]),h=new a("Galician",["Xaneiro","Febreiro","Marzo","Abril","Maio","Xuño","Xullo","Agosto","Setembro","Outubro","Novembro","Decembro"],["Xan","Feb","Mar","Abr","Mai","Xuñ","Xul","Ago","Set","Out","Nov","Dec"],["Dom","Lun","Mar","Mér","Xov","Ven","Sáb"]),k=new a("Hebrew",["ינואר","פברואר","מרץ","אפריל","מאי","יוני","יולי","אוגוסט","ספטמבר","אוקטובר","נובמבר","דצמבר"],["ינו","פבר","מרץ","אפר","מאי","יונ","יול","אוג","ספט","אוק","נוב","דצמ"],["א","ב","ג","ד","ה","ו","ש"]);k.rtl=!0;var w=new a("Croatian",["Siječanj","Veljača","Ožujak","Travanj","Svibanj","Lipanj","Srpanj","Kolovoz","Rujan","Listopad","Studeni","Prosinac"],["Sij","Velj","Ožu","Tra","Svi","Lip","Srp","Kol","Ruj","Lis","Stu","Pro"],["Ned","Pon","Uto","Sri","Čet","Pet","Sub"]),D=new a("Hungarian",["Január","Február","Március","Április","Május","Június","Július","Augusztus","Szeptember","Október","November","December"],["Jan","Febr","Márc","Ápr","Máj","Jún","Júl","Aug","Szept","Okt","Nov","Dec"],["Vas","Hét","Ke","Sze","Csü","Pén","Szo"]),f=new a("Indonesian",["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Agu","Sep","Okt","Nov","Des"],["Min","Sen","Sel","Rab","Kam","Jum","Sab"]),N=new a("Icelandic",["Janúar","Febrúar","Mars","Apríl","Maí","Júní","Júlí","Ágúst","September","Október","Nóvember","Desember"],["Jan","Feb","Mars","Apr","Maí","Jún","Júl","Ágú","Sep","Okt","Nóv","Des"],["Sun","Mán","Þri","Mið","Fim","Fös","Lau"]),O=new a("Italian",["Gennaio","Febbraio","Marzo","Aprile","Maggio","Giugno","Luglio","Agosto","Settembre","Ottobre","Novembre","Dicembre"],["Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"],["Dom","Lun","Mar","Mer","Gio","Ven","Sab"]),j=new a("Japanese",["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],["日","月","火","水","木","金","土"]);j.yearSuffix="年",j.ymd=!0;var F=new a("Kazakh",["Қаңтар","Ақпан","Наурыз","Сәуір","Мамыр","Маусым","Шілде","Тамыз","Қыркүйек","Қазан","Қараша","Желтоқсан"],["Қаң","Ақп","Нау","Сәу","Мам","Мау","Шіл","Там","Қыр","Қаз","Қар","Жел"],["Жк","Дй","Сй","Ср","Бй","Жм","Сн"]),d=new a("Korean",["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],["1월","2월","3월","4월","5월","6월","7월","8월","9월","10월","11월","12월"],["일","월","화","수","목","금","토"]);d.yearSuffix="년",d.ymd=!0;var T=new a("Luxembourgish",["Januar","Februar","Mäerz","Abrëll","Mee","Juni","Juli","August","September","Oktober","November","Dezember"],["Jan","Feb","Mäe","Abr","Mee","Jun","Jul","Aug","Sep","Okt","Nov","Dez"],["So.","Mé.","Dë.","Më.","Do.","Fr.","Sa."]),y=new a("Lithuanian",["Sausis","Vasaris","Kovas","Balandis","Gegužė","Birželis","Liepa","Rugpjūtis","Rugsėjis","Spalis","Lapkritis","Gruodis"],["Sau","Vas","Kov","Bal","Geg","Bir","Lie","Rugp","Rugs","Spa","Lap","Gru"],["Sek","Pir","Ant","Tre","Ket","Pen","Šeš"]);y.ymd=!0;var z=new a("Latvian",["Janvāris","Februāris","Marts","Aprīlis","Maijs","Jūnijs","Jūlijs","Augusts","Septembris","Oktobris","Novembris","Decembris"],["Jan","Feb","Mar","Apr","Mai","Jūn","Jūl","Aug","Sep","Okt","Nov","Dec"],["Sv","Pr","Ot","Tr","Ce","Pk","Se"]),L=new a("Macedonian",["Јануари","Февруари","Март","Април","Мај","Јуни","Јули","Август","Септември","Октомври","Ноември","Декември"],["Јан","Фев","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Ное","Дек"],["Нед","Пон","Вто","Сре","Чет","Пет","Саб"]),P=new a("Mongolia",["1 дүгээр сар","2 дугаар сар","3 дугаар сар","4 дүгээр сар","5 дугаар сар","6 дугаар сар","7 дугаар сар","8 дугаар сар","9 дүгээр сар","10 дугаар сар","11 дүгээр сар","12 дугаар сар"],["1-р сар","2-р сар","3-р сар","4-р сар","5-р сар","6-р сар","7-р сар","8-р сар","9-р сар","10-р сар","11-р сар","12-р сар"],["Ня","Да","Мя","Лх","Пү","Ба","Бя"]);P.ymd=!0;var G=new a("Norwegian Bokmål",["Januar","Februar","Mars","April","Mai","Juni","Juli","August","September","Oktober","November","Desember"],["Jan","Feb","Mar","Apr","Mai","Jun","Jul","Aug","Sep","Okt","Nov","Des"],["Sø","Ma","Ti","On","To","Fr","Lø"]),C=new a("Dutch",["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"],["jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"],["zo","ma","di","wo","do","vr","za"]),K=new a("Polish",["Styczeń","Luty","Marzec","Kwiecień","Maj","Czerwiec","Lipiec","Sierpień","Wrzesień","Październik","Listopad","Grudzień"],["Sty","Lut","Mar","Kwi","Maj","Cze","Lip","Sie","Wrz","Paź","Lis","Gru"],["Nd","Pn","Wt","Śr","Czw","Pt","Sob"]),R=new a("Brazilian",["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"],["Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"],["Dom","Seg","Ter","Qua","Qui","Sex","Sab"]),E=new a("Romanian",["Ianuarie","Februarie","Martie","Aprilie","Mai","Iunie","Iulie","August","Septembrie","Octombrie","Noiembrie","Decembrie"],["Ian","Feb","Mar","Apr","Mai","Iun","Iul","Aug","Sep","Oct","Noi","Dec"],["D","L","Ma","Mi","J","V","S"]),V=new a("Russian",["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"],["Янв","Февр","Март","Апр","Май","Июнь","Июль","Авг","Сент","Окт","Нояб","Дек"],["Вс","Пн","Вт","Ср","Чт","Пт","Сб"]),_=new a("Slovakian",["január","február","marec","apríl","máj","jún","júl","august","september","október","november","december"],["jan","feb","mar","apr","máj","jún","júl","aug","sep","okt","nov","dec"],["ne","po","ut","st","št","pi","so"]),x=new a("Sloveian",["Januar","Februar","Marec","April","Maj","Junij","Julij","Avgust","September","Oktober","November","December"],["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],["Ned","Pon","Tor","Sre","Čet","Pet","Sob"]),I=new a("Serbian in Cyrillic script",["Јануар","Фебруар","Март","Април","Мај","Јун","Јул","Август","Септембар","Октобар","Новембар","Децембар"],["Јан","Феб","Мар","Апр","Мај","Јун","Јул","Авг","Сеп","Окт","Нов","Дец"],["Нед","Пон","Уто","Сре","Чет","Пет","Суб"]),B=new a("Serbian",["Januar","Februar","Mart","April","Maj","Jun","Jul","Avgust","Septembar","Oktobar","Novembar","Decembar"],["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Avg","Sep","Okt","Nov","Dec"],["Ned","Pon","Uto","Sre","Čet","Pet","Sub"]),H=new a("Swedish",["Januari","Februari","Mars","April","Maj","Juni","Juli","Augusti","September","Oktober","November","December"],["Jan","Feb","Mar","Apr","Maj","Jun","Jul","Aug","Sep","Okt","Nov","Dec"],["Sön","Mån","Tis","Ons","Tor","Fre","Lör"]),X=new a("Thai",["มกราคม","กุมภาพันธ์","มีนาคม","เมษายน","พฤษภาคม","มิถุนายน","กรกฎาคม","สิงหาคม","กันยายน","ตุลาคม","พฤศจิกายน","ธันวาคม"],["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."],["อา","จ","อ","พ","พฤ","ศ","ส"]),U=new a("Turkish",["Ocak","Şubat","Mart","Nisan","Mayıs","Haziran","Temmuz","Ağustos","Eylül","Ekim","Kasım","Aralık"],["Oca","Şub","Mar","Nis","May","Haz","Tem","Ağu","Eyl","Eki","Kas","Ara"],["Paz","Pzt","Sal","Çar","Per","Cum","Cmt"]),W=new a("Ukraine",["Січень","Лютий","Березень","Квітень","Травень","Червень","Липень","Серпень","Вересень","Жовтень","Листопад","Грудень"],["Січ","Лют","Бер","Квіт","Трав","Чер","Лип","Серп","Вер","Жовт","Лист","Груд"],["Нд","Пн","Вт","Ср","Чт","Пт","Сб"]),Q=new a("Urdu",["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","سپتمبر","اکتوبر","نومبر","دسمبر"],["جنوری","فروری","مارچ","اپریل","مئی","جون","جولائی","اگست","سپتمبر","اکتوبر","نومبر","دسمبر"],["اتوار","پیر","منگل","بدھ","جمعرات","جمعہ","ہفتہ"]);Q.rtl=!0;var Y=new a("Vietnamese",["Tháng 1","Tháng 2","Tháng 3","Tháng 4","Tháng 5","Tháng 6","Tháng 7","Tháng 8","Tháng 9","Tháng 10","Tháng 11","Tháng 12"],["T 01","T 02","T 03","T 04","T 05","T 06","T 07","T 08","T 09","T 10","T 11","T 12"],["CN","Thứ 2","Thứ 3","Thứ 4","Thứ 5","Thứ 6","Thứ 7"]),q=new a("Chinese",["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],["一月","二月","三月","四月","五月","六月","七月","八月","九月","十月","十一月","十二月"],["日","一","二","三","四","五","六"]);q.yearSuffix="年";var Z=new a("Chinese_HK",["壹月","贰月","叁月","肆月","伍月","陆月","柒月","捌月","玖月","拾月","拾壹月","拾贰月"],["壹月","贰月","叁月","肆月","伍月","陆月","柒月","捌月","玖月","拾月","拾壹月","拾贰月"],["日","壹","贰","叁","肆","伍","陆"]);Z.yearSuffix="年",e.af=n,e.ar=u,e.bg=i,e.bs=t,e.ca=o,e.cs=s,e.da=b,e.de=l,e.ee=m,e.el=M,e.en=p,e.es=J,e.fa=g,e.fi=S,e.fo=c,e.fr=A,e.ge=v,e.gl=h,e.he=k,e.hr=w,e.hu=D,e.id=f,e.is=N,e.it=O,e.ja=j,e.kk=F,e.ko=d,e.lb=T,e.lt=y,e.lv=z,e.mk=L,e.mn=P,e.nbNO=G,e.nl=C,e.pl=K,e.ptBR=R,e.ro=E,e.ru=V,e.sk=_,e.slSI=x,e.sr=B,e.srCYRL=I,e.sv=H,e.th=X,e.tr=U,e.uk=W,e.ur=Q,e.vi=Y,e.zh=q,e.zhHK=Z,Object.defineProperty(e,"__esModule",{value:!0})});
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // optional / simple context binding
-var aFunction = __webpack_require__(19);
+var aFunction = __webpack_require__(20);
 module.exports = function (fn, that, length) {
   aFunction(fn);
   if (that === undefined) return fn;
@@ -4318,34 +4340,12 @@ module.exports = function (fn, that, length) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports) {
 
 module.exports = function (it) {
   if (typeof it != 'function') throw TypeError(it + ' is not a function!');
   return it;
-};
-
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__(5);
-var IE8_DOM_DEFINE = __webpack_require__(99);
-var toPrimitive = __webpack_require__(100);
-var dP = Object.defineProperty;
-
-exports.f = __webpack_require__(10) ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-  anObject(O);
-  P = toPrimitive(P, true);
-  anObject(Attributes);
-  if (IE8_DOM_DEFINE) try {
-    return dP(O, P, Attributes);
-  } catch (e) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-  if ('value' in Attributes) O[P] = Attributes.value;
-  return O;
 };
 
 
@@ -4387,7 +4387,7 @@ module.exports = function (exec) {
 /* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isObject = __webpack_require__(15);
+var isObject = __webpack_require__(16);
 var document = __webpack_require__(1).document;
 // typeof document.createElement is 'object' in old IE
 var is = isObject(document) && isObject(document.createElement);
@@ -4477,7 +4477,7 @@ __webpack_require__(55)(String, 'String', function (iterated) {
 /* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var def = __webpack_require__(20).f;
+var def = __webpack_require__(15).f;
 var has = __webpack_require__(21);
 var TAG = __webpack_require__(2)('toStringTag');
 
@@ -4492,8 +4492,8 @@ module.exports = function (it, tag, stat) {
 
 __webpack_require__(118);
 var global = __webpack_require__(1);
-var hide = __webpack_require__(9);
-var Iterators = __webpack_require__(13);
+var hide = __webpack_require__(11);
+var Iterators = __webpack_require__(14);
 var TO_STRING_TAG = __webpack_require__(2)('toStringTag');
 
 var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
@@ -4547,7 +4547,7 @@ module.exports = function (it) {
 "use strict";
 
 // 25.4.1.5 NewPromiseCapability(C)
-var aFunction = __webpack_require__(19);
+var aFunction = __webpack_require__(20);
 
 function PromiseCapability(C) {
   var resolve, reject;
@@ -7188,7 +7188,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(8)))
 
 /***/ }),
 /* 36 */
@@ -18555,7 +18555,7 @@ module.exports = function (it) {
 /* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var core = __webpack_require__(4);
+var core = __webpack_require__(3);
 var global = __webpack_require__(1);
 var SHARED = '__core-js_shared__';
 var store = global[SHARED] || (global[SHARED] = {});
@@ -18608,10 +18608,10 @@ module.exports = function (it) {
 "use strict";
 
 var LIBRARY = __webpack_require__(29);
-var $export = __webpack_require__(14);
+var $export = __webpack_require__(10);
 var redefine = __webpack_require__(113);
-var hide = __webpack_require__(9);
-var Iterators = __webpack_require__(13);
+var hide = __webpack_require__(11);
+var Iterators = __webpack_require__(14);
 var $iterCreate = __webpack_require__(114);
 var setToStringTag = __webpack_require__(31);
 var getPrototypeOf = __webpack_require__(117);
@@ -18691,8 +18691,8 @@ module.exports = document && document.documentElement;
 
 var classof = __webpack_require__(33);
 var ITERATOR = __webpack_require__(2)('iterator');
-var Iterators = __webpack_require__(13);
-module.exports = __webpack_require__(4).getIteratorMethod = function (it) {
+var Iterators = __webpack_require__(14);
+module.exports = __webpack_require__(3).getIteratorMethod = function (it) {
   if (it != undefined) return it[ITERATOR]
     || it['@@iterator']
     || Iterators[classof(it)];
@@ -18705,7 +18705,7 @@ module.exports = __webpack_require__(4).getIteratorMethod = function (it) {
 
 // 7.3.20 SpeciesConstructor(O, defaultConstructor)
 var anObject = __webpack_require__(5);
-var aFunction = __webpack_require__(19);
+var aFunction = __webpack_require__(20);
 var SPECIES = __webpack_require__(2)('species');
 module.exports = function (O, D) {
   var C = anObject(O).constructor;
@@ -18718,7 +18718,7 @@ module.exports = function (O, D) {
 /* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx = __webpack_require__(18);
+var ctx = __webpack_require__(19);
 var invoke = __webpack_require__(126);
 var html = __webpack_require__(56);
 var cel = __webpack_require__(24);
@@ -18822,7 +18822,7 @@ module.exports = function (exec) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(5);
-var isObject = __webpack_require__(15);
+var isObject = __webpack_require__(16);
 var newPromiseCapability = __webpack_require__(34);
 
 module.exports = function (C, x) {
@@ -18891,7 +18891,7 @@ var normalizeComponent = __webpack_require__(6)
 /* script */
 var __vue_script__ = __webpack_require__(136)
 /* template */
-var __vue_template__ = __webpack_require__(137)
+var __vue_template__ = __webpack_require__(141)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -18938,11 +18938,11 @@ module.exports = Component.exports
 
 exports.__esModule = true;
 
-var _isIterable2 = __webpack_require__(152);
+var _isIterable2 = __webpack_require__(156);
 
 var _isIterable3 = _interopRequireDefault(_isIterable2);
 
-var _getIterator2 = __webpack_require__(155);
+var _getIterator2 = __webpack_require__(159);
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
 
@@ -18991,7 +18991,7 @@ exports.default = function () {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(66);
-module.exports = __webpack_require__(159);
+module.exports = __webpack_require__(163);
 
 
 /***/ }),
@@ -19000,7 +19000,7 @@ module.exports = __webpack_require__(159);
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(148);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__store__ = __webpack_require__(152);
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -19024,8 +19024,8 @@ window.Vue = __webpack_require__(46);
 
 Vue.component('example-component', __webpack_require__(91).default);
 Vue.component('schedule-edit', __webpack_require__(94));
-Vue.component('schedule-report', __webpack_require__(142));
-Vue.component('check-component', __webpack_require__(145));
+Vue.component('schedule-report', __webpack_require__(146));
+Vue.component('check-component', __webpack_require__(149));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -36202,7 +36202,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(69)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(69)(module)))
 
 /***/ }),
 /* 69 */
@@ -53514,7 +53514,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(89).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(89).setImmediate))
 
 /***/ }),
 /* 89 */
@@ -53584,7 +53584,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ }),
 /* 90 */
@@ -53777,7 +53777,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(7), __webpack_require__(41)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(41)))
 
 /***/ }),
 /* 91 */
@@ -53908,7 +53908,7 @@ var normalizeComponent = __webpack_require__(6)
 /* script */
 var __vue_script__ = __webpack_require__(95)
 /* template */
-var __vue_template__ = __webpack_require__(141)
+var __vue_template__ = __webpack_require__(145)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -53952,18 +53952,18 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__periodos__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__periodos___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__periodos__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__programadas__ = __webpack_require__(63);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__programadas___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__programadas__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__horario__ = __webpack_require__(138);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__horario__ = __webpack_require__(142);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__horario___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__horario__);
 
 
@@ -54071,13 +54071,24 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     check_main: function check_main(state) {
       return state.check_main;
     },
-    editable: function editable(state) {
-      return state.editable;
+    // editable: (state) => state.editable,
+    confirm: function confirm(state) {
+      return state.confirm;
     },
     tmail_id: function tmail_id(state) {
       return state.tmail_id;
+    },
+    panel: function panel(state) {
+      return state.panel;
     }
   })),
+  watch: {
+    check_main: function check_main() {
+      if (this.check_main.length > 0) {
+        this.$store.commit('status', 'edit');
+      }
+    }
+  },
   methods: {
     getData: function getData(docente_id) {
       this.$store.dispatch('getData', docente_id);
@@ -54104,7 +54115,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this2.$store.dispatch('saveData');
 
               case 3:
-                _this2.$store.commit('status', 'view');
+                _this2.$store.commit('status', 'editable');
                 _context2.next = 9;
                 break;
 
@@ -54136,7 +54147,7 @@ module.exports = { "default": __webpack_require__(97), __esModule: true };
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(98);
-module.exports = __webpack_require__(4).Object.assign;
+module.exports = __webpack_require__(3).Object.assign;
 
 
 /***/ }),
@@ -54144,7 +54155,7 @@ module.exports = __webpack_require__(4).Object.assign;
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(14);
+var $export = __webpack_require__(10);
 
 $export($export.S + $export.F, 'Object', { assign: __webpack_require__(101) });
 
@@ -54153,7 +54164,7 @@ $export($export.S + $export.F, 'Object', { assign: __webpack_require__(101) });
 /* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = !__webpack_require__(10) && !__webpack_require__(23)(function () {
+module.exports = !__webpack_require__(7) && !__webpack_require__(23)(function () {
   return Object.defineProperty(__webpack_require__(24)('div'), 'a', { get: function () { return 7; } }).a != 7;
 });
 
@@ -54163,7 +54174,7 @@ module.exports = !__webpack_require__(10) && !__webpack_require__(23)(function (
 /***/ (function(module, exports, __webpack_require__) {
 
 // 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(15);
+var isObject = __webpack_require__(16);
 // instead of the ES6 spec version, we didn't implement @@toPrimitive case
 // and the second argument - flag - preferred type is a string
 module.exports = function (it, S) {
@@ -54183,7 +54194,7 @@ module.exports = function (it, S) {
 "use strict";
 
 // 19.1.2.1 Object.assign(target, source, ...)
-var DESCRIPTORS = __webpack_require__(10);
+var DESCRIPTORS = __webpack_require__(7);
 var getKeys = __webpack_require__(48);
 var gOPS = __webpack_require__(105);
 var pIE = __webpack_require__(106);
@@ -55090,7 +55101,7 @@ __webpack_require__(32);
 __webpack_require__(121);
 __webpack_require__(132);
 __webpack_require__(133);
-module.exports = __webpack_require__(4).Promise;
+module.exports = __webpack_require__(3).Promise;
 
 
 /***/ }),
@@ -55126,7 +55137,7 @@ module.exports = function (TO_STRING) {
 /* 113 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(9);
+module.exports = __webpack_require__(11);
 
 
 /***/ }),
@@ -55141,7 +55152,7 @@ var setToStringTag = __webpack_require__(31);
 var IteratorPrototype = {};
 
 // 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(9)(IteratorPrototype, __webpack_require__(2)('iterator'), function () { return this; });
+__webpack_require__(11)(IteratorPrototype, __webpack_require__(2)('iterator'), function () { return this; });
 
 module.exports = function (Constructor, NAME, next) {
   Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
@@ -55200,11 +55211,11 @@ module.exports = Object.create || function create(O, Properties) {
 /* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var dP = __webpack_require__(20);
+var dP = __webpack_require__(15);
 var anObject = __webpack_require__(5);
 var getKeys = __webpack_require__(48);
 
-module.exports = __webpack_require__(10) ? Object.defineProperties : function defineProperties(O, Properties) {
+module.exports = __webpack_require__(7) ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var keys = getKeys(Properties);
   var length = keys.length;
@@ -55242,7 +55253,7 @@ module.exports = Object.getPrototypeOf || function (O) {
 
 var addToUnscopables = __webpack_require__(119);
 var step = __webpack_require__(120);
-var Iterators = __webpack_require__(13);
+var Iterators = __webpack_require__(14);
 var toIObject = __webpack_require__(25);
 
 // 22.1.3.4 Array.prototype.entries()
@@ -55299,11 +55310,11 @@ module.exports = function (done, value) {
 
 var LIBRARY = __webpack_require__(29);
 var global = __webpack_require__(1);
-var ctx = __webpack_require__(18);
+var ctx = __webpack_require__(19);
 var classof = __webpack_require__(33);
-var $export = __webpack_require__(14);
-var isObject = __webpack_require__(15);
-var aFunction = __webpack_require__(19);
+var $export = __webpack_require__(10);
+var isObject = __webpack_require__(16);
+var aFunction = __webpack_require__(20);
 var anInstance = __webpack_require__(122);
 var forOf = __webpack_require__(123);
 var speciesConstructor = __webpack_require__(58);
@@ -55520,7 +55531,7 @@ if (!USE_NATIVE) {
 $export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
 __webpack_require__(31)($Promise, PROMISE);
 __webpack_require__(130)(PROMISE);
-Wrapper = __webpack_require__(4)[PROMISE];
+Wrapper = __webpack_require__(3)[PROMISE];
 
 // statics
 $export($export.S + $export.F * !USE_NATIVE, PROMISE, {
@@ -55599,7 +55610,7 @@ module.exports = function (it, Constructor, name, forbiddenField) {
 /* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var ctx = __webpack_require__(18);
+var ctx = __webpack_require__(19);
 var call = __webpack_require__(124);
 var isArrayIter = __webpack_require__(125);
 var anObject = __webpack_require__(5);
@@ -55649,7 +55660,7 @@ module.exports = function (iterator, fn, value, entries) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // check on default Array iterator
-var Iterators = __webpack_require__(13);
+var Iterators = __webpack_require__(14);
 var ITERATOR = __webpack_require__(2)('iterator');
 var ArrayProto = Array.prototype;
 
@@ -55769,7 +55780,7 @@ module.exports = navigator && navigator.userAgent || '';
 /* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hide = __webpack_require__(9);
+var hide = __webpack_require__(11);
 module.exports = function (target, src, safe) {
   for (var key in src) {
     if (safe && target[key]) target[key] = src[key];
@@ -55785,9 +55796,9 @@ module.exports = function (target, src, safe) {
 "use strict";
 
 var global = __webpack_require__(1);
-var core = __webpack_require__(4);
-var dP = __webpack_require__(20);
-var DESCRIPTORS = __webpack_require__(10);
+var core = __webpack_require__(3);
+var dP = __webpack_require__(15);
+var DESCRIPTORS = __webpack_require__(7);
 var SPECIES = __webpack_require__(2)('species');
 
 module.exports = function (KEY) {
@@ -55834,8 +55845,8 @@ module.exports = function (exec, skipClosing) {
 "use strict";
 // https://github.com/tc39/proposal-promise-finally
 
-var $export = __webpack_require__(14);
-var core = __webpack_require__(4);
+var $export = __webpack_require__(10);
+var core = __webpack_require__(3);
 var global = __webpack_require__(1);
 var speciesConstructor = __webpack_require__(58);
 var promiseResolve = __webpack_require__(61);
@@ -55861,7 +55872,7 @@ $export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
 "use strict";
 
 // https://github.com/tc39/proposal-promise-try
-var $export = __webpack_require__(14);
+var $export = __webpack_require__(10);
 var newPromiseCapability = __webpack_require__(34);
 var perform = __webpack_require__(60);
 
@@ -55879,11 +55890,11 @@ $export($export.S, 'Promise', { 'try': function (callbackfn) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuejs_datepicker__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuejs_datepicker_dist_locale__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_vuejs_datepicker__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuejs_datepicker_dist_locale__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_vuejs_datepicker_dist_locale__);
 
 //
@@ -56080,16 +56091,19 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuejs_datepicker__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(137);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuejs_datepicker_dist_locale__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_vuejs_datepicker_dist_locale__);
+
 
 
 
@@ -56161,13 +56175,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    var _this = this;
+
+    return __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee() {
+      return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              _context.next = 2;
+              return _this.status_ver();
+
+            case 2:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this);
+    }))();
+  },
 
   name: 'Programadas',
   components: {
-    Datepicker: __WEBPACK_IMPORTED_MODULE_4_vuejs_datepicker__["a" /* default */]
+    Datepicker: __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker__["a" /* default */]
   },
-  computed: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["c" /* mapState */])({
+  computed: __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["c" /* mapState */])({
     es: function es(state) {
       return state.es;
     },
@@ -56194,9 +56226,51 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     porDiaWeek: function porDiaWeek(state) {
       return state.porDiaWeek;
+    },
+    panel: function panel(state) {
+      return state.panel;
+    },
+    btn: function btn(state) {
+      return state.btn_prog;
     }
-  }), Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapGetters */])(['wdia'])),
+  }), Object(__WEBPACK_IMPORTED_MODULE_4_vuex__["b" /* mapGetters */])(['wdia'])),
+  watch: {
+    status: function status() {
+      this.status_ver();
+    }
+  },
   methods: {
+    switchEdit: function switchEdit(value) {
+      for (var i = 0; i < this.programadas.length; i++) {
+        if (this.programadas[i]['open'] == true) {
+          this.programadas[i]['editDias'] = value;
+          this.programadas[i]['editFecha'] = value;
+        } else {
+          this.programadas[i]['editDias'] = false;
+          this.programadas[i]['editFecha'] = false;
+        }
+      }
+    },
+    status_ver: function status_ver() {
+      switch (this.status) {
+        case 'view':
+          this.switchEdit(false);
+          this.btn.agregar = false;
+          break;
+        case 'editable':
+          this.switchEdit(false);
+          this.btn.agregar = false;
+          break;
+        case 'edit':
+          this.switchEdit(true);
+          this.btn.agregar = true;
+          break;
+        case 'upgradeable':
+          this.switchEdit(true);
+          this.btn.agregar = true;
+          break;
+      }
+    },
     btnDel: function btnDel(item) {
       this.$store.commit('deleteProgramada', item);
       this.$store.dispatch('changeSemestre', this.semestre);
@@ -56206,6 +56280,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.$store.dispatch('changeSemestre', this.semestre);
     },
     btnAdd: function btnAdd(cdocente) {
+      var _newItem;
+
       var array = this.programadas.filter(function (prog) {
         return prog.type == 'new';
       });
@@ -56217,7 +56293,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }));
       }
       var hoy = new Date().setHours(0, 0, 0, 0);
-      var newItem = {
+      var newItem = (_newItem = {
         id: max + 1,
         cdocente: cdocente,
         fecha_ini: new Date(hoy),
@@ -56228,36 +56304,34 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         opciones: [1, 2, 3, 4, 5, 6, 7],
         paso: 1,
         type: 'new'
-      };
+      }, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_newItem, 'message', ''), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_newItem, 'eliminar', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_newItem, 'editFecha', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_newItem, 'editDias', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_newItem, 'open', true), _newItem);
       this.$store.commit('addNewProgramada', newItem);
       this.changeDini(newItem);
-      // this.$store.commit('changeDiasInProgramada', [newItem.type, newItem.id, newItem.value]);
-      // alert('btnAdd pressed.');
     },
     onChange: function onChange(type, id, value) {
-      var _this = this;
+      var _this2 = this;
 
-      return __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.mark(function _callee() {
-        return __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default.a.wrap(function _callee$(_context) {
+      return __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_asyncToGenerator___default()( /*#__PURE__*/__WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.mark(function _callee2() {
+        return __WEBPACK_IMPORTED_MODULE_2_babel_runtime_regenerator___default.a.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
-                _context.next = 2;
-                return _this.$store.commit('changeDiasInProgramada', [type, id, value]);
+                _context2.next = 2;
+                return _this2.$store.commit('changeDiasInProgramada', [type, id, value]);
 
               case 2:
-                _context.next = 4;
-                return _this.$store.dispatch('changeSemestre', _this.semestre);
+                _context2.next = 4;
+                return _this2.$store.dispatch('changeSemestre', _this2.semestre);
 
               case 4:
-                _this.$store.commit('component_key');
+                _this2.$store.commit('component_key');
 
               case 5:
               case 'end':
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, _this);
+        }, _callee2, _this2);
       }))();
     }
   } // End of Methods
@@ -56265,6 +56339,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 /***/ }),
 /* 137 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(138);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+/***/ }),
+/* 138 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = { "default": __webpack_require__(139), __esModule: true };
+
+/***/ }),
+/* 139 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(140);
+var $Object = __webpack_require__(3).Object;
+module.exports = function defineProperty(it, key, desc) {
+  return $Object.defineProperty(it, key, desc);
+};
+
+
+/***/ }),
+/* 140 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var $export = __webpack_require__(10);
+// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+$export($export.S + $export.F * !__webpack_require__(7), 'Object', { defineProperty: __webpack_require__(15).f });
+
+
+/***/ }),
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -56279,7 +56409,7 @@ var render = function() {
         _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "col-md-1" }, [
-          _vm.status == "edit"
+          _vm.btn.agregar
             ? _c(
                 "button",
                 {
@@ -56301,7 +56431,7 @@ var render = function() {
       _vm._l(_vm.programadas, function(rango) {
         return _c("div", { staticClass: "row" }, [
           _c("div", { staticClass: "col-md-2 col-offset-1" }, [
-            _vm.status == "view" || rango.type != "new"
+            !rango.editFecha || rango.type != "new"
               ? _c("span", [
                   _vm._v(
                     "\n        " +
@@ -56311,7 +56441,7 @@ var render = function() {
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm.status == "edit" && rango.type == "new"
+            rango.editFecha && rango.type == "new"
               ? _c(
                   "span",
                   [
@@ -56341,13 +56471,13 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("div", { staticClass: "col-md-1" }, [
-            _vm.status == "view" || rango.type == "closed"
+            !rango.editDias || rango.type == "closed"
               ? _c("span", [
                   _vm._v("\n        " + _vm._s(rango.dias) + "        \n      ")
                 ])
               : _vm._e(),
             _vm._v(" "),
-            _vm.status == "edit" && rango.type != "closed"
+            rango.editDias && rango.type != "closed"
               ? _c("span", [
                   _c(
                     "select",
@@ -56410,7 +56540,7 @@ var render = function() {
             _vm._v(_vm._s(_vm.wdia(rango.fecha_fin)))
           ]),
           _vm._v(" "),
-          _vm.status == "edit" && rango.type == "new"
+          rango.eliminar
             ? _c("span", [
                 _c("div", { staticClass: "col-md-1" }, [
                   _c(
@@ -56515,15 +56645,15 @@ if (false) {
 }
 
 /***/ }),
-/* 138 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(6)
 /* script */
-var __vue_script__ = __webpack_require__(139)
+var __vue_script__ = __webpack_require__(143)
 /* template */
-var __vue_template__ = __webpack_require__(140)
+var __vue_template__ = __webpack_require__(144)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -56562,27 +56692,24 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 139 */
+/* 143 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuejs_datepicker__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_vuejs_datepicker__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_vuejs_datepicker_dist_locale__);
 
 
 
-//
-//
-//
 //
 //
 //
@@ -56697,18 +56824,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     status: function status(state) {
       return state.status;
     },
-    panelRango_btn: function panelRango_btn(state) {
-      return state.panel.btn.rango;
-    },
-    panelRango_data: function panelRango_data(state) {
-      return state.panel.data.rango;
-    },
-    panelHorario_btn: function panelHorario_btn(state) {
-      return state.panel.btn.horario;
-    },
-    panelHorario_data: function panelHorario_data(state) {
-      return state.panel.data.horario;
-    },
+    // panelRango_btn: (state) => state.panel.btn.rango,
+    // panelRango_data: (state) => state.panel.data.rango,
+    // panelHorario_btn: (state) => state.panel.btn.horario,
+    // panelHorario_data: (state) => state.panel.data.horario,
     turnos: function turnos(state) {
       return state.turnos;
     },
@@ -56783,15 +56902,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
           }
         }, _callee2, _this2);
       }))();
-    },
-    btnEdit: function btnEdit(type) {
-      this.$store.commit('btnEdit', type);
     }
   } // End of Methods
 });
 
 /***/ }),
-/* 140 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -56859,18 +56975,18 @@ var render = function() {
               opcion.semestre == _vm.semestre
                 ? _c("span", [
                     _c("div", { staticClass: "col-md-2 col-md-offset-1" }, [
-                      _vm._v("\n              De: "),
+                      _vm._v("\n            De: "),
                       _c("br"),
                       _vm._v(
-                        _vm._s(_vm.wdia(opcion.fecha_ini)) + "\n            "
+                        _vm._s(_vm.wdia(opcion.fecha_ini)) + "\n          "
                       )
                     ]),
                     _vm._v(" "),
                     _c("div", { staticClass: "col-md-2" }, [
-                      _vm._v("\n              A: "),
+                      _vm._v("\n            A: "),
                       _c("br"),
                       _vm._v(
-                        _vm._s(_vm.wdia(opcion.fecha_fin)) + "\n            "
+                        _vm._s(_vm.wdia(opcion.fecha_fin)) + "\n          "
                       )
                     ]),
                     _vm._v(" "),
@@ -56914,7 +57030,7 @@ var render = function() {
               [_vm._v("__TURNO__")]
             ),
             _vm._v(" "),
-            _vm.status == "edit"
+            _vm.status == "edit" || _vm.status == "upgradeable"
               ? _c(
                   "span",
                   _vm._l(_vm.semana, function(dia) {
@@ -56958,10 +57074,7 @@ var render = function() {
                   }),
                   0
                 )
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.status == "view"
-              ? _c(
+              : _c(
                   "span",
                   _vm._l(_vm.turnos, function(turno) {
                     return _c(
@@ -56975,7 +57088,6 @@ var render = function() {
                   }),
                   0
                 )
-              : _vm._e()
           ]),
           _vm._v(" "),
           _c(
@@ -57063,7 +57175,7 @@ if (false) {
 }
 
 /***/ }),
-/* 141 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -57082,7 +57194,7 @@ var render = function() {
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
-                _vm.status == "view" && _vm.editable
+                _vm.panel.btn.editar
                   ? _c(
                       "button",
                       {
@@ -57097,7 +57209,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "edit" && _vm.editable
+                _vm.panel.btn.grabar
                   ? _c(
                       "button",
                       {
@@ -57112,7 +57224,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "edit" && _vm.editable
+                _vm.panel.btn.rehacer
                   ? _c(
                       "button",
                       {
@@ -57127,7 +57239,7 @@ var render = function() {
                     )
                   : _vm._e(),
                 _vm._v(" "),
-                _vm.status == "view" && _vm.editable
+                _vm.panel.btn.confirmar
                   ? _c(
                       "a",
                       {
@@ -57247,15 +57359,15 @@ if (false) {
 }
 
 /***/ }),
-/* 142 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(6)
 /* script */
-var __vue_script__ = __webpack_require__(143)
+var __vue_script__ = __webpack_require__(147)
 /* template */
-var __vue_template__ = __webpack_require__(144)
+var __vue_template__ = __webpack_require__(148)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -57294,18 +57406,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 143 */
+/* 147 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__periodos__ = __webpack_require__(62);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__periodos___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__periodos__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__programadas__ = __webpack_require__(63);
@@ -57404,7 +57516,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 144 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -57498,15 +57610,15 @@ if (false) {
 }
 
 /***/ }),
-/* 145 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(6)
 /* script */
-var __vue_script__ = __webpack_require__(146)
+var __vue_script__ = __webpack_require__(150)
 /* template */
-var __vue_template__ = __webpack_require__(147)
+var __vue_template__ = __webpack_require__(151)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -57545,18 +57657,18 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 146 */
+/* 150 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_asyncToGenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_vuex__ = __webpack_require__(4);
 
 
 
@@ -57611,7 +57723,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 });
 
 /***/ }),
-/* 147 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -57647,19 +57759,19 @@ if (false) {
 }
 
 /***/ }),
-/* 148 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_vue__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(149);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(150);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(151);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getters__ = __webpack_require__(158);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuejs_datepicker__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vuejs_datepicker_dist_locale__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuex__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__state__ = __webpack_require__(153);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions__ = __webpack_require__(154);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__mutations__ = __webpack_require__(155);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__getters__ = __webpack_require__(162);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_vuejs_datepicker__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vuejs_datepicker_dist_locale__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7_vuejs_datepicker_dist_locale__);
 
 
@@ -57680,20 +57792,21 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 }));
 
 /***/ }),
-/* 149 */
+/* 153 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuejs_datepicker_dist_locale__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vuejs_datepicker__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuejs_datepicker_dist_locale__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vuejs_datepicker_dist_locale___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_vuejs_datepicker_dist_locale__);
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	docente_id: 0,
-	editable: false,
+	// editable: false,
 	tmail_id: false,
+	confirm: false,
 	check_main: [],
 	holidays: [],
 	component_key: 0,
@@ -57703,7 +57816,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 	// 	turnos_sab: ['noche', 'vacaciones', 'none'] 
 	// },
 	parameters: '',
-	status: 'view',
+	status: '',
 	cdocente: '',
 	docente: {},
 	periodos: [],
@@ -57726,10 +57839,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 	// semestre: '2019-2',
 	panel: {
 		btn: {
-			periodos: 'view',
-			programadas: 'view',
-			rango: 'view',
-			horario: 'view'
+			// agregar_p: false,
+			confirmar: false,
+			editar: false,
+			grabar: false,
+			rehacer: false
 		},
 		data: {
 			periodos: 'view',
@@ -57737,6 +57851,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 			rango: 'view',
 			horario: 'view'
 		}
+	},
+	btn_prog: {
+		agregar: false
 	},
 	vacaciones_in: {
 		periodos: [{ periodo: '2018-2019', fecha_ini: '01/07/2019', fecha_fin: '30/06/2020', ganadas: 30, id: 1 }, { periodo: '2019-2020', fecha_ini: '01/07/2020', fecha_fin: '30/06/2021', ganadas: 60, id: 2 }],
@@ -57770,13 +57887,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 });
 
 /***/ }),
-/* 150 */
+/* 154 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_regenerator__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__ = __webpack_require__(13);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_asyncToGenerator__);
 
 
@@ -57824,8 +57941,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     }
     context.commit('check_main', check_main);
   },
-
-  //* Consistencia de horarios todos los semestres
+  editToUpgradeable: function editToUpgradeable(context) {
+    if (context.state.check_main.length == 0 && context.state.status == 'edit') {
+      context.commit('status', 'upgradeable');
+    }
+  },
   setCheckSemestres: function setCheckSemestres(context) {
     var _this = this;
 
@@ -58560,6 +58680,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       context.dispatch('fillSchedule');
       var check1 = context.dispatch('calculoVacaciones');
       check1.then(function (value) {
+        context.commit('messageCheck', []);
         var check2 = context.dispatch('consistencia_horario', semestre);
         check2.then(function (value) {
           var check3 = context.dispatch('consistencia_periodos');
@@ -58568,7 +58689,10 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
             check4.then(function (value) {
               var check5 = context.dispatch('setCheckMain');
               check5.then(function (value) {
-                context.commit('component_key');
+                var check6 = context.dispatch('editToUpgradeable');
+                check6.then(function (value) {
+                  context.commit('component_key');
+                });
               });
             });
           });
@@ -58662,61 +58786,65 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
             case 2:
               _context6.next = 4;
-              return context.commit('editable', data.editable);
+              return context.commit('confirm', data.confirm);
 
             case 4:
               _context6.next = 6;
-              return context.commit('tmail_id', data.tmail_id);
+              return context.commit('status', data.status);
 
             case 6:
               _context6.next = 8;
-              return context.commit('docente', data.docente);
+              return context.commit('tmail_id', data.tmail_id);
 
             case 8:
               _context6.next = 10;
-              return context.commit('semestre', data.semestre);
+              return context.commit('docente', data.docente);
 
             case 10:
               _context6.next = 12;
-              return context.commit('feriados', data.feriados);
+              return context.commit('semestre', data.semestre);
 
             case 12:
               _context6.next = 14;
-              return context.commit('periodos', data.periodos);
+              return context.commit('feriados', data.feriados);
 
             case 14:
               _context6.next = 16;
-              return context.commit('gozadas', data.gozadas);
+              return context.commit('periodos', data.periodos);
 
             case 16:
               _context6.next = 18;
-              return context.commit('programadas', data.programadas);
+              return context.commit('gozadas', data.gozadas);
 
             case 18:
               _context6.next = 20;
-              return context.commit('horarios', data.horarios);
+              return context.commit('programadas', data.programadas);
 
             case 20:
               _context6.next = 22;
-              return context.commit('semestres', data.semestres);
+              return context.commit('horarios', data.horarios);
 
             case 22:
               _context6.next = 24;
-              return context.commit('derechos', data.derechos);
+              return context.commit('semestres', data.semestres);
 
             case 24:
               _context6.next = 26;
-              return context.dispatch('getHoras');
+              return context.commit('derechos', data.derechos);
 
             case 26:
               _context6.next = 28;
-              return context.dispatch('setDateLimit');
+              return context.dispatch('getHoras');
 
             case 28:
               _context6.next = 30;
-              return context.dispatch('setCheckSemestres');
+              return context.dispatch('setDateLimit');
 
             case 30:
+              _context6.next = 32;
+              return context.dispatch('setCheckSemestres');
+
+            case 32:
             case 'end':
               return _context6.stop();
           }
@@ -58751,7 +58879,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 });
 
 /***/ }),
-/* 151 */
+/* 155 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -58762,11 +58890,16 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   parameters: function parameters(state, value) {
     state.parameters = value;
   },
-  editable: function editable(state, value) {
-    state.editable = value;
+  confirm: function confirm(state, value) {
+    state.confirm = value;
   },
   tmail_id: function tmail_id(state, value) {
     state.tmail_id = value;
+    if (!state.tmail_id) {
+      state.confirm = false;
+    } else {
+      state.confirm = true;
+    }
   },
   check_main: function check_main(state, value) {
     state.check_main = value;
@@ -58917,8 +59050,52 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         break;
     }
   },
+
+
+  // panelBtnAgregar_p(state, value){
+  //   state.panel.btn.agregar_p = value;
+  // },
+
   status: function status(state, value) {
     state.status = value;
+    switch (state.status) {
+      case 'view':
+        if (state.confirm == false) {
+          // state.panel.btn.agregar_p = false,
+          state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = false, state.panel.btn.rehacer = false, state.panel.data.horario = 'view';
+          state.panel.data.periodos = 'view';
+          state.panel.data.programadas = 'view';
+          state.panel.data.rango = 'view';
+        }
+        break;
+      case 'editable':
+        if (state.confirm == true) {
+          // state.panel.btn.agregar_p = false,
+          state.panel.btn.confirmar = true, state.panel.btn.editar = true, state.panel.btn.grabar = false, state.panel.btn.rehacer = false, state.panel.data.horario = 'view';
+          state.panel.data.periodos = 'view';
+          state.panel.data.programadas = 'view';
+          state.panel.data.rango = 'view';
+        }
+        break;
+      case 'edit':
+        if (state.confirm == true) {
+          // state.panel.btn.agregar_p = true,
+          state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = false, state.panel.btn.rehacer = true, state.panel.data.horario = 'edit';
+          state.panel.data.periodos = 'view';
+          state.panel.data.programadas = 'edit';
+          state.panel.data.rango = 'edit';
+        }
+        break;
+      case 'upgradeable':
+        if (state.confirm == true) {
+          // state.panel.btn.agregar_p = true,
+          state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = true, state.panel.btn.rehacer = true, state.panel.data.horario = 'edit';
+          state.panel.data.periodos = 'view';
+          state.panel.data.programadas = 'edit';
+          state.panel.data.rango = 'edit';
+        }
+        break;
+    }
   },
   cdocente: function cdocente(state, value) {
     state.cdocente = value;
@@ -58931,7 +59108,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   feriados: function feriados(state, value) {
     state.feriados = value;
     for (var i = 0; i < state.feriados.length; i++) {
-      // console.log('feriados [state.feriados[i], typeof(state.feriados[i])]', [state.feriados[i], typeof(state.feriados[i])]);
       var fecha = new Date(state.feriados[i]['fecha'] + "T00:00:00");
       state.feriados[i]['fecha'] = fecha;
     }
@@ -59016,8 +59192,13 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       state.programadas[i]['fecha_ini'] = fecha_ini;
       state.programadas[i]['fecha_fin'] = fecha_fin;
       state.programadas[i]['message'] = '';
+      // state.programadas[i]['aceptar'] = false;
+      state.programadas[i]['eliminar'] = false;
+      state.programadas[i]['editFecha'] = false;
+      state.programadas[i]['editDias'] = false;
+      state.programadas[i]['open'] = true;
       if (fecha_fin < new Date().setHours(0, 0, 0, 0)) {
-        state.programadas[i]['type'] = 'closed';
+        state.programadas[i]['open'] = false;
       }
     }
   },
@@ -59109,71 +59290,36 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     state.vacPorPeriodo = [];
   },
   clearBtnEdit: function clearBtnEdit(state) {
-    state.status = 'view';
-    for (var key in state.panel) {
-      state.panel[key] = 'view';
-    }
-  },
-  btnSave: function btnSave(state) {
-    for (var key in state.panel.btn) {
-      state.panel.btn[key] = 'view';
-    }
-    for (var key in state.panel.data) {
-      state.panel.data[key] = 'view';
-    }
-  },
-  btnAdd: function btnAdd(state, type) {
-    for (var key in state.panel.btn) {
-      state.panel.btn[key] = 'none';
-    }
-    state.panel.btn[type] = 'add';
-  },
-  btnEdit: function btnEdit(state, type) {
-    var old = state.panel.btn[type];
-    for (var key in state.panel.btn) {
-      state.panel.btn[key] = 'none';
-    }
-    for (var key in state.panel.data) {
-      state.panel.data[key] = 'view';
-    }
-    switch (state.status) {
-      case 'view':
-        state.panel.btn[type] = 'edit';
-        state.panel.data[type] = 'edit';
-        state.status = 'edit';
-        break;
-      case 'edit':
-        state.panel.btn[type] = 'view';
-        state.panel.data[type] = 'view';
-        state.status = 'view';
-        break;
-    }
+    state.status = 'editable';
+    // for (var key in state.panel) {
+    //     state.panel[key] = 'view';
+    // }
   }
 });
 
 /***/ }),
-/* 152 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(153), __esModule: true };
+module.exports = { "default": __webpack_require__(157), __esModule: true };
 
 /***/ }),
-/* 153 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(32);
 __webpack_require__(30);
-module.exports = __webpack_require__(154);
+module.exports = __webpack_require__(158);
 
 
 /***/ }),
-/* 154 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var classof = __webpack_require__(33);
 var ITERATOR = __webpack_require__(2)('iterator');
-var Iterators = __webpack_require__(13);
-module.exports = __webpack_require__(4).isIterable = function (it) {
+var Iterators = __webpack_require__(14);
+module.exports = __webpack_require__(3).isIterable = function (it) {
   var O = Object(it);
   return O[ITERATOR] !== undefined
     || '@@iterator' in O
@@ -59183,27 +59329,27 @@ module.exports = __webpack_require__(4).isIterable = function (it) {
 
 
 /***/ }),
-/* 155 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(156), __esModule: true };
+module.exports = { "default": __webpack_require__(160), __esModule: true };
 
 /***/ }),
-/* 156 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(32);
 __webpack_require__(30);
-module.exports = __webpack_require__(157);
+module.exports = __webpack_require__(161);
 
 
 /***/ }),
-/* 157 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var anObject = __webpack_require__(5);
 var get = __webpack_require__(57);
-module.exports = __webpack_require__(4).getIterator = function (it) {
+module.exports = __webpack_require__(3).getIterator = function (it) {
   var iterFn = get(it);
   if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
   return anObject(iterFn.call(it));
@@ -59211,7 +59357,7 @@ module.exports = __webpack_require__(4).getIterator = function (it) {
 
 
 /***/ }),
-/* 158 */
+/* 162 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59224,6 +59370,9 @@ module.exports = __webpack_require__(4).getIterator = function (it) {
   },
   semestres: function semestres(state) {
     return state.semestres;
+  },
+  programadas: function programadas(state) {
+    return state.programadas;
   },
   horarios: function horarios(state) {
     return state.horarios;
@@ -59365,7 +59514,7 @@ module.exports = __webpack_require__(4).getIterator = function (it) {
 });
 
 /***/ }),
-/* 159 */
+/* 163 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

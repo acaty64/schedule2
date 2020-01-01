@@ -7,13 +7,14 @@ describe('store state', () => {
 	test('default state is correct', () => {
 		expect(state).toEqual({
 			docente_id: 0,
-			editable: false,
+			// editable: false,
 			tmail_id: false,
+			confirm: false,
 			check_main: [],
 			component_key: 0,
 			mess_horario: ['','',''],
 			parameters: '',			
-			status: 'view',
+			status: '',
 			docente: {},
 			cdocente: '',
 			URLdomain: window.location.host,
@@ -30,10 +31,11 @@ describe('store state', () => {
 			holidays: [],
 			panel: {
 				'btn': {
-				  rango: 'view',
-				  periodos: 'view',
-				  programadas: 'view',
-				  horario: 'view'
+					// agregar_p: false,
+				  confirmar: false,
+				  editar: false,
+				  grabar: false,
+				  rehacer: false
 				},
 				'data': {
 				  rango: 'view',
@@ -41,6 +43,9 @@ describe('store state', () => {
 				  programadas: 'view',
 				  horario: 'view'
 				},
+			},
+			btn_prog: {
+				agregar: false,
 			},
 			periodos: [],
 			ganadas: [],

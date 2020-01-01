@@ -9,10 +9,10 @@
                 Docente: <b>{{ docente.wdocente }}</b>
               </div>
               <div class="col-md-2"> 
-                <button v-if="status == 'view' && editable" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
-                <button v-if="status == 'edit' && editable" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
-                <button v-if="status == 'edit' && editable" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
-                <a v-if="status == 'view' && editable" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/confirm/view/'+tmail_id+'/'+ docente_id">Confirmar</a>
+                <button v-if="panel.btn.editar" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
+                <button v-if="panel.btn.grabar" v-on:click='btnSave()' class="btn btn-sm btn-danger">Grabar</button>
+                <button v-if="panel.btn.rehacer" v-on:click='btnRestore(docente_id)' class="btn btn-sm btn-primary">Rehacer</button>
+                <a v-if="panel.btn.confirmar" class="btn btn-sm btn-primary" role="button" v-bind:href="'/schedule/confirm/view/'+tmail_id+'/'+ docente_id">Confirmar</a>
               </div>              
               <div class="col-md-6"> 
                 <span v-for="mess in check_main">
@@ -77,9 +77,18 @@ export default {
       component_key: (state) => state.component_key,
       docente: (state) => state.docente,
       check_main: (state) => state.check_main,
-      editable: (state) => state.editable,
+      // editable: (state) => state.editable,
+      confirm: (state) => state.confirm,
       tmail_id: (state) => state.tmail_id,
+      panel: (state) => state.panel,
     }),
+  },
+  watch: {
+    check_main: function () {
+      if(this.check_main.length>0){
+        this.$store.commit('status', 'edit');
+      }
+    }
   },
   methods: {
     getData(docente_id){
@@ -97,7 +106,7 @@ export default {
     async btnSave() {
       try {
         await this.$store.dispatch('saveData');
-        this.$store.commit('status', 'view');
+        this.$store.commit('status', 'editable');
       } catch (e) {
         alert('Error de grabación.');
       }

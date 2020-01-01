@@ -3,6 +3,7 @@ export default {
     return state.parameters;
   },
   semestres: (state) => { return state.semestres },
+  programadas: (state) => { return state.programadas },
   horarios: (state) => { return state.horarios },
   cdocente: (state) => {
     return state.cdocente;
