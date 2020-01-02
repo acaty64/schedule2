@@ -7,7 +7,7 @@
             <div class="row">
               <div class="col-md-4"> 
                 Docente: <b>{{ docente.wdocente }}</b>
-                <button v-on:click='btnExample()' class="btn btn-sm btn-success">Ejemplo</button>
+                <!-- <button v-on:click='btnExample()' class="btn btn-sm btn-success">Ejemplo</button> -->
               </div>
               <div class="col-md-2"> 
                 <button v-if="panel.btn.editar" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
@@ -78,7 +78,6 @@ export default {
       component_key: (state) => state.component_key,
       docente: (state) => state.docente,
       check_main: (state) => state.check_main,
-      // editable: (state) => state.editable,
       confirm: (state) => state.confirm,
       tmail_id: (state) => state.tmail_id,
       panel: (state) => state.panel,
@@ -92,12 +91,9 @@ export default {
     }
   },
   methods: {
-
-btnExample(){
-  this.$store.dispatch('semestresVacaciones');
-
-},
-
+    // btnExample(){
+    //   this.$store.dispatch('semestresVacaciones');
+    // },
     getData(docente_id){
       this.$store.dispatch('getData', docente_id);
     },

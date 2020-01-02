@@ -54072,7 +54072,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     check_main: function check_main(state) {
       return state.check_main;
     },
-    // editable: (state) => state.editable,
     confirm: function confirm(state) {
       return state.confirm;
     },
@@ -54091,9 +54090,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
-    btnExample: function btnExample() {
-      this.$store.dispatch('semestresVacaciones');
-    },
+    // btnExample(){
+    //   this.$store.dispatch('semestresVacaciones');
+    // },
     getData: function getData(docente_id) {
       this.$store.dispatch('getData', docente_id);
     },
@@ -56865,9 +56864,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this.$store.dispatch('changeSemestre', semestre);
 
               case 4:
-                _this.$store.commit('component_key');
-
-              case 5:
               case 'end':
                 return _context.stop();
             }
@@ -56899,9 +56895,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this2.$store.dispatch('changeSemestre', _this2.semestre);
 
               case 8:
-                _this2.$store.commit('component_key');
-
-              case 9:
               case 'end':
                 return _context2.stop();
             }
@@ -57213,20 +57206,7 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-md-4" }, [
                 _vm._v(" \n              Docente: "),
-                _c("b", [_vm._v(_vm._s(_vm.docente.wdocente))]),
-                _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-sm btn-success",
-                    on: {
-                      click: function($event) {
-                        return _vm.btnExample()
-                      }
-                    }
-                  },
-                  [_vm._v("Ejemplo")]
-                )
+                _c("b", [_vm._v(_vm._s(_vm.docente.wdocente))])
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
@@ -58241,13 +58221,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
               return context.commit('semestreColor', [semestre, color]);
 
             case 26:
-              _context4.next = 28;
-              return context.commit('component_key');
-
-            case 28:
               return _context4.abrupt('return', [check_semestre, color]);
 
-            case 29:
+            case 27:
             case 'end':
               return _context4.stop();
           }
@@ -58780,6 +58756,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
                 var check6 = context.dispatch('editToUpgradeable');
                 check6.then(function (value) {
                   context.commit('component_key');
+                  console.log('component_key, changeSemestre');
                 });
               });
             });
@@ -59031,6 +59008,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       }
     }
     state.component_key++;
+    console.log('component_key, changeDiasInProgramada');
   },
 
   //* Asigna el periodo en "holidays"
@@ -59109,6 +59087,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   //* Agrega 1 a "component_key"
   component_key: function component_key(state) {
     state.component_key = state.component_key + 1;
+    console.log('component_key: ', state.component_key);
   },
 
   //* Asigna los mensajes de consistencia

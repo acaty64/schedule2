@@ -166,7 +166,8 @@ export default {
       color = 'red';
     }
     await context.commit('semestreColor',[semestre, color]);
-    await context.commit('component_key');              
+//     await context.commit('component_key');
+// console.log('component_key, consistencia_horario');
     return [check_semestre, color];
   }, // end of consistencia_horario()
     //* Funcion de verificacion de periodo
@@ -691,6 +692,7 @@ export default {
                 var check6 = context.dispatch('editToUpgradeable');
                   check6.then(function(value){
                   context.commit('component_key');
+// console.log('component_key, changeSemestre');
                 });
               });
             });

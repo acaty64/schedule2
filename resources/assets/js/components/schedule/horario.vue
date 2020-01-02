@@ -115,14 +115,14 @@
       async changeSemestre (semestre) {
         await this.$store.dispatch('horario2horarios');
         await this.$store.dispatch('changeSemestre', semestre);
-        this.$store.commit('component_key');
+        // this.$store.commit('component_key');
       },
       async changeTurno(dia, turno){
         await this.$store.commit('turno', [dia, turno]);
         await this.$store.dispatch('turnos2horario');
         await this.$store.dispatch('horario2horarios');
         await this.$store.dispatch('changeSemestre', this.semestre);
-        this.$store.commit('component_key');
+        // this.$store.commit('component_key');
       },
     }, // End of Methods
   };  

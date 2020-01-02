@@ -48,6 +48,7 @@ export default {
       }
     }
     state.component_key++;
+// console.log('component_key, changeDiasInProgramada');    
   },
   //* Asigna el periodo en "holidays"
   changePeriodoInHolidays(state, [index, value]){
@@ -104,7 +105,10 @@ export default {
     }
   },
   //* Agrega 1 a "component_key"
-  component_key(state){ state.component_key = state.component_key+1; },
+  component_key(state){ 
+    state.component_key = state.component_key+1;
+// console.log('component_key: ', state.component_key);     
+  },
   //* Asigna los mensajes de consistencia
   messageCheck(state, [type, item, mess]){
     switch(type){
