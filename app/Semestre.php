@@ -10,4 +10,11 @@ class Semestre extends Model
         'semestre', 'fecha_ini', 'fecha_fin', 'status'
     ];
 
+    protected $appends = ['vacaciones'];
+
+    public function getVacacionesAttribute()
+    {
+    	return false;
+    }
+
 }

@@ -1,4 +1,58 @@
 export default {
+  semestresVacaciones(context){
+    // dia x dia de vacaciones programadas
+    var dias = [];
+    for (var i = 0; i < context.state.programadas.length; i++) {
+      let ini = new Date(context.state.programadas[i]['fecha_ini']);
+      let fin = new Date(context.state.programadas[i]['fecha_fin']);
+
+      for (var j = ini; j <= fin; j.setDate(j.getDate()+1)) {
+        dias.push(new Date(j));
+      }
+    }
+    dias.sort(function (a,b) {
+      return Number(new Date(a)) - Number(new Date(b));
+    });
+    // acumulacion de vacaciones
+    var rangos = [];
+    var nx = dias[0];
+    loop1: for (var i = 0; i < dias.length; i++) {
+      var dia1 = new Date(dias[i]);
+      var dia2 = new Date(dias[i+1]);
+      var diax = dia2;
+      diax.setDate(diax.getDate()-1);
+      if(Number(dia1) == Number(diax)) {
+        continue loop1;
+      }else{
+        rangos.push({ini: nx, fin: dia1});
+        nx = dias[i+1];
+      }
+    }
+// console.log('rangos b: ', rangos);
+    // Identificar semestres en vacaciones
+    for (var i = 0; i < context.state.semestres.length; i++) {
+      var fini = Number(new Date(context.state.semestres[i]['fecha_ini']));
+// console.log('fini: ', [i, new Date(fini)]);
+      var ffin = Number(new Date(context.state.semestres[i]['fecha_fin']));
+// console.log('ffin: ', [i, new Date(ffin)]);
+      for (var j = 0; j < rangos.length; j++) {
+// console.log('rangos[j]: ', [j, rangos[j]]);
+        var vini = Number(new Date(rangos[j]['ini']));
+// console.log('vini: ', [j, new Date(vini)]);
+        var vfin = Number(new Date(rangos[j]['fin']));
+// console.log('vfin: ', [j, new Date(vfin)]);
+
+// console.log('if 1', vini<=fini ? true : false);
+// console.log('if 2', vfin>=ffin ? true : false);
+        if(vini <= fini && vfin >= ffin){
+// console.log('commit');
+          context.commit('semestreVacaciones', [i, true]);
+        }
+      }
+    }
+// console.log('semestres: ', context.state.semestres);
+  },
+
   saveData (context) {
     var url = context.state.protocol+'//'+context.state.URLdomain+'/api/schedule/save/';
     var request = {
@@ -131,13 +185,11 @@ export default {
     }
   },
   check_periodos2: (context, item) => {
+    if( item.adelantadas > 21){
+      return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 21.'];
+    }else{
       return [true, ''];
-    // TODO: Se ha eliminado la consistencia de exceso de vacaciones adelantadas
-    // if( item.adelantadas > 7){
-    //   return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 7.'];
-    // }else{
-    //   return [true, ''];
-    // }
+    }
   },
   check_periodos3: (context, item) => {
     if(item.porprogramar < 0 || item.porprogramar > 7){
@@ -624,6 +676,7 @@ export default {
       context.dispatch('setTurnos');
       context.dispatch('setSchedule');
       context.dispatch('fillSchedule');
+      context.dispatch('semestresVacaciones');
       var check1 = context.dispatch('calculoVacaciones');
       check1.then(function(value){
         context.commit('messageCheck', []);

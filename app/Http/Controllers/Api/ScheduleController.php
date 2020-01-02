@@ -148,7 +148,6 @@ class ScheduleController extends Controller
       }
     }
 
-
     $feriados = Feriado::where('fecha','>=',$fini)->where('fecha','<=',$ffin)->get();
     $horarios = Horario::where('cdocente', $cdocente)->get();
     $semestres = Semestre::where('status', true)->orderBy('fecha_ini')->get();

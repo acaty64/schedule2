@@ -54029,6 +54029,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -54090,6 +54091,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     }
   },
   methods: {
+    btnExample: function btnExample() {
+      this.$store.dispatch('semestresVacaciones');
+    },
     getData: function getData(docente_id) {
       this.$store.dispatch('getData', docente_id);
     },
@@ -56780,6 +56784,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -56824,10 +56835,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     status: function status(state) {
       return state.status;
     },
-    // panelRango_btn: (state) => state.panel.btn.rango,
-    // panelRango_data: (state) => state.panel.data.rango,
-    // panelHorario_btn: (state) => state.panel.btn.horario,
-    // panelHorario_data: (state) => state.panel.data.horario,
     turnos: function turnos(state) {
       return state.turnos;
     },
@@ -56837,7 +56844,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     component_key: function component_key(state) {
       return state.component_key;
     }
-    // semestreActual: (state) => state.semestre,
   }), Object(__WEBPACK_IMPORTED_MODULE_3_vuex__["b" /* mapGetters */])(['wdia', 'view', 'wturno'])),
   methods: {
     consistencia: function consistencia() {
@@ -56929,29 +56935,31 @@ var render = function() {
             [
               _c("font", { attrs: { color: opcion.color } }, [
                 _c("label", { staticClass: "radio-inline col-md-2" }, [
-                  _c("input", {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.semestre,
-                        expression: "semestre"
-                      }
-                    ],
-                    attrs: { type: "radio" },
-                    domProps: {
-                      value: opcion.semestre,
-                      checked: _vm._q(_vm.semestre, opcion.semestre)
-                    },
-                    on: {
-                      click: function($event) {
-                        return _vm.changeSemestre(opcion.semestre)
-                      },
-                      change: function($event) {
-                        _vm.semestre = opcion.semestre
-                      }
-                    }
-                  }),
+                  opcion.status
+                    ? _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.semestre,
+                            expression: "semestre"
+                          }
+                        ],
+                        attrs: { type: "radio" },
+                        domProps: {
+                          value: opcion.semestre,
+                          checked: _vm._q(_vm.semestre, opcion.semestre)
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.changeSemestre(opcion.semestre)
+                          },
+                          change: function($event) {
+                            _vm.semestre = opcion.semestre
+                          }
+                        }
+                      })
+                    : _vm._e(),
                   _vm._v(" "),
                   _c("b", [_vm._v(_vm._s(opcion.semestre))])
                 ])
@@ -56968,12 +56976,27 @@ var render = function() {
       "div",
       { staticClass: "panel-body" },
       _vm._l(_vm.semestres, function(opcion) {
-        return _c(
-          "span",
-          [
-            _c("font", { attrs: { color: opcion.color } }, [
-              opcion.semestre == _vm.semestre
-                ? _c("span", [
+        return _c("span", [
+          opcion.vacaciones && opcion.semestre == _vm.semestre
+            ? _c("span", [
+                _c(
+                  "div",
+                  { staticClass: "col-md-2 col-md-offset-1" },
+                  [
+                    _c("font", { attrs: { color: opcion.color } }, [
+                      _vm._v("\n            VACACIONES\n          ")
+                    ])
+                  ],
+                  1
+                )
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          !opcion.vacaciones && opcion.semestre == _vm.semestre
+            ? _c(
+                "span",
+                [
+                  _c("font", { attrs: { color: opcion.color } }, [
                     _c("div", { staticClass: "col-md-2 col-md-offset-1" }, [
                       _vm._v("\n            De: "),
                       _c("br"),
@@ -56999,11 +57022,11 @@ var render = function() {
                       0
                     )
                   ])
-                : _vm._e()
-            ])
-          ],
-          1
-        )
+                ],
+                1
+              )
+            : _vm._e()
+        ])
       }),
       0
     ),
@@ -57190,7 +57213,20 @@ var render = function() {
             _c("div", { staticClass: "row" }, [
               _c("div", { staticClass: "col-md-4" }, [
                 _vm._v(" \n              Docente: "),
-                _c("b", [_vm._v(_vm._s(_vm.docente.wdocente))])
+                _c("b", [_vm._v(_vm._s(_vm.docente.wdocente))]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-sm btn-success",
+                    on: {
+                      click: function($event) {
+                        return _vm.btnExample()
+                      }
+                    }
+                  },
+                  [_vm._v("Ejemplo")]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "col-md-2" }, [
@@ -57898,6 +57934,59 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
+  semestresVacaciones: function semestresVacaciones(context) {
+    // dia x dia de vacaciones programadas
+    var dias = [];
+    for (var i = 0; i < context.state.programadas.length; i++) {
+      var ini = new Date(context.state.programadas[i]['fecha_ini']);
+      var fin = new Date(context.state.programadas[i]['fecha_fin']);
+
+      for (var j = ini; j <= fin; j.setDate(j.getDate() + 1)) {
+        dias.push(new Date(j));
+      }
+    }
+    dias.sort(function (a, b) {
+      return Number(new Date(a)) - Number(new Date(b));
+    });
+    // acumulacion de vacaciones
+    var rangos = [];
+    var nx = dias[0];
+    loop1: for (var i = 0; i < dias.length; i++) {
+      var dia1 = new Date(dias[i]);
+      var dia2 = new Date(dias[i + 1]);
+      var diax = dia2;
+      diax.setDate(diax.getDate() - 1);
+      if (Number(dia1) == Number(diax)) {
+        continue loop1;
+      } else {
+        rangos.push({ ini: nx, fin: dia1 });
+        nx = dias[i + 1];
+      }
+    }
+    // console.log('rangos b: ', rangos);
+    // Identificar semestres en vacaciones
+    for (var i = 0; i < context.state.semestres.length; i++) {
+      var fini = Number(new Date(context.state.semestres[i]['fecha_ini']));
+      // console.log('fini: ', [i, new Date(fini)]);
+      var ffin = Number(new Date(context.state.semestres[i]['fecha_fin']));
+      // console.log('ffin: ', [i, new Date(ffin)]);
+      for (var j = 0; j < rangos.length; j++) {
+        // console.log('rangos[j]: ', [j, rangos[j]]);
+        var vini = Number(new Date(rangos[j]['ini']));
+        // console.log('vini: ', [j, new Date(vini)]);
+        var vfin = Number(new Date(rangos[j]['fin']));
+        // console.log('vfin: ', [j, new Date(vfin)]);
+
+        // console.log('if 1', vini<=fini ? true : false);
+        // console.log('if 2', vfin>=ffin ? true : false);
+        if (vini <= fini && vfin >= ffin) {
+          // console.log('commit');
+          context.commit('semestreVacaciones', [i, true]);
+        }
+      }
+    }
+    // console.log('semestres: ', context.state.semestres);
+  },
   saveData: function saveData(context) {
     var url = context.state.protocol + '//' + context.state.URLdomain + '/api/schedule/save/';
     var request = {
@@ -58183,13 +58272,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     }
   },
   check_periodos2: function check_periodos2(context, item) {
-    return [true, ''];
-    // TODO: Se ha eliminado la consistencia de exceso de vacaciones adelantadas
-    // if( item.adelantadas > 7){
-    //   return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 7.'];
-    // }else{
-    //   return [true, ''];
-    // }
+    if (item.adelantadas > 21) {
+      return [false, 'La programación de vacaciones adelantadas debe ser menor o igual a 21.'];
+    } else {
+      return [true, ''];
+    }
   },
   check_periodos3: function check_periodos3(context, item) {
     if (item.porprogramar < 0 || item.porprogramar > 7) {
@@ -58678,6 +58765,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       context.dispatch('setTurnos');
       context.dispatch('setSchedule');
       context.dispatch('fillSchedule');
+      context.dispatch('semestresVacaciones');
       var check1 = context.dispatch('calculoVacaciones');
       check1.then(function (value) {
         context.commit('messageCheck', []);
@@ -59050,18 +59138,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         break;
     }
   },
-
-
-  // panelBtnAgregar_p(state, value){
-  //   state.panel.btn.agregar_p = value;
-  // },
-
   status: function status(state, value) {
     state.status = value;
     switch (state.status) {
       case 'view':
         if (state.confirm == false) {
-          // state.panel.btn.agregar_p = false,
           state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = false, state.panel.btn.rehacer = false, state.panel.data.horario = 'view';
           state.panel.data.periodos = 'view';
           state.panel.data.programadas = 'view';
@@ -59070,7 +59151,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         break;
       case 'editable':
         if (state.confirm == true) {
-          // state.panel.btn.agregar_p = false,
           state.panel.btn.confirmar = true, state.panel.btn.editar = true, state.panel.btn.grabar = false, state.panel.btn.rehacer = false, state.panel.data.horario = 'view';
           state.panel.data.periodos = 'view';
           state.panel.data.programadas = 'view';
@@ -59079,7 +59159,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         break;
       case 'edit':
         if (state.confirm == true) {
-          // state.panel.btn.agregar_p = true,
           state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = false, state.panel.btn.rehacer = true, state.panel.data.horario = 'edit';
           state.panel.data.periodos = 'view';
           state.panel.data.programadas = 'edit';
@@ -59088,7 +59167,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
         break;
       case 'upgradeable':
         if (state.confirm == true) {
-          // state.panel.btn.agregar_p = true,
           state.panel.btn.confirmar = false, state.panel.btn.editar = false, state.panel.btn.grabar = true, state.panel.btn.rehacer = true, state.panel.data.horario = 'edit';
           state.panel.data.periodos = 'view';
           state.panel.data.programadas = 'edit';
@@ -59103,8 +59181,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   docente_id: function docente_id(state, value) {
     state.docente_id = value;
   },
-
-  // vacaciones_in(state, value){state.vacaciones_in = value},    
   feriados: function feriados(state, value) {
     state.feriados = value;
     for (var i = 0; i < state.feriados.length; i++) {
@@ -59121,10 +59197,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   semestre: function semestre(state, value) {
     state.semestre = value;
   },
-  semestreColor: function semestreColor(state, _ref11) {
+  semestreVacaciones: function semestreVacaciones(state, _ref11) {
     var _ref12 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref11, 2),
-        semestre = _ref12[0],
+        index = _ref12[0],
         value = _ref12[1];
+
+    state.semestres[index].vacaciones = value;
+  },
+  semestreColor: function semestreColor(state, _ref13) {
+    var _ref14 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref13, 2),
+        semestre = _ref14[0],
+        value = _ref14[1];
 
     for (var i = 0; i < state.semestres.length; i++) {
       if (state.semestres[i]['semestre'] == semestre) {
@@ -59135,13 +59218,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   horario: function horario(state, value) {
     state.horario = value;
   },
-
-  // horario_in(state, value){state.horario_in = value},    
-  periodo: function periodo(state, _ref13) {
-    var _ref14 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref13, 3),
-        periodo = _ref14[0],
-        index = _ref14[1],
-        value = _ref14[2];
+  periodo: function periodo(state, _ref15) {
+    var _ref16 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref15, 3),
+        periodo = _ref16[0],
+        index = _ref16[1],
+        value = _ref16[2];
 
     for (var i = 0; i < state.periodos.length; i++) {
       if (state.periodos[i]['periodo'] == periodo) {
@@ -59151,7 +59232,7 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     state.periodo = periodo;
   },
 
-  //* Inicializa los valore de "periodos"   
+  //* Inicializa los valores de "periodos"   
   periodos: function periodos(state, pre_periodos) {
     state.periodos = [];
     for (var i = 0; i < pre_periodos.length; i++) {
@@ -59192,7 +59273,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       state.programadas[i]['fecha_ini'] = fecha_ini;
       state.programadas[i]['fecha_fin'] = fecha_fin;
       state.programadas[i]['message'] = '';
-      // state.programadas[i]['aceptar'] = false;
       state.programadas[i]['eliminar'] = false;
       state.programadas[i]['editFecha'] = false;
       state.programadas[i]['editDias'] = false;
@@ -59205,7 +59285,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   programada: function programada(state, item) {
     for (var i = 0; i < state.programadas.length; i++) {
       if (state.programadas[i]['id'] == item.id) {
-        // state.programadas[i]['periodo'] = item.periodo;
         state.programadas[i]['fecha_ini'] = item.fecha_ini;
         state.programadas[i]['dias'] = item.dias;
         state.programadas[i]['fecha_fin'] = item.fecha_fin;
@@ -59216,11 +59295,11 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   horarios: function horarios(state, value) {
     state.horarios = value;
   },
-  schedule: function schedule(state, _ref15) {
-    var _ref16 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref15, 3),
-        index = _ref16[0],
-        subindex = _ref16[1],
-        value = _ref16[2];
+  schedule: function schedule(state, _ref17) {
+    var _ref18 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref17, 3),
+        index = _ref18[0],
+        subindex = _ref18[1],
+        value = _ref18[2];
 
     if (subindex == '') {
       state.schedule[index] = value;
@@ -59228,17 +59307,17 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       state.schedule[index][subindex] = value;
     }
   },
-  turno: function turno(state, _ref17) {
-    var _ref18 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref17, 2),
-        dia = _ref18[0],
-        turno = _ref18[1];
+  turno: function turno(state, _ref19) {
+    var _ref20 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref19, 2),
+        dia = _ref20[0],
+        turno = _ref20[1];
 
     state.turnos[dia] = turno;
   },
-  turno2horario: function turno2horario(state, _ref19) {
-    var _ref20 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref19, 2),
-        nDia = _ref20[0],
-        turno = _ref20[1];
+  turno2horario: function turno2horario(state, _ref21) {
+    var _ref22 = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_slicedToArray___default()(_ref21, 2),
+        nDia = _ref22[0],
+        turno = _ref22[1];
 
     for (var item in state.horario) {
       if (state.horario[item][0] == nDia) {
@@ -59291,9 +59370,6 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
   },
   clearBtnEdit: function clearBtnEdit(state) {
     state.status = 'editable';
-    // for (var key in state.panel) {
-    //     state.panel[key] = 'view';
-    // }
   }
 });
 

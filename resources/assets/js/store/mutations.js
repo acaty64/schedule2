@@ -128,17 +128,12 @@ export default {
     }
   },
 
-  // panelBtnAgregar_p(state, value){
-  //   state.panel.btn.agregar_p = value;
-  // },
-
   status(state, value){ 
     state.status = value;
     switch (state.status){
       case 'view':
         if(state.confirm == false)
         {
-          // state.panel.btn.agregar_p = false,
           state.panel.btn.confirmar = false,
           state.panel.btn.editar = false,
           state.panel.btn.grabar = false,
@@ -152,7 +147,6 @@ export default {
       case 'editable':
         if(state.confirm == true)
         {
-          // state.panel.btn.agregar_p = false,
           state.panel.btn.confirmar = true,
           state.panel.btn.editar = true,
           state.panel.btn.grabar = false,
@@ -166,7 +160,6 @@ export default {
       case 'edit':
         if(state.confirm == true)
         {
-          // state.panel.btn.agregar_p = true,
           state.panel.btn.confirmar = false,
           state.panel.btn.editar = false,
           state.panel.btn.grabar = false,
@@ -180,7 +173,6 @@ export default {
       case 'upgradeable':
         if(state.confirm == true)
         {
-          // state.panel.btn.agregar_p = true,
           state.panel.btn.confirmar = false,
           state.panel.btn.editar = false,
           state.panel.btn.grabar = true,
@@ -196,7 +188,6 @@ export default {
 
   cdocente(state, value){ state.cdocente = value; },
   docente_id(state, value){ state.docente_id = value; },
-  // vacaciones_in(state, value){state.vacaciones_in = value},    
   feriados(state, value){
     state.feriados = value;
     for (var i = 0; i < state.feriados.length; i++) {
@@ -206,16 +197,17 @@ export default {
   },    
   fini(state, value){state.fini = value},
   ffin(state, value){state.ffin = value},    
-  semestre(state, value){state.semestre = value},    
+  semestre(state, value){state.semestre = value},
+  semestreVacaciones(state, [index, value]){ state.semestres[index].vacaciones = value },  
   semestreColor(state, [semestre, value]){
     for (var i = 0; i < state.semestres.length; i++) {
       if(state.semestres[i]['semestre'] == semestre){
         state.semestres[i]['color'] = value;
       }
     }
-  },    
+  },
+      
   horario(state, value){state.horario = value},    
-  // horario_in(state, value){state.horario_in = value},    
   periodo(state, [periodo, index, value]){
     for (var i = 0; i < state.periodos.length; i++) {
       if(state.periodos[i]['periodo'] == periodo){
@@ -224,7 +216,7 @@ export default {
     }
     state.periodo = periodo
   }, 
-  //* Inicializa los valore de "periodos"   
+  //* Inicializa los valores de "periodos"   
   periodos(state, pre_periodos){
     state.periodos = [];
     for (var i = 0; i < pre_periodos.length; i++) {
@@ -263,7 +255,6 @@ export default {
         state.programadas[i]['fecha_ini'] = fecha_ini;
         state.programadas[i]['fecha_fin'] = fecha_fin;
         state.programadas[i]['message'] = '';
-        // state.programadas[i]['aceptar'] = false;
         state.programadas[i]['eliminar'] = false;
         state.programadas[i]['editFecha'] = false;
         state.programadas[i]['editDias'] = false;
@@ -276,7 +267,6 @@ export default {
   programada(state, item){
     for (var i = 0; i < state.programadas.length; i++) {
       if(state.programadas[i]['id'] == item.id){
-        // state.programadas[i]['periodo'] = item.periodo;
         state.programadas[i]['fecha_ini'] = item.fecha_ini;
         state.programadas[i]['dias'] = item.dias;
         state.programadas[i]['fecha_fin'] = item.fecha_fin;
@@ -343,46 +333,5 @@ export default {
   },
   clearBtnEdit(state){
     state.status = 'editable';
-    // for (var key in state.panel) {
-    //     state.panel[key] = 'view';
-    // }
   },
-  // btnSave(state) {
-  //   for (var key in state.panel.btn) {
-  //       state.panel.btn[key] = 'view';
-  //   }
-  //   for (var key in state.panel.data) {
-  //       state.panel.data[key] = 'view';
-  //   }
-  // },
-
-  // btnAdd(state, type) {
-  //   for (var key in state.panel.btn) {
-  //       state.panel.btn[key] = 'none';
-  //   }
-  //   state.panel.btn[type] = 'add';
-  // },
-
-  // btnEdit(state, type) {
-  //   let old = state.panel.btn[type];
-  //   for (var key in state.panel.btn) {
-  //       state.panel.btn[key] = 'none';
-  //   }
-  //   for (var key in state.panel.data) {
-  //       state.panel.data[key] = 'view';
-  //   }
-  //   switch (state.status){
-  //     case 'view':
-  //       state.panel.btn[type] = 'edit';
-  //       state.panel.data[type] = 'edit';
-  //       state.status = 'edit';
-  //       break;
-  //     case 'edit':
-  //       state.panel.btn[type] = 'view';
-  //       state.panel.data[type] = 'view';
-  //       state.status = 'view';
-  //       break;
-  //   }
-  // },
-
 };

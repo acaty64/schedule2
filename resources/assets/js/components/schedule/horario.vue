@@ -9,7 +9,7 @@
         <span v-for="opcion in semestres">
           <font :color="opcion.color">
             <label class="radio-inline col-md-2">
-              <input type="radio" v-model="semestre" :value="opcion.semestre" @click="changeSemestre(opcion.semestre)">
+              <input v-if="opcion.status" type="radio" v-model="semestre" :value="opcion.semestre" @click="changeSemestre(opcion.semestre)">
               <b>{{ opcion.semestre }}</b>
             </label>
           </font>
@@ -18,8 +18,15 @@
     </div>
     <div class="panel-body">
       <span v-for="opcion in semestres">
-        <font :color="opcion.color">
-          <span v-if="opcion.semestre == semestre">
+        <span v-if="opcion.vacaciones && opcion.semestre == semestre">
+          <div class="col-md-2 col-md-offset-1">
+            <font :color="opcion.color">
+              VACACIONES
+            </font>
+          </div>  
+        </span>
+        <span v-if="!opcion.vacaciones && opcion.semestre == semestre">
+          <font :color="opcion.color">
             <div class="col-md-2 col-md-offset-1">
               De: <br>{{ wdia(opcion.fecha_ini) }}
             </div>
@@ -29,8 +36,8 @@
             <div class="col-md-5">
               <div v-for="(mess, index) in mess_horario"><b>{{ mess }}</b></div>
             </div>
-          </span>
-        </font>
+          </font>
+        </span>
       </span>
     </div>
     <div class="row"><div class="col-md-9"><hr></div></div> 
@@ -93,14 +100,9 @@
         semestres: (state) => state.semestres,
         schedule: (state) => state.schedule,
         status: (state) => state.status,
-        // panelRango_btn: (state) => state.panel.btn.rango,
-        // panelRango_data: (state) => state.panel.data.rango,
-        // panelHorario_btn: (state) => state.panel.btn.horario,
-        // panelHorario_data: (state) => state.panel.data.horario,
         turnos: (state) => state.turnos,
         mess_horario: (state) => state.mess_horario,
         component_key: (state) => state.component_key,
-        // semestreActual: (state) => state.semestre,
       }),
       ...mapGetters([
         'wdia', 'view', 'wturno'
@@ -122,9 +124,6 @@
         await this.$store.dispatch('changeSemestre', this.semestre);
         this.$store.commit('component_key');
       },
-      // btnEdit (type){
-      //   this.$store.commit('btnEdit',type);
-      // },
     }, // End of Methods
   };  
 </script>

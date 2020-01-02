@@ -7,6 +7,7 @@
             <div class="row">
               <div class="col-md-4"> 
                 Docente: <b>{{ docente.wdocente }}</b>
+                <button v-on:click='btnExample()' class="btn btn-sm btn-success">Ejemplo</button>
               </div>
               <div class="col-md-2"> 
                 <button v-if="panel.btn.editar" v-on:click='btnEdit()' class="btn btn-sm btn-success">Editar</button>
@@ -58,7 +59,7 @@
     </div>
   </div>
 </template>
-
+ 
 <script>
 import { mapState, mapActions } from 'vuex';
 import periodos from './periodos';
@@ -91,6 +92,12 @@ export default {
     }
   },
   methods: {
+
+btnExample(){
+  this.$store.dispatch('semestresVacaciones');
+
+},
+
     getData(docente_id){
       this.$store.dispatch('getData', docente_id);
     },
