@@ -39,6 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapApiRoutes();
 
+        $this->mapMasterRoute();
+
         $this->mapAdminRoute();
 
         $this->mapDocRoute();
@@ -56,6 +58,20 @@ class RouteServiceProvider extends ServiceProvider
         Route::middleware('web')
              ->namespace($this->namespace)
              ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "master" routes for the application.
+     *
+     * These routes all receive session state, CSRF protection, masterMiddleware, etc.
+     *
+     * @return void
+     */
+    protected function mapMasterRoute()
+    {
+        Route::middleware('master')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/master.php'));
     }
 
     /**
