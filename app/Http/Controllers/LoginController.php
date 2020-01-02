@@ -29,7 +29,8 @@ class LoginController extends Controller
         $appUser = User::where('email', $googleUser->getEmail())->first();
 
         if(!$appUser){
-            return redirect('/loginGoogle');
+            return redirect('/login');
+            // return redirect('/loginGoogle');
         }
         
         auth()->login($appUser);
@@ -38,7 +39,13 @@ class LoginController extends Controller
 
         \Session::put('rol', $roles->first()->trole);
 
-        return redirect('/home')->with('roles', $roles);
+        if($appUser->isDoc){
+            return redirect(route('app.schedule.edit', $appUser->id));
+        }
+        if($appUser->isMaster || $appUser->isAdmin){  
+            return redirect('/home')->with('roles', $roles);
+        }        
+        return redirect('/login');
 
     }
 }

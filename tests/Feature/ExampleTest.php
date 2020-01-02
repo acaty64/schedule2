@@ -7,15 +7,20 @@ use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
+    /** * @test */
     public function testBasicTest()
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
     }
+
+    /** * @test */
+    public function logTest()
+    {
+        $response = $this->get('/log');
+        $response->assertStatus(200)
+                ->assertViewIs('auth.login');
+    }
+
 }

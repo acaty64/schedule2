@@ -26,15 +26,20 @@ class GoogleController extends Controller
 
         $appUser = User::where('email', $googleUser->getEmail())->first();
 
+
         if(!$appUser){
-            return redirect('/loginGoogle');
+            return redirect('/login');
+            // return redirect('/loginGoogle');
         }
         auth()->login($appUser);
 
         $roles = $appUser->roles()->first();        
 
-        \Session::put('ctype', $roles->acronym);
+        \Session::put('rol', $roles->acronym);
 
+        if($roles->acronym == 'doc'){
+            return redirect(route('app.schedule.edit', $appUser->id));
+        }
         return redirect('/home')->with('roles', $roles);
     }
 }

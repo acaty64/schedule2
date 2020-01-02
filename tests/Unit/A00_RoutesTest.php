@@ -11,31 +11,11 @@ class A00_RoutesTest extends TestCase
     use DatabaseMigrations;
 
     /**     * @test      */
-    public function a_user_can_access_to_welcome()
+    public function a_user_can_access_to_login()
     {
         $this->get('/')
-            ->assertStatus(200)
-            ->assertViewIs('welcome');
+            ->assertStatus(302);
+            // ->assertViewIs('welcome');
     }
-
-    /**     * @test      */
-    public function an_authorized_user_can_access_to_home()
-    {
-        $user = $this->defaultUser([],'doc');
-        $this->actingAs($user)
-            ->get('/home')
-            ->assertStatus(200)
-            ->assertViewIs('home')
-            ->assertSee('Bienvenido');
-    }
-
-    /**     * @test      */
-    public function an_unauthorized_user_cannot_access_to_home()
-    {
-        $this->get('/home')
-            ->assertStatus(302)
-            ->assertRedirect('login');
-    }
-
 
 }

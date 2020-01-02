@@ -19,10 +19,9 @@ class AdminMiddleware
         if(!Auth::check()){
             Auth::logout();
             return redirect()->to('login');
-            return redirect()->to('loginGoogle');
+            // return redirect()->to('login');
         };
         if(Auth::user()->isAdmin || Auth::user()->isMaster){
-// dd([$request, 'AdminMiddleware']);
             return $next($request);
         }else{
             return redirect()->to('home');

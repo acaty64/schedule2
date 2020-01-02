@@ -69,7 +69,7 @@ class LoginTest extends TestCase
         // Then
         $this->assertAuthenticated();
 
-        $response->assertRedirect('/home');
+        $response->assertRedirect(route('app.schedule.edit', $user->id));
     }
 
 
@@ -81,7 +81,7 @@ class LoginTest extends TestCase
         $this->mockGoogleProvider()
             ->shouldReceive('redirect')
             ->andReturn($message);
-        $this->get('/loginGoogle')
+        $this->get('/login')
                 ->assertStatus(200)
                 ->assertSee($message);
            
@@ -108,6 +108,6 @@ class LoginTest extends TestCase
             'email' => $this->email,
         ]);
 
-        $response->assertRedirect('/loginGoogle');
+        $response->assertRedirect('/login');
     }
 }

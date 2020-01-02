@@ -15,7 +15,7 @@ class A01_AuthorizationTest extends TestCase
     /**     * @test      */
     public function an_authorized_user_can_access_to_home()
     {
-        $user = $this->defaultUser([], 'doc');
+        $user = $this->defaultUser([], 'master');
         $this->actingAs($user)
             ->get('/home')
             ->assertStatus(200)
@@ -31,12 +31,21 @@ class A01_AuthorizationTest extends TestCase
     }
 
     /**     * @test      */
+    public function a_doc_user_cannot_access_to_home()
+    {
+        $user = $this->defaultUser([],'doc');
+        $this->get('/home')
+            ->assertStatus(302)
+            ->assertRedirect('login');
+    }
+
+    /**     * @test      */
     public function an_admin_user_can_access_to_create_derechos()
     {
         $user = $this->defaultUser([],'admin');
-        $this->actingAs($user)
-            ->get('/')
-            ->assertStatus(200);
+        $this->actingAs($user);
+            // ->get('/')
+            // ->assertStatus(200);
         $this->get('/derecho/create')
             ->assertStatus(200)
             ->assertViewIs('app.derechos.create');

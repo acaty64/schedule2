@@ -11,34 +11,51 @@
 |
 */
 
+
 Route::get('/', function () {
-    return view('welcome');
+    return redirect(route('login'));
 });
 
+Route::get('login',[
+	'as' => 'login',
+	'uses' => 'LoginController@redirectToGoogle'
+]);
+
+Route::get('login/callback',[
+	'as' => 'login.callback',
+	'uses' => 'LoginController@handleGoogleCallback'
+]);
+
+Route::post('logout',[
+	'as' => 'logout',
+	'uses' => 'Auth\LoginController@logout'
+]);
+
+Route::get('log', function ()
+{
+	return view('auth.login');
+});
+
+Route::post('login',[
+	'as' => 'loginPost',
+	'uses' => '\App\Http\Controllers\Auth\LoginController@login'
+]);
+	// 'uses' => '\Illuminate\Foundation\Auth\AuthenticatesUsers@login'
+
+// Route::get('home', 'HomeController@index')->name('home')->middleware('auth');
+
+// Auth::routes();
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 // Route::get('home', function () {
 //     return view('home');
 // });
 
-Route::get('login',[
-	'as' => 'login',
-	'uses' => 'Auth\LoginController@login'
-]);
+// Route::get('login',[
+// 	'as' => 'login',
+// 	'uses' => 'Auth\LoginController@login'
+// ]);
 
 // Route::get('/home', 'HomeController@index')->name('home');
-Route::get('loginGoogle',[
-	'as' => 'loginGoogle',
-	'uses' => 'LoginController@redirectToGoogle'
-]);
-Route::get('login/callback', 'LoginController@handleGoogleCallback');
-
-Route::get('logout',[
-	'as' => 'logout',
-	'uses' => 'Auth\LoginController@logout'
-]);
-// Auth::routes();
-
-Route::get('home', 'HomeController@index')->name('home')->middleware('auth');
-
-Auth::routes();
-
-
+// Route::get('login/callback', 'LoginController@handleGoogleCallback');

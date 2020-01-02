@@ -1,4 +1,5 @@
 <?php
+Route::get('home', 'HomeController@index')->name('home');
 
 Route::get('email/send/notification/{tmail_id}', [
 	'as'	=> 'app.email.send.notification',

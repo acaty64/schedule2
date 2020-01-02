@@ -18,7 +18,7 @@ class MasterMiddleware
         if(!Auth::check()){
             Auth::logout();
             return redirect()->to('login');
-            return redirect()->to('loginGoogle');
+            // return redirect()->to('login');
         };
         if(Auth::user()->isMaster){
             return $next($request);
