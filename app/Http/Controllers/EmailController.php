@@ -50,7 +50,7 @@ class EmailController extends Controller
                 $email->save();
 
                 flash('Correo electrónico de confirmación enviado.')->success();
-                return redirect(route('app.schedule.edit', $user->id));
+                return view('thanks');
 
             } catch (Exception $e) {
                 flash('Error al enviar el correo electrónico.')->error();

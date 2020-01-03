@@ -105,7 +105,8 @@ class ConfirmTest extends TestCase
         ]);
 
         $response = $this->get(route('email.confirm.send', ['tmail_id'=>$tmail->id, 'docente_id'=>$user->id]))
-                ->assertStatus(302);
+                ->assertStatus(200)
+                ->assertViewIs('thanks');
 
         $sended = Email::whereNotNull('reply_date')->get();
         $this->assertTrue($sended->count() == 1);

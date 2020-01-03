@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Session\flash;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -14,6 +16,11 @@
 
 Route::get('/', function () {
     return redirect(route('login'));
+});
+
+Route::get('thanks', function () {
+	flash('Correo electrónico de confirmación enviado.')->success();
+    return view('thanks');
 });
 
 Route::get('login',[
