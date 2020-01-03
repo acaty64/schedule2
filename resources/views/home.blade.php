@@ -7,13 +7,13 @@
       <div class="panel panel-default">
         <div class="panel-heading">Bienvenido</div>
         <div class="panel-body">
-          @if (session('status'))
+{{--           @if (session('status'))
             <div class="alert alert-success" role="alert">
               {{ session('status') }}
             </div>
-          @endif
-          @foreach(auth()->user()->roles() as $rol)
-            @if($rol->trole->acronym == "master" || $rol->trole->acronym == "admin")
+          @endif --}}
+          {{-- @foreach(auth()->user()->roles() as $rol) --}}
+            {{-- @if($rol->trole->acronym == "master" || $rol->trole->acronym == "admin") --}}
 {{--               Acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Acceso</button>
@@ -25,14 +25,14 @@
               <div>
                 <a href="{{ route('app.tmail.index') }}"><button>Correos Masivos</button></a>
               </div>
-            @endif
+            {{-- @endif --}}
 {{--             @if($rol->trole->acronym == "doc")
               Bienvenido, acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Docente</button>
               </a>
             @endif --}}
-          @endforeach
+          {{-- @endforeach --}}
         </div>
       </div>
     </div>
