@@ -21,19 +21,33 @@ class TmailController extends Controller
 
     public function store(Request $request)
     {
-        // try {
+        switch (gettype($request->limit_date)) {
+            case 'string':
+                $limit = date('Y-m-d H:i:s', strtotime($request->limit_date));
+                break;
+            case 'number':
+                $limit = date("Y-m-d H:i:s", $request->limit_date);
+                break;
+            default:
+                $limit = $request->limit_date;
+                break;
+        }
+        $limit = date_create_from_format('Y-m-d H:i:s', $limit)->setTime(23,59,59);
+        $limit = $limit->format('Y-m-d H:i:s');
+        try {
             $tmail = new Tmail;
             $tmail->name = $request->name;
             $tmail->subject = $request->subject;
             $tmail->view = $request->view;
-            $date = $request->limit_date->setTime(23,59,59);
-            $tmail->limit_date = $date->format('Y-m-d H:i:s');
+            // $date = $request->limit_date->setTime(23,59,59);
+            // $tmail->limit_date = $date->format('Y-m-d H:i:s');
+            $tmail->limit_date = $limit;
             $tmail->save();
-            return redirect('app.mail.tmail.index');
-// dd($tmail);
-        // } catch (Exception $e) {
-        //     dd('error TmailController@store', e);
-        // }
+            flash('Registro ' . $tmail->id . ' creado.')->success();
+            return redirect(route('app.tmail.index'));
+        } catch (Exception $e) {
+            dd('error TmailController@store', e);
+        }
     }
 
     public function show(Tmail $tmail)
@@ -50,14 +64,27 @@ class TmailController extends Controller
     public function update(Request $request)
     {
         $item = Tmail::findOrFail($request->id);
+        switch (gettype($request->limit_date)) {
+            case 'string':
+                $limit = date('Y-m-d H:i:s', strtotime($request->limit_date));
+                break;
+            case 'number':
+                $limit = date("Y-m-d H:i:s", $request->limit_date);
+                break;
+            default:
+                $limit = $request->limit_date;
+                break;
+        }
+        $limit = date_create_from_format('Y-m-d H:i:s', $limit)->setTime(23,59,59);
+        $limit = $limit->format('Y-m-d H:i:s');
         try {
             $item->name = $request->name;
             $item->subject = $request->subject;
             $item->view = $request->view;
-            $item->limit_date = $request->limit_date->setTime(23,59,59);
-            $item->limit_date->format('Y-m-d H:i:s');
+            $item->limit_date = $limit;
             $item->save();
-            return redirect('app.mail.tmail.index');
+            flash('Registro ' . $item->id . ' modificado.')->success();
+            return redirect(route('app.tmail.index'));
         } catch (Exception $e) {
             dd('error TmailController@update');
         }
@@ -74,7 +101,8 @@ class TmailController extends Controller
         $item = Tmail::findOrFail($id);
         try {
             $item->delete();
-            return redirect('app.mail.tmail.index');
+            flash('Registro ' . $item->id . ' eliminado.')->success();
+            return redirect(route('app.tmail.index'));
         } catch (Exception $e) {
             dd('error TmailController@destroy');
         }

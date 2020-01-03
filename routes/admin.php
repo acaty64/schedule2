@@ -39,7 +39,7 @@ Route::post('tmail/store', [
 	'uses'	=> 'TmailController@store'
 ]);
 
-Route::get('tmail/read', [
+Route::get('tmail/index', [
 	'as'	=> 'app.tmail.index',
 	'uses'	=> 'TmailController@index'
 ]);

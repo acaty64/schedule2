@@ -14,18 +14,24 @@
           @endif
           @foreach(auth()->user()->roles() as $rol)
             @if($rol->trole->acronym == "master" || $rol->trole->acronym == "admin")
-              Acceda a su programación de vacaciones y horarios en el siguiente enlace:
+{{--               Acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Acceso</button>
-              </a>
-              <a href="{{ route('app.schedule.index') }}"><button>Ver Lista</button></a>
+              </a> --}}
+              <div>
+                <a href="{{ route('app.schedule.index') }}"><button>Lista de Docentes</button></a>
+              </div>
+              <br>
+              <div>
+                <a href="{{ route('app.tmail.index') }}"><button>Correos Masivos</button></a>
+              </div>
             @endif
-            @if($rol->trole->acronym == "doc")
+{{--             @if($rol->trole->acronym == "doc")
               Bienvenido, acceda a su programación de vacaciones y horarios en el siguiente enlace:
               <a href="{{ '/schedule/edit/'. Auth()->user()->id }}">
                 <button>Docente</button>
               </a>
-            @endif
+            @endif --}}
           @endforeach
         </div>
       </div>

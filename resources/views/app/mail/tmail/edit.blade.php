@@ -27,7 +27,9 @@
 				<span class="col-md-8">
 					<div class="input-group">
 						<span class="input-group-addon" id="view">Vista</span>
-						<input type="string" class="form-control" name="view" required value="{{ $data->view }}">
+						<input type="hidden" name="view" value="app.mail.email.notification">
+						<span disabled class="form-control" id="view">app.mail.email.notification</span>
+{{-- 						<input disabled type="string" class="form-control" name="view" required value="{{ $data->view }}"> --}}
 					</div>
 				</span>
 			</span>
@@ -35,7 +37,7 @@
 				<span class="col-md-8">
 					<div class="input-group">
 						<span class="input-group-addon" id="name">Fecha Límite</span>
-						<input type="date" class="form-control" name="limit_date" required value="{{ $data->limit_date }}">
+						<input type="date" class="form-control" name="limit_date" required value="{{ date('Y-m-d', strtotime($data->limit_date)) }}">
 					</div>
 				</span>
 			</span>

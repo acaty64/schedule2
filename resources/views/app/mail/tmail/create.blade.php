@@ -26,7 +26,8 @@
 				<span class="col-md-8">
 					<div class="input-group">
 						<span class="input-group-addon" id="view">Vista</span>
-						<input type="string" class="form-control" name="view" required>
+						<input type="hidden" name="view" value="app.mail.email.notification">
+						<span class="form-control" id="view">app.mail.email.notification</span>
 					</div>
 				</span>
 			</span>
@@ -34,7 +35,7 @@
 				<span class="col-md-8">
 					<div class="input-group">
 						<span class="input-group-addon" id="limit_date">Fecha Límite</span>
-						<input type="date" class="form-control" name="name" required>
+						<input type="date" class="form-control" name="limit_date" required>
 					</div>
 				</span>
 			</span>
