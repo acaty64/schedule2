@@ -119,7 +119,7 @@ class EmailController extends Controller
             $email->save();
 
         } catch (Exception $e) {
-            return ['success'=>false, 'message' => 'Error al enviar el correo electrónico.'];
+            return ['success'=>false, 'message' => 'Error al enviar el correo electrónico: '.$data['to']];
         }
         return ['success'=>true];
 
