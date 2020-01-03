@@ -28,9 +28,11 @@
                     </button>
 
                     <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
+                    <a href="http://www.ucss.edu.pe" target="_blank">
+                        <img class="navbar-brand" src="{{asset('images/logo-ucss.png')}}" ></img></a>
+{{--                     <a class="navbar-brand" href="{{ url('/') }}">
                         {{ config('app.name', 'Laravel') }}
-                    </a>
+                    </a> --}}
                 </div>
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
