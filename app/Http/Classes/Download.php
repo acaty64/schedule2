@@ -5,12 +5,15 @@ namespace App\Http\Classes;
 use App\Feriado;
 use App\Gozada;
 use App\Horario;
+use App\Http\Controllers\Api\ScheduleController as Schedule;
 use App\Periodo;
 use App\Programada;
 use App\Semestre;
 use App\User;
 use Carbon\Carbon;
-use App\Http\Controllers\Api\ScheduleController as Schedule;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class Download 
@@ -93,7 +96,16 @@ class Download
     $data = Download::dataReport($docente_id);
     $data['type'] = 'PDF';
     $user = User::findOrFail($docente_id);
-    $file_to_attach = storage_path() . DIRECTORY_SEPARATOR . 'reports' .  DIRECTORY_SEPARATOR . 'report_' . $user->cdocente . '.pdf';
+    $file = 'report_' . $user->cdocente . '.pdf';
+    $file_to_attach = storage_path() 
+                    . DIRECTORY_SEPARATOR . 
+                    'app'
+                    . DIRECTORY_SEPARATOR . 
+                    'public'
+                    . DIRECTORY_SEPARATOR . 
+                    'reports' 
+                    .  DIRECTORY_SEPARATOR 
+                    . $file;
     $file_name = 'report_' . $user->wdocente . '.pdf';    
 
     if(file_exists($file_to_attach)){
@@ -102,32 +114,45 @@ class Download
 
     $vista = 'app.schedule.report';
     try {
-      $pdf = PDF::loadView($vista, compact('data'))
-                    ->setPaper('a4')
-                    ->setOption('margin-top', 25)
-                    ->setOrientation('Portrait');
-      $pdf->save($file_to_attach);
-    } catch (Exception $e) {
-      return ['success'=>'false', 'error' => $e];
-    }  
-    if(file_exists($file_to_attach)){
+      $pdf = App::make('snappy.pdf.wrapper');
+      $outputPDF = $pdf->loadView($vista, compact('data'))
+            ->setPaper('a4')
+            ->setOption('margin-top', 25)
+            ->setOrientation('Portrait');
+      $outputPDF->save($file_to_attach);
+
+      if(!file_exists($file_to_attach)){
+        return ['success'=>'false', 'message' => 'Error al generar PDF: ' . $file_to_attach];
+      }
       if($output == 'pc'){
-        $pdf->download($file_name);
-        flash('Archivo: ' . $file_name . ' descargado.')->success();
-        return redirect(route('app.schedule.index'));
+        $headers = ['Content-Type: application/pdf'];
+
+        return Storage::download("public/reports/$file", $file_name, $headers);
+
       }else{
         return ['success' => true, 'file_to_attach' => $file_to_attach, 'file_name' => $file_name];
       }
+    } catch (Exception $e) {
+      return ['success'=>'false', 'error' => $e];
     }
+
   }
 
   public static function cronoDownload($docente_id, $output)
   {
     $data = Download::dataCrono($docente_id);
-
     $data['type'] = 'PDF';
     $user = User::findOrFail($docente_id);
-    $file_to_attach = storage_path() . DIRECTORY_SEPARATOR . 'reports' .  DIRECTORY_SEPARATOR . 'crono_' . $user->cdocente . '.pdf';
+    $file = 'crono_' . $user->cdocente . '.pdf';
+    $file_to_attach = storage_path() 
+                    . DIRECTORY_SEPARATOR . 
+                    'app'
+                    . DIRECTORY_SEPARATOR . 
+                    'public'
+                    . DIRECTORY_SEPARATOR . 
+                    'reports' 
+                    .  DIRECTORY_SEPARATOR 
+                    . $file;
     $file_name = 'crono_' . $user->wdocente . '.pdf';    
 
     if(file_exists($file_to_attach)){
@@ -136,23 +161,69 @@ class Download
 
     $vista = 'app.schedule.crono';
     try {
-      $pdf = PDF::loadView($vista, compact('data'))
-                    ->setPaper('a4')
-                    ->setOption('margin-top', 25)
-                    ->setOrientation('Portrait');
-      $pdf->save($file_to_attach);
-    } catch (Exception $e) {
-      return ['success'=>'false', 'error' => $e];
-    }  
-    if(file_exists($file_to_attach)){
+      $pdf = App::make('snappy.pdf.wrapper');
+      $outputPDF = $pdf->loadView($vista, compact('data'))
+            ->setPaper('a4')
+            ->setOption('margin-top', 25)
+            ->setOrientation('Portrait');
+      $outputPDF->save($file_to_attach);
+
+      if(!file_exists($file_to_attach)){
+        return ['success'=>'false', 'message' => 'Error al generar PDF: ' . $file_to_attach];
+      }
       if($output == 'pc'){
-        $pdf->download($file_name);
-        flash('Archivo: ' . $file_name . ' descargado.')->success();
-        return redirect(route('app.schedule.index'));
+        $headers = ['Content-Type: application/pdf'];
+
+        return Storage::download("public/reports/$file", $file_name, $headers);
+
       }else{
         return ['success' => true, 'file_to_attach' => $file_to_attach, 'file_name' => $file_name];
       }
+    } catch (Exception $e) {
+      return ['success'=>'false', 'error' => $e];
     }
+
+    // $data = Download::dataCrono($docente_id);
+
+    // $data['type'] = 'PDF';
+    // $user = User::findOrFail($docente_id);
+    // $file_to_attach = storage_path() . DIRECTORY_SEPARATOR . 'reports' .  DIRECTORY_SEPARATOR . 'crono_' . $user->cdocente . '.pdf';
+    // $file_name = 'crono_' . $user->wdocente . '.pdf';    
+
+    // if(file_exists($file_to_attach)){
+    //   unlink($file_to_attach);
+    // }
+
+    // $vista = 'app.schedule.crono';
+    // try {
+    //   $pdf = App::make('snappy.pdf.wrapper');
+    //   $outputPDF = $pdf->loadView($vista, compact('data'))
+    //         ->setPaper('a4')
+    //         ->setOption('margin-top', 25)
+    //         ->setOrientation('Portrait');
+
+    //   $outputPDF->save($file_to_attach);
+
+    //   if(!file_exists($file_to_attach)){
+    //     return ['success'=>'false', 'message' => 'Error al generar PDF: ' . $file_to_attach];
+    //   }
+    //   // $pdf = PDF::loadView($vista, compact('data'))
+    //   //               ->setPaper('a4')
+    //   //               ->setOption('margin-top', 25)
+    //   //               ->setOrientation('Portrait');
+    //   // $pdf->save($file_to_attach);
+    // } catch (Exception $e) {
+    //   return ['success'=>'false', 'error' => $e];
+    // }  
+    // if(file_exists($file_to_attach)){
+    //   if($output == 'pc'){
+    //     $outputPDF->download($file_name);
+    //     flash('Archivo: ' . $file_name . ' descargado.')->success();
+    //     return redirect(route('app.schedule.index'));
+    //   }else{
+    //     return ['success' => true, 'file_to_attach' => $file_to_attach, 'file_name' => $file_name];
+    //   }
+    // }
   }
   
   public static function dataCrono($docente_id)

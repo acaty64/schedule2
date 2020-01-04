@@ -9,7 +9,10 @@ use App\Http\Classes\Report;
 use App\Periodo;
 use App\Tmail;
 use App\User;
+use Barryvdh\Snappy\PdfWrapper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class ScheduleController extends Controller
@@ -115,10 +118,12 @@ class ScheduleController extends Controller
     $data = Download::dataCrono($docente_id);
     $data['type'] = 'PDF';
     try {
-      $pdf = PDF::loadView('app.schedule.crono', compact('data'))
-      ->setPaper('a4')
-      ->setOrientation('Portrait');
-      return $pdf->stream('cronograma.pdf');      
+      $file_name = $data['docente']['cdocente'].'.pdf';
+      $file_to_save = storage_path('reports/crono_'.$file_name);
+      
+      $pdf = App::make('snappy.pdf.wrapper');
+
+      return $pdf->loadView('app.schedule.crono', compact('data'))->stream($file_name);
     } catch (Exception $e) {
       dd('Error cronoPdf', $e);
     }

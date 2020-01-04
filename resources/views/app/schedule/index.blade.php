@@ -28,10 +28,12 @@
 						<a role="button" 
 							class="btn btn-sm btn-info glyphicon glyphicon-calendar" 
 							href="{{ route('schedule.crono.show', $docente['id'])}}" 
+							target="_blank"
 							title="Ver Cronograma">Ver</a>
 						<a role="button" 
 							class="btn btn-sm btn-primary glyphicon glyphicon-show" 
 							href="{{ route('schedule.crono.pdf', $docente['id'])}}" 
+							target="_blank"
 							title="Ver en PDF">Crono</a>
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 
@@ -45,10 +47,12 @@
 						<a role="button" 
 							class="btn btn-sm btn-info glyphicon glyphicon-list" 
 							href="{{ route('schedule.report.show', $docente['id'])}}"
+							target="_blank"
 							title="Ver reporte">Ver</a>
 						<a role="button" 
 							class="btn btn-sm btn-primary glyphicon glyphicon-show" 
 							href="{{ route('schedule.report.pdf', $docente['id'])}}"
+							target="_blank"
 							title="Ver PDF">Reporte</a>
 						<a role="button" 
 							class="btn btn-sm btn-success glyphicon glyphicon-download" 

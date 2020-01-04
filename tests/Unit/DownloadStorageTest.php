@@ -28,7 +28,7 @@ class DownloadStorageTest extends TestCase
 
         $this->assertTrue($response['success']);
 
-		$file_to_attach = storage_path() . '/reports/report_' . $user->cdocente . '.pdf';
+		$file_to_attach = storage_path() . '/app/public/reports/report_' . $user->cdocente . '.pdf';
 
     	$time = 0;
     	do {
@@ -59,7 +59,7 @@ class DownloadStorageTest extends TestCase
 
         $this->assertTrue($response['success']);
 
-		$file_to_attach = storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
+		$file_to_attach = storage_path() . '/app/public/reports/crono_' . $user->cdocente . '.pdf';
 
     	$time = 0;
     	do {
