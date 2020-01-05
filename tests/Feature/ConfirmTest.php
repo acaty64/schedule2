@@ -53,7 +53,7 @@ class ConfirmTest extends TestCase
             'from' => env('MAIL_USERNAME'),
             'to' => $user->email,
             'user_id_to' => $user->id,
-            'cc1' => 'jfigueroa@ucss.edu.pe',
+            'cc1' => 'direccion_rrhh@ucss.edu.pe',
             'subject' => 'Confirmación de cronograma.',
             'view' => 'app.mail.reply',
             'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
