@@ -131,11 +131,11 @@ return [
         'notifiable' => \Spatie\Backup\Notifications\Notifiable::class,
 
         'mail' => [
-            'to' => 'your@example.com',
+            'to' => 'ucss.fcec.lim@gmail.com',
 
             'from' => [
-                'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
-                'name' => env('MAIL_FROM_NAME', 'Example'),
+                'address' => env('MAIL_USERNAME', 'hello@example.com'),
+                'name' => env('MAIL_FROM_NAME', 'ScheduleSys'),
             ],
         ],
 

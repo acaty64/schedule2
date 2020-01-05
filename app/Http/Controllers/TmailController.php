@@ -39,8 +39,6 @@ class TmailController extends Controller
             $tmail->name = $request->name;
             $tmail->subject = $request->subject;
             $tmail->view = $request->view;
-            // $date = $request->limit_date->setTime(23,59,59);
-            // $tmail->limit_date = $date->format('Y-m-d H:i:s');
             $tmail->limit_date = $limit;
             $tmail->save();
             flash('Registro ' . $tmail->id . ' creado.')->success();

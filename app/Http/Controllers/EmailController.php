@@ -203,6 +203,7 @@ class EmailController extends Controller
                             $email->from = env('MAIL_USERNAME');
                             $email->user_id_to = $user->id ;
                             $email->to = $user->email ;
+                            $email->subject = $tmail->subject ;
                             $email->view = $tmail->view ;
                             $email->limit_date = $tmail->limit_date;
                             $email->file_to_attach1 = $responseR['file_to_attach'];

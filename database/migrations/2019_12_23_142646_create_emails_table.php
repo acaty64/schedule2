@@ -19,6 +19,7 @@ class CreateEmailsTable extends Migration
             $table->string('from');
             $table->integer('user_id_to');
             $table->string('to');
+            $table->string('subject');
             $table->string('view');
             $table->dateTime('limit_date');
             $table->string('cc1')->nullable();

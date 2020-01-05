@@ -34,13 +34,14 @@ class ScheduleController extends Controller
     //storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
     $file_name2 = $crono['file_name'];
     // $user->name;
-    if($reply['success']){
+    if($reply['success'] && $report['success'] && $crono['success']){
       Email::create([
             'tmail_id' => $tmail->id,
             'from' => env('MAIL_USERNAME'),
             'to' => $user->email,
             'user_id_to' => $user->id,
             'cc1' => 'jfigueroa@ucss.edu.pe',
+            'subject' => 'Confirmación de cronograma.',
             'view' => 'app.mail.reply',
             'limit_date' => $tmail->limit_date,
             'file_to_attach1' => $file_to_attach1,

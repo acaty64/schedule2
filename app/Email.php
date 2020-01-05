@@ -15,6 +15,7 @@ class Email extends Model
             'user_id_to',
             'cc1',
             'cc2',
+            'subject',
             'view',
             'send_date',
             'limit_date',

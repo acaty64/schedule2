@@ -54,6 +54,7 @@ class CRUD09_SendEmailTest extends TestCase
                 'from' => 'ucss.fcec.lim@gmail.com',
                 'user_id_to' => $user->id,
                 'to' => $user->email,
+                'subject' => $tmail->subject,
                 'view' => $tmail->view,
                 'file_to_attach1' => $file_to_attach1,
                 'file_name1' => $file_name1,

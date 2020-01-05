@@ -14,7 +14,7 @@ class TmailsTableSeeder extends Seeder
     {
         Tmail::create([
             'name' => 'Requerimiento',
-            'subject' => 'Acceso al módulo',
+            'subject' => 'Requerimiento de disponibilidad UCSS-FCEC. Acceso al módulo',
             'view' => 'app.mail.email.notification',
             'limit_date' => date_create_from_format('d/m/Y H:i:s', '07/01/2020 23:59:59'),
         ]);
