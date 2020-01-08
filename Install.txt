@@ -1,0 +1,20 @@
+Install.txt
+
+https://gist.github.com/srmds/2507aa3bcdb464085413c650fe42e31d#wkhtmltopdf-0125----ubuntu-1604-x64
+
+wkhtmltopdf 0.12.5 - Ubuntu 18.04 x64
+Credits to @J5Dev and @bcalik
+
+~$>> 
+sudo apt-get install -y software-properties-common && \
+sudo apt-add-repository -y "deb http://security.ubuntu.com/ubuntu bionic-security main" && \
+sudo apt-get -yq update && \
+sudo apt-get install -y libxrender1 libfontconfig1 libx11-dev libjpeg62 libxtst6 \
+                           fontconfig xfonts-75dpi xfonts-base libpng12-0 && \
+wget "https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb" && \
+sudo dpkg -i wkhtmltox_0.12.5-1.bionic_amd64.deb && \
+sudo apt-get -f install
+
+
+
+~$code/project>> php artisan storage:link

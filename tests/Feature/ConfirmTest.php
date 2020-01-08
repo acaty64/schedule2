@@ -27,7 +27,7 @@ class ConfirmTest extends TestCase
         $tmail = Tmail::create([
             'name' => 'Requerimiento',
             'subject' => 'Correo de prueba',
-            'view' => 'app.mail.required',
+            'view' => 'app.mail.email.required',
             'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
         ]);
 
@@ -55,7 +55,7 @@ class ConfirmTest extends TestCase
             'user_id_to' => $user->id,
             'cc1' => 'direccion_rrhh@ucss.edu.pe',
             'subject' => 'Confirmación de cronograma.',
-            'view' => 'app.mail.reply',
+            'view' => 'app.mail.email.reply',
             'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
             'file_to_attach1' => $file_to_attach1,
             'file_name1' => $file_name1,
@@ -63,7 +63,7 @@ class ConfirmTest extends TestCase
             'file_name2' => $file_name2,
         ]);        
 
-        $file_reply_view = public_path() . '/view/reply_' . $user->cdocente . '.pdf';
+        $file_reply_view = storage_path('app/public/view/reply_' . $user->cdocente . '.pdf');
 
         $this->assertTrue(file_exists($file_reply_view));
 
@@ -78,9 +78,18 @@ class ConfirmTest extends TestCase
 
         $tmail = Tmail::create([
             'name' => 'Requerimiento',
-            'subject' => 'Correo de prueba',
-            'view' => 'app.mail.required',
+            'subject' => 'Requerimiento de disponibilidad UCSS-FCEC. Acceso al módulo',
+            'view' => 'app.mail.email.notification',
             'limit_date' => date_create_from_format('d/m/Y', '31/12/2019'),
+        ]);
+        $email = Email::create([
+            'tmail_id' => $tmail->id,
+            'from' => env('MAIL_USERNAME'),
+            'to' => $user->email,
+            'user_id_to' => $user->id,
+            'subject' => $tmail->subject,
+            'view' => $tmail->view,
+            'limit_date' => $tmail->limit_date->format('Y-m-d H:i:s'),
         ]);
 
         // Crea archivos pdf ficticios
@@ -98,9 +107,9 @@ class ConfirmTest extends TestCase
             'from' => 'ucss.fcec.lim@gmail.com',
             'user_id_to' => $user->id,
             'to' => $user->email,
-            'cc1' => $user->cc1,
+            'cc1' => 'direccion_rrhh@ucss.edu.pe',
             'subject' => $tmail->subject,
-            'view' => $tmail->view,
+            'view' => 'app.mail.email.reply',
             'file_to_attach1' => $file_to_attach1,
             'file_name1' => $file_name1,
             'file_to_attach2' => $file_to_attach2,

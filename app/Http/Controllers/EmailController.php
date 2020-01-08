@@ -14,9 +14,12 @@ class EmailController extends Controller
 {
     public function send_reply($tmail_id, $docente_id)
     {
-        $email = Email::where('tmail_id', $tmail_id)
-        ->where('user_id_to', $docente_id)
-        ->first();
+        $emails = Email::where('tmail_id', $tmail_id)
+            ->where('user_id_to', $docente_id)
+            ->where('view', 'app.mail.email.reply')
+            ->get();
+        $email = $emails->sortByDesc('id')->first();
+
         $user = User::findOrFail($docente_id);
         if(!is_null($email)){
 
@@ -24,6 +27,7 @@ class EmailController extends Controller
                 'from' => $email->from,
                 'dfrom' => 'Departamento Académico FCEC',
                 'to' => $email->to,
+                'cc' => $email->cc1,
                 'user_id_to' => $email->to,
                 'subject' => 'Confirmación de cronograma.',
                 'wdocente' => $user->wdocente,
@@ -34,20 +38,36 @@ class EmailController extends Controller
                 ['file_to_attach' => $email->file_to_attach1, 'file_name' => $email->file_name1 ],
                 ['file_to_attach' => $email->file_to_attach2, 'file_name' => $email->file_name2 ]
             ];
-
             try {
-                Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {
+                $response = Mail::send($data['view'], ['data'=>$data], function ($message) use ($data, $attach) {
+                    $message->from('ucss.fcec.lim@gmail.com', $data['dfrom']);
                     $message->to($data['to'], '');
-                    $message->from('ucss.fcec.lim@gmail.com', 'UCSS – FCEC');
+                    $message->cc($data['cc'], '');
                     $message->subject($data['subject']);
                     foreach ($attach as $item) {
                         $message->attach( $item['file_to_attach'], 
                             [ 'as'=>$item['file_name'], 'mime' => 'application/pdf']);
                     }
-                });         
+                });
+                $id_replay_send = $email->id;
 
-                $email->reply_date = now();
-                $email->save();
+                $not_send = Email::where('tmail_id', $tmail_id)
+                        ->where('user_id_to', $docente_id)
+                        ->where('view', 'app.mail.email.reply')
+                        ->get();
+                foreach ($not_send as $item) {
+                    if($item->id != $id_replay_send){
+                        $item->delete();
+                    }
+                }
+
+                // Reply date in email require
+                $email_require = Email::where('user_id_to', $docente_id)
+                          ->where('view', 'app.mail.email.notification')
+                          ->orderByDesc('id')
+                          ->first();
+                $email_require->reply_date = now();
+                $email_require->save();
 
                 flash('Correo electrónico de confirmación enviado.')->success();
                 return view('thanks');

@@ -165,6 +165,7 @@ class ScheduleController extends Controller
     ];
 
     $email = Email::where('user_id_to', $docente_id)
+              ->where('view', 'app.mail.email.notification')
               ->orderByDesc('send_date')
               ->first();
     if(is_null($email)){

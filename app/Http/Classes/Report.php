@@ -13,7 +13,20 @@ class Report
   public static function saveReply($docente_id)
   {
     $user = User::findOrFail($docente_id);
-    $file_to_save = public_path() . DIRECTORY_SEPARATOR . 'view' .  DIRECTORY_SEPARATOR . 'reply_' . $user->cdocente . '.pdf';
+
+    $file = 'reply_' . $user->cdocente . '.pdf';
+    $file_to_save = storage_path() 
+                    . DIRECTORY_SEPARATOR . 
+                    'app'
+                    . DIRECTORY_SEPARATOR . 
+                    'public'
+                    . DIRECTORY_SEPARATOR . 
+                    'view' 
+                    .  DIRECTORY_SEPARATOR 
+                    . $file;
+
+
+    // $file_to_save = public_path() . DIRECTORY_SEPARATOR . 'view' .  DIRECTORY_SEPARATOR . 'reply_' . $user->cdocente . '.pdf';
     $file_name = 'reply_' . $user->wdocente . '.pdf';    
 
     if(file_exists($file_to_save)){

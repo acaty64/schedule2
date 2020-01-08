@@ -34,6 +34,7 @@ class ScheduleController extends Controller
     //storage_path() . '/reports/crono_' . $user->cdocente . '.pdf';
     $file_name2 = $crono['file_name'];
     // $user->name;
+// dd([$reply['success'], $report['success'], $crono['success']]);
     if($reply['success'] && $report['success'] && $crono['success']){
       Email::create([
             'tmail_id' => $tmail->id,
@@ -42,7 +43,7 @@ class ScheduleController extends Controller
             'user_id_to' => $user->id,
             'cc1' => 'direccion_rrhh@ucss.edu.pe',
             'subject' => 'Confirmación de cronograma.',
-            'view' => 'app.mail.reply',
+            'view' => 'app.mail.email.reply',
             'limit_date' => $tmail->limit_date,
             'file_to_attach1' => $file_to_attach1,
             'file_name1' => $file_name1,
@@ -53,9 +54,9 @@ class ScheduleController extends Controller
       $data = [
         'tmail_id' => $tmail_id,
         'user' => $user,
-        'file_pdf' => asset('view/reply_'.$user->cdocente.'.pdf')
+        'file_pdf' => asset('storage/view/reply_'.$user->cdocente.'.pdf'),
       ];
-
+// dd($data['file_pdf']);
       return view('app.schedule.confirm')->with('data', $data);
 
     }else{
