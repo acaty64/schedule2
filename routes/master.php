@@ -3,6 +3,11 @@
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Http\Request;
 
+Route::get('master/tests', [
+	'as'	=> 'master.tests',
+	'uses'	=> 'TestsController@master'
+]);
+
 Route::get('sys/backup', [
 	'as'	=> 'backup.index',
 	'uses'	=> 'Sys\BackupController@index'

@@ -99,7 +99,7 @@ class A01_AuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get('/derecho/edit/'.$user->id.'/1')
             ->assertStatus(302)
-            ->assertRedirect('home');
+            ->assertRedirect('login');
     }
 
     /**     * @test      */
@@ -139,10 +139,8 @@ class A01_AuthorizationTest extends TestCase
         $this->actingAs($user)
             ->get('/derecho/read/'.$user->id)
             ->assertStatus(302)
-            ->assertRedirect('home');
+            ->assertRedirect('login');
     }
-
-
 
 }
 

@@ -4,6 +4,10 @@
 // 	'as'	=> 'email.reply.view',
 // 	'uses'	=> 'EmailController@reply_view'
 // ]);
+Route::get('doc/tests', [
+	'as'	=> 'doc.tests',
+	'uses'	=> 'TestsController@docente'
+]);
 
 Route::get('email/confirm/send/{tmail_id}/{docente_id}', [
 	'as'	=> 'email.confirm.send',

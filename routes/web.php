@@ -12,6 +12,10 @@ use Illuminate\Session\flash;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('web/tests', [
+	'as'	=> 'web.tests',
+	'uses'	=> 'TestsController@web'
+]);
 
 
 Route::get('/', function () {

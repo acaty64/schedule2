@@ -24,7 +24,7 @@ class AdminMiddleware
         if(Auth::user()->isAdmin || Auth::user()->isMaster){
             return $next($request);
         }else{
-            return redirect()->to('home');
+            return redirect()->to('login');
             // return redirect()->to('loginGoogle');
         }
 

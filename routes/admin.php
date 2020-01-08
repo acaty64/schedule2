@@ -1,4 +1,9 @@
 <?php
+Route::get('admin/tests', [
+	'as'	=> 'admin.tests',
+	'uses'	=> 'TestsController@admin'
+]);
+
 Route::get('home', 'HomeController@index')->name('home');
 
 Route::get('email/send/notification/{tmail_id}', [
