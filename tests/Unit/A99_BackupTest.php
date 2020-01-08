@@ -31,12 +31,12 @@ class A99_BackupTest extends TestCase
     }
 
     /** @test */
-    public function a_master_user_can_create_the_backup_files()
-    {
-        $user = $this->defaultUser([], 'master');
-        $this->actingAs($user)
-        	->get(route('backup.index'))
-        	->assertStatus(200)
-        	->assertViewIs('backup.index');
-    }
+    // public function a_master_user_can_create_the_backup_files()
+    // {
+    //     $user = $this->defaultUser([], 'master');
+    //     $this->actingAs($user)
+    //     	->get(route('backup.index'))
+    //     	->assertStatus(200)
+    //     	->assertViewIs('backup.index');
+    // }
 }
