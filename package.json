@@ -33,7 +33,7 @@
         "jsdom": "^15.1.1",
         "jsdom-global": "^3.0.2",
         "laravel-mix": "^1.0",
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.19",
         "vue": "^2.5.7",
         "vue-jest": "^2.6.0",
         "vue-loader": "^13.0.5",
